@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bleach_tags %}
+
+{% block content %}
+    <main>
+        <section class="slider">
+            <div class="container container--bc">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <div id="carouselMain" class="carousel carousel--base slide b-carousel carousel-fade">
+                            <div class="carousel-indicators">
+                                {% for _ in main_banners %}
+                                    <button type="button" data-bs-target="#carouselMain"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            aria-label="Slide {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for banner in main_banners %}
+                                    <div class="carousel-item">
+                                        <img src="{{ banner.banner.url }}" class="d-block w-100" alt="...">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="catalog-new">
+            <div class="container p-md-0">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-xxl-4">
+                        <a href="" class="text-center mb-4 title--h2">Новое в каталоге</a>
+                    </div>
+                </div>
+                <div class="row catalog-new__list">
+                    <div class="row catalog-new__list">
+                    </div>
+                    {% for product in new_products %}
+                        <a href="{{ product.get_absolute_url }}" class="col-6 col-md-2 catalog-new__item">
+                            <img src="{% if product.thumbnail %} {{ product.thumbnail.url }} {% endif %}" alt="" class="catalog-new__img"/>
+                            <p>{{ product.name }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="selection">
+            <div class="container container--bc">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <a href="" class="text-center mb-4 title--h2">Индивидуальный подбор косметики</a>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <div id="carouselSelection" class="carousel carousel--base slide b-carousel carousel-fade"
+                             data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                {% for _ in selection_banners %}
+                                    <button type="button" data-bs-target="#carouselSelection"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            aria-label="Slide {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for banner in selection_banners %}
+                                    <div class="carousel-item">
+                                        <a href="{% url 'landing:landing_page' 'o-proekte' %}">
+                                            <img src="{{ banner.banner.url }}" class="d-block w-100" alt="...">
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="articles">
+            <div class="container container--bc">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-xxl-4 mb-3 mb-md-2 mb-xxl-0">
+                        <a href="" class="text-center title--h2">Новые статьи</a>
+                    </div>
+                </div>
+                <div class="row justify-content-center articles__list">
+                    {% for article in actually_articles %}
+                        <div class="col-12 col-md-6 col-xxl-5 py-1 py-md-3">
+                            <a href="{{ article.get_absolute_url }}" class="shadow articles__item">
+                                <div class="row articles__info">
+                                    <div class="col-6">
+                                        <img src="{% static "img/logo-min.png" %}" alt=""/>
+                                    </div>
+                                    <div class="col-6 text-end articles__date">01.01.2023</div>
+                                </div>
+                                {% if article.thumbnail %}
+                                    <img src="{{ article.thumbnail.url }}" class="articles__img" alt="{{ article.title }}"/>
+                                {% endif %}
+                                <h5 class="articles__title">
+                                    {{ article.title }}
+                                </h5>
+                                <p>{{ article.text|bleach|truncatewords_html:20 }}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

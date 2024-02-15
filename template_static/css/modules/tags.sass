@@ -1,0 +1,177 @@
+@import "vars.sass"
+.tags
+  margin-top: 27px
+  margin-bottom: 15px
+  @media screen and (min-width: $first-breack-point)
+    margin-top: 37px
+    margin-bottom: 30px
+  &__select
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    height: 26px
+    padding: 0
+    @media screen and (min-width: $first-breack-point)
+      //width: 260px
+
+      height: 42px
+    &--auto
+      height: auto
+      .tags__selected
+        display: flex
+        flex-wrap: wrap
+        align-items: center
+        row-gap: 4px
+  &__header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    cursor: pointer
+  &__options
+    display: none
+    position: absolute
+    left: 0
+    top: 100%
+    height: auto
+    background-color: $white-color
+    box-shadow: $box-shadow-regular
+    z-index: 1
+    border-radius: 10px
+    padding: 7px 12px
+    &.open
+      display: flex
+      flex-direction: column
+      @media screen and (min-width: $first-breack-point)
+        flex-direction: row
+  &__selected
+    color: $dark-lighter
+    font-size: 10px
+    font-style: normal
+    font-weight: 600
+    line-height: normal
+    @media screen and (min-width: $first-breack-point)
+      font-size: 18px
+  &__arrow
+    font-size: 12px
+  &__column
+    display: inline-block
+    vertical-align: top
+    box-sizing: border-box
+  &__option
+    width: fit-content
+    padding: 12px 20px
+    cursor: pointer
+    transition: 0.3s
+    &.active
+      color: $dark-semi-light
+      background: $bg-grey
+      border-radius: 15px
+    &:hover
+      color: $main-color
+    &:active
+      color: $pre-color
+  &__content
+    display: flex
+    flex-wrap: wrap
+    align-items: flex-start
+    gap: 10px
+    &.filled
+      margin-top: 10px
+      margin-bottom: 10px
+      @media screen and (min-width: $first-breack-point)
+        margin-top: 20px
+        margin-bottom: 20px
+        gap: 20px
+  &__item
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    padding: 4px 10px
+    border-radius: 15px
+    background: $bg-grey
+    color: $dark-semi-light
+    font-size: 10px
+    font-style: normal
+    font-weight: 600
+    line-height: normal
+    &:hover
+      color: $main-color
+    &:active
+      color: $pre-color
+
+
+    margin-right: 4px
+    @media screen and (min-width: $first-breack-point)
+      font-size: 18px
+
+
+.products__details
+  .tags
+    &__row
+      display: flex
+      flex-direction: column
+      @media screen and (min-width: $first-breack-point)
+        flex-direction: row
+    &__column
+      padding: 12px 18px
+      flex-basis: 20%
+    &__subcolumn
+      margin-bottom: 12px
+    &__title
+      text-decoration: none
+      color: $darker
+      transition: .2s
+      font-size: 18px
+      font-weight: 600
+      margin-bottom: 12px
+      line-height: 1.2
+      @media screen and (min-width: $first-breack-point)
+        font-size: 30px
+        font-weight: 600
+        margin-bottom: 42px
+    &__subtitle
+      text-decoration: none
+      color: $darker
+      transition: .2s
+      font-size: 18px
+      font-weight: 600
+      margin-bottom: 12px
+      padding: 0 !important
+      @media screen and (min-width: $first-breack-point)
+        font-size: 24px
+        // margin-bottom: 42px
+
+    &__catalog-section_options
+      height: 50vh
+      overflow: auto
+      width: 100%
+
+
+  //.select
+  //  &__options
+  //    right: 0
+  //    height: 50vh
+  //    overflow: auto
+
+.select-assignment
+  &__options
+    .option
+      width: max-content
+      padding: 12px 20px
+      cursor: pointer
+      transition: 0.3s
+      border-radius: 15px
+      &.active
+        color: $dark-semi-light
+        background: $bg-grey
+        border-radius: 15px
+        &:hover
+          color: $main-color
+        &:active
+          color: $pre-color
+
+
+
+

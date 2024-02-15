@@ -1,0 +1,11 @@
+@media screen and (min-width: 768px) {
+  .additional__buttons {
+    row-gap: 1.5rem;
+  }
+}
+@media screen and (min-width: 1400px) {
+  .additional__buttons svg {
+    width: 37px;
+    height: 37px;
+  }
+}/*# sourceMappingURL=additional.css.map */

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ block.super }} - Серия {{ series.name }}{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="series">
+            <div class="container container--bc series__sticker">
+                <div class="row justify-content-center mb-4">
+                    <h1 href="" class="col-12 col-xxl-10 mb-2 mb-md-4 text-center title--h1 text-uppercase">Серия</h1>
+                    <div class="col-12 col-xxl-10 d-flex justify-content-center series__logo">
+                        {% if series.logo %}
+                            <img src="{{ series.logo.url }}" alt="">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-2  mb-md-4">
+                    <div class="col-12 col-xxl-10 title--sub">
+                        {{ series.name }}
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-3 mb-xxl-4">
+                    <div class="col-12 col-xxl-10 information">
+                        <p>{{ series.description|safe }}</p>
+                    </div>
+                </div>
+                <div class="row  justify-content-center">
+                    <div class="col-12 col-xxl-10 mb-2 mb-xxl-4 tag-links">
+                        {% for tag in series.tag.all %}
+                            <a href="" class="tag">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slider">
+            <div class="container container--bc">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <div id="carouselProducer" class="carousel  carousel--base slide b-carousel carousel-fade"
+                             data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                {% for i in series_banners %}
+                                    <button type="button" data-bs-target="#carouselProducer"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            aria-label="Slide {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for banner in series_banners %}
+                                    <div class="carousel-item">
+                                        <a href="{{ banner.url }}">
+                                            {% if banner.banner %}
+                                                <img src="{{ banner.banner.url }}" class="d-block w-100" alt="...">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="products">
+            <div class="container container--bc">
+                <div class="catalog mb-3 mb-md-4">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-xxl-10">
+                            <div class="row catalog__list catalog__list--full">
+                                {% for product in series_products %}
+                                    <a href="{% url 'products:product_detail' product.slug %}" class="col-6 col-md-2 catalog__item">
+                                        <button class="favorite favorite--product"></button>
+                                        {% if product.thumbnail %}
+                                            <img src="{{ product.thumbnail.url }}" alt="" class="catalog__img">
+                                        {% endif %}
+                                        <div class="catalog__rating rating">
+                                            <div class="rating__body">
+                                                <div class="rating__active"
+                                                    style="width: {{ product.rating_int }}%"></div>
+                                            </div>
+                                        </div>
+                                        <p>{{ product.name }}</p>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

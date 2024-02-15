@@ -1,0 +1,185 @@
+ul
+    padding-left: 0
+
+.infProg
+    width: 95%
+    height: 100%
+.pagin
+    margin-bottom: 20px
+    p
+        font-size: 30px
+        line-height: 37px
+        letter-spacing: 0.5px
+        color: $dark-semi-light
+        margin-bottom: 30px
+        font-weight: 600
+        color: $dark-semi-light
+        @media screen and (max-width: $first-breack-point) 
+            font-size: 15px
+            line-height: 18px
+            margin-bottom: 10px
+            line-height: 10px
+    &__output-info
+        .image
+            background-color: $main-color
+            mask: url('../img/Vector.svg')
+            mask-repeat: no-repeat
+            mask-size: 75%
+            mask-position: center
+            width: 50px
+            height: 18px
+            rotate: -90deg
+            transition: 0.3s
+            opacity: 1
+            cursor: pointer
+            &:hover
+                opacity: 0.7
+            @media screen and (max-width: $first-breack-point) 
+                display: none
+        &-lk-man
+            .paginationjs-pages
+                li
+                    width: 30px
+                    padding: 0
+                    a
+                        font-size: 21px
+                        line-height: inherit
+        ul, li 
+            list-style: none
+        ul p 
+            padding: 0
+            margin: 0
+        li 
+            margin-bottom: 30px
+            padding: 5px 10px
+            box-shadow: $box-shadow-sm
+            height: 158px
+            border-radius: $border-radius
+            overflow: hidden
+            text-overflow: ellipsis
+            @media screen and (max-width: $first-breack-point)
+                margin-bottom: 10px
+        a
+            transition: color 0.3s
+            text-decoration: none
+            height: 100%
+            .title
+                line-height: 37px
+                letter-spacing: 0.5px
+                text-transform: uppercase
+                color: $dark-semi-light
+                overflow: hidden
+                text-overflow: ellipsis
+                width: 100%
+                display: flex
+                align-items: center
+            small
+                font-size: 18px
+                line-height: 22px
+                color: $gray-light
+                @media screen and (max-width: $first-breack-point) 
+                    font-size: 10px
+                    line-height: 12px
+
+            .descr
+                font-size: 18px
+                line-height: 22px
+                color: $dark-lighter
+                @media screen and (max-width: $first-breack-point) 
+                    font-size: 12px
+                    line-height: 15px
+        .feed__name
+            flex-shrink: 0
+
+.paginationjs-pages
+
+    .paginationjs-page, .paginationjs-ellipsis
+        background-color: $gray-light
+
+    .active
+        background-color: $main-color
+    ul
+        list-style: none    
+        display: flex
+        align-items: center
+        justify-content: space-around
+        width: 75%
+        margin: auto
+        @media screen and (max-width: $first-breack-point) 
+            width: 85%
+        .paginationjs-prev, .paginationjs-next
+            a
+                background-color: $main-color !important
+                mask: url('../img/Vector.svg') !important
+                mask-repeat: no-repeat !important
+                mask-size: 100% !important
+                mask-position: center !important
+                width: 100%
+                height: 100%
+                display: block
+
+        .disabled 
+            a
+                background-color: $gray-light !important
+
+        .paginationjs-prev
+            box-shadow: none
+            rotate: 90deg
+
+        .paginationjs-next
+            box-shadow: none
+            rotate: -90deg
+        li
+            padding: 10px
+            border-radius: 50%
+            width: 60px
+            aspect-ratio: 1
+            height: auto
+            text-align: center
+            transition: 0.3s
+            opacity: 1
+            cursor: pointer
+            &:hover
+                opacity: 0.7
+            @media screen and (max-width: $first-breack-point)
+                width: 30px
+                padding: 3px
+
+            a
+                padding: 0
+                margin: auto
+                font-size: 30px
+                line-height: 37px
+                leading-trim: both
+                text-edge: cap
+                text-align: center
+                letter-spacing: 0.5px
+                text-transform: lowercase
+                color: $sub-color !important
+                cursor: pointer
+                @media screen and (max-width: $first-breack-point)
+                    font-size: 15px
+                    line-height: 18px
+
+.view
+    margin-bottom: 20px
+    p
+        font-size: 30px
+        line-height: 37px
+        letter-spacing: 0.5px
+        color: $dark-semi-light
+        margin-bottom: 30px
+        font-weight: 600
+        color: $dark-semi-light
+        @media screen and (max-width: $first-breack-point) 
+            font-size: 15px
+            line-height: 18px
+            margin-bottom: 10px
+            line-height: 10px
+    &-rez
+        .pagin__output-info
+            .title
+                height: 60%
+
+    ul
+        padding-left: 0

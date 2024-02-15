@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Чаты{% endblock %}
+
+{% block content %}
+  <main class="chat">
+    <section class="brand__title">
+      <div class="container container--bc">
+          <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+              <div class="col-1 col-xxl-12 order-xxl-1">
+                  <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                      <img src="{% static "img/arrow-left.svg" %}" alt="Стрелка налево">
+                      <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                  </a>
+              </div>
+              <div class="col text-center col-xxl-12">
+                  <h1 class="title--20-36 text-uppercase">чаты</h1>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="sysInf">
+          <div class="container container--bc">
+            <button data-bs-toggle="modal" data-bs-target="#sendMess" id="createRev" class="text-uppercase feed-button"><p>написать сообщение</p></button>
+            <p id="numberMess">Все сообщения ({{page_obj.paginator.count}})</p>
+          </div>
+        </section>
+        
+        <!-- Чат -->
+        {% if chats %}
+          {% for chat in chats %}
+            <section class="pagin container container--bc">
+              <div class="pagin__output-info">
+                  <p></p>
+                      <div class="feed__row">
+                        <div class="feed__user">
+                          <a href="#" class="feed__avatar-chats">
+                            <img
+                              alt="avatar"
+                              style="border-radius: 50%; max-width: 160px; max-height: 160px; height: 160px; width: 160px;"
+                              src="{% if chat.avatar %} {% get_media_prefix %}{{chat.avatar}} {% else %} {% static "img/user-avatar.svg" %} {% endif %}"
+                            >
+                          </a>
+                        <div>
+                        <div class="feed__info">
+                            <div class="d-flex align-items-center gap-2">
+                              <a href="#" class="feed__avatar feed__avatar-chats">
+                                <img src="{% static "img/user-avatar.svg" %}" alt="avatar">
+                              </a>
+                              <a href="#" class="feed__name">{{chat.first_name}} {{chat.last_name}}</a>
+                              <div class="feed__date">{{chat.date|date:'d.m.Y'}}</div>
+                            </div>
+                        </div>
+                        <p class="feed__text feed__text-chats mt-3">
+                          {{chat.last_message}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          {% endfor %}
+        {% endif %}
+
+        {% if page_obj.has_other_pages %}
+          <div class="d-flex justify-content-center mt-4 mt-md-5">
+              <ul class="pagination">
+                  <li class="page-item">
+                      {% if page_obj.has_previous %}
+                          <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                             aria-label="Previous">
+                              <span aria-hidden="true">〈</span>
+                          </a>
+                      {% endif %}
+                  </li>
+                  {% for num in page_obj.paginator.page_range %}
+                      {% if num == page_obj.number %}
+                          <li class="page-item active">
+                              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                          </li>
+                      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                          </li>
+                      {% endif %}
+                  {% endfor %}
+
+                  <li class="page-item">
+                      {% if page_obj.has_next %}
+                          <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                             aria-label="Previous">
+                              <span aria-hidden="true">〉</span>
+                          </a>
+                      {% endif %}
+                  </li>
+              </ul>
+          </div>
+        {% endif %}
+  </main>
+  
+
+  <div class="modal fade" id="sendMess" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header chat text-center">
+          <h5 class="modal-title" id="deleteProfileLabel">Сообщение</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <form
+                  method="post"
+                  id="create-message-form"
+                  class="send-mess-tech"
+                  action="{% url 'chats:create_message' %}"
+          >
+              {% csrf_token %}
+            <div class="modal__adrese">
+              <label for="adrese" class="select-wrap" id="adrese">
+                <small> 
+                  Поиск собеседника
+                </small>
+                <button class="feed-button"></button>
+                <input class="form-control" placeholder="Поиск по нику" type="text" name="nickname" id="search-input" value="">
+                  <input type="hidden" id="receiver" name="receiver">
+              </label>
+              <div class="modal__adrese__ansver" id="search-result">
+                <div class="modal__adrese">
+                  <p class="modal__adrese__text">
+                    Какой-то ник1
+                  </p>
+                </div>
+                <div class="modal__adrese">
+                  <p class="modal__adrese__text">
+                    Какой-то ник2
+                  </p>
+                </div>
+                <div class="modal__adrese">
+                  <p class="modal__adrese__text">
+                    Какой-то ник3
+                  </p>
+                </div>
+                <div class="modal__adrese">
+                  <p class="modal__adrese__text">
+                    Какой-то ник4
+                  </p>
+                </div> 
+              </div>
+            </div>
+            <div class="titleModal">
+              <label for="appeal" class="select-wrap" id="appeal">
+                <small> 
+                  Заголовок сообщения
+                </small>
+                <input class="form-control" type="text" name="title" id="appeal">
+              </label>
+            </div>
+            <label for="textApeal" class="select-wrap">
+              <small> 
+                Текст обращения
+              </small>
+              <textarea class="form-control" name="text" id="textApeal" rows="3"></textarea>
+            </label>
+          </form> 
+        </div>
+        <div class="modal-footer modal-footer-tech d-flex">
+          <button type="button" class="close text-uppercase feed-button" data-bs-dismiss="modal">отмена</button>
+          <button type="button" class="sendMess-chats text-uppercase feed-button" onclick="submitForm();">отправить</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+{% endblock %}
+{% block extra_js %}
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const nickNameInput = document.getElementById('receiver');
+
+        function eventByNickname() {
+            const usernamesBlock = document.getElementById('search-result');
+            const nicknames = usernamesBlock.querySelectorAll('.nickname-block');
+            nicknames.forEach((el) => {
+                el.addEventListener('click', function () {
+                    searchInput.value = el.dataset.nickname;
+                    nickNameInput.value = el.dataset.user;
+                    usernamesBlock.style.display = 'none';
+                }, { once: true })
+            })
+        }
+
+        function getAuthors(value) {
+            $.ajax({
+                url: `{% url "profile:search_author" %}?nickname=${value}&period={{type_period}}&type=chat`,
+                type: 'get',
+                dataType: 'html',
+                success: function(response) {
+                    $('#search-result').html(response).show();
+                    eventByNickname();
+                }
+            })
+        }
+
+        searchInput.addEventListener('input', () => {
+            const value = searchInput.value;
+            getAuthors(value);
+        })
+    </script>
+    <script>
+        function submitForm() {
+            const form = document.getElementById('create-message-form');
+            form.submit();
+        }
+    </script>
+{% endblock %}

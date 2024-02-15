@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ block.super }} - Отзыв{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="reviews">
+            <div class="container container--bc reviews__sticker reviews__sticker--reviews-photos">
+                <div class="row justify-content-center mb-5">
+                    <a href="" class="col-12 col-xxl-10 mb-2 mb-md-4 text-center title--h1 questions__heading-link--h1-link">
+                        {{ product.name }}
+                    </a>
+                    <div class="col-12">
+                        <a href="#"
+                           class="questions__heading-link title__under d-flex justify-content-center align-items-center text-center">
+                            {{ product.name }}
+                        </a>
+                    </div>
+                </div>
+                <div class="offset-xxl-1 col-xxl-10">
+                    <!-- review -->
+                    <div class="row mb-5">
+                        <div class="col-12 mb-3 mb-md-0 col-md-7">
+                            <section id="review-image-slider" class="reviews__splide splide" aria-label="Feed slides">
+                                <div class="splide__track">
+                                    <div class="splide__list">
+                                        {% for image in review_images %}
+                                            <div class="splide__slide">
+                                                <img src="{{ image.image.url }}" alt="review-photo" data-modal-image/>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="feed__row">
+                                <div class="feed__user">
+                                    <a href="{% url 'profile:profile_detail' %}" class="feed__avatar">
+                                        {% if review.profile.avatar %}
+                                            <img src="{{ review.profile.avatar.url }}" alt="avatar"/>
+                                        {% endif %}
+                                    </a>
+                                    <div class="feed__info">
+                                        <a href="{% url 'profile:profile_detail' %}"
+                                           class="feed__name">{{ review.profile.first_name }} {{ review.profile.last_name_slice }}.</a>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rating">
+                                                <div class="rating__body">
+                                                    <div class="rating__active" style="width: {{ review.rating_int }}%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="feed__date">{{ review.created_at|date:'d.n.y' }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="feed__text mb-4">
+                                    {{ review.text|safe }}
+                                </p>
+
+                                <div class="feed__user">
+                                    <a href=""
+                                       class="feed__avatar">
+                                        {% if answer.manufacturer.logo %}
+                                            <img src="{{ answer.manufacturer.logo.url }}" alt="avatar"/>
+                                        {% endif %}
+                                    </a>
+                                    <div class="feed__info">
+                                        <a href=""
+                                           class="feed__name">{{ answer.manufacturer.name }}</a>
+                                        <div class="feed__date">{{ answer.created_at|date:'d.n.y' }}</div>
+                                    </div>
+                                </div>
+                                <p class="feed__text">
+                                    {{ answer.text|safe }}
+                                </p>
+                                <div class="feed__footer">
+                                    <div class="feed__actions">
+                                        <a href="#" class="feed__footer-show-more">Читать полностью</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="title--h4 mb-3 first-bp">Все фото покупателей ({{ product_reviews_images|length }})</h3>
+
+                    <!-- Photos grid -->
+                    <div class="reviews__photo-grid row mb-5">
+                        {% for image in product_reviews_images %}
+                            <div class="col-2 py-2">
+                                <a href="#" class="shadow reviews__photo-link">
+                                    <img src="{{ image.image.url }}" alt="review"/>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">〈</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">〉</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal__close">&times;</span>
+        <img class="image-modal__content" id="img01"/>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/splide.min.js' %}"></script>
+    <script src="{% static 'js/image-modal.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Splide.defaults = {
+                perPage: 1,
+                height: "560px",
+                pagination: false,
+                omitEnd: true,
+                classes: {
+                    arrows: "splide__arrows reviews__splide-arrows",
+                    arrow: "splide__arrow reviews__splide-arrow",
+                    prev: "splide__arrow--prev reviews__splide-prev",
+                    next: "splide__arrow--next reviews__splide-next",
+                },
+                breakpoints: {
+                    1400: {
+                        height: "420px",
+                    },
+                    768: {
+                        type: "loop",
+                        pagination: false,
+                        arrows: false,
+                        gap: ".7rem",
+                        padding: {right: "1.5rem", left: "1.5rem"},
+                        height: "325px",
+                    },
+                },
+            };
+            new Splide("#review-image-slider").mount();
+        });
+    </script>
+{% endblock %}

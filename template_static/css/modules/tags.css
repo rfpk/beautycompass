@@ -1,0 +1,212 @@
+.tags {
+  margin-top: 27px;
+  margin-bottom: 15px;
+}
+@media screen and (min-width: 1400px) {
+  .tags {
+    margin-top: 37px;
+    margin-bottom: 30px;
+  }
+}
+.tags__select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 26px;
+  padding: 0;
+}
+@media screen and (min-width: 1400px) {
+  .tags__select {
+    height: 42px;
+  }
+}
+.tags__select--auto {
+  height: auto;
+}
+.tags__select--auto .tags__selected {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+}
+.tags__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+}
+.tags__options {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  height: auto;
+  background-color: #FFFFFF;
+  box-shadow: 0px 4px 20px 0 rgba(14, 14, 14, 0.07);
+  z-index: 1;
+  border-radius: 10px;
+  padding: 7px 12px;
+}
+.tags__options.open {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (min-width: 1400px) {
+  .tags__options.open {
+    flex-direction: row;
+  }
+}
+.tags__selected {
+  color: #210E22;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+@media screen and (min-width: 1400px) {
+  .tags__selected {
+    font-size: 18px;
+  }
+}
+.tags__arrow {
+  font-size: 12px;
+}
+.tags__column {
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+.tags__option {
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.tags__option.active {
+  color: #494949;
+  background: #E8E8E8;
+  border-radius: 15px;
+}
+.tags__option:hover {
+  color: #1560BD;
+}
+.tags__option:active {
+  color: #E31E24;
+}
+.tags__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+.tags__content.filled {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+@media screen and (min-width: 1400px) {
+  .tags__content.filled {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+}
+.tags__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 15px;
+  background: #E8E8E8;
+  color: #494949;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-right: 4px;
+}
+.tags__item:hover {
+  color: #1560BD;
+}
+.tags__item:active {
+  color: #E31E24;
+}
+@media screen and (min-width: 1400px) {
+  .tags__item {
+    font-size: 18px;
+  }
+}
+
+.products__details .tags__row {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (min-width: 1400px) {
+  .products__details .tags__row {
+    flex-direction: row;
+  }
+}
+.products__details .tags__column {
+  padding: 12px 18px;
+  flex-basis: 20%;
+}
+.products__details .tags__subcolumn {
+  margin-bottom: 12px;
+}
+.products__details .tags__title {
+  text-decoration: none;
+  color: #0E0E0E;
+  transition: 0.2s;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+@media screen and (min-width: 1400px) {
+  .products__details .tags__title {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 42px;
+  }
+}
+.products__details .tags__subtitle {
+  text-decoration: none;
+  color: #0E0E0E;
+  transition: 0.2s;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding: 0 !important;
+}
+@media screen and (min-width: 1400px) {
+  .products__details .tags__subtitle {
+    font-size: 24px;
+  }
+}
+.products__details .tags__catalog-section_options {
+  height: 50vh;
+  overflow: auto;
+  width: 100%;
+}
+
+.select-assignment__options .option {
+  width: -moz-max-content;
+  width: max-content;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 15px;
+}
+.select-assignment__options .option.active {
+  color: #494949;
+  background: #E8E8E8;
+  border-radius: 15px;
+}
+.select-assignment__options .option.active:hover {
+  color: #1560BD;
+}
+.select-assignment__options .option.active:active {
+  color: #E31E24;
+}/*# sourceMappingURL=tags.css.map */

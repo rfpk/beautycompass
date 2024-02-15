@@ -1,0 +1,571 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load programs_tags %}
+
+{% block title %}Программа{% endblock %}
+
+
+{% block content %}
+<main class="custom-main-program">
+    <section class="brand__title">
+      <div class="container container--bc">
+          <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+              <div class="col-1 col-xxl-12 order-xxl-1">
+                  <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                      <img src="{% static 'img/arrow-left.svg' %}" alt="Стрелка налево">
+                      <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                  </a>
+              </div>
+              <div class="col text-center col-xxl-12">
+                  <h1 class="title--20-36 text-uppercase" >программа</h1>
+              </div>
+          </div>
+      </div>
+    </section>
+    <section>
+
+      <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase ">
+            Дорогой {{nickname}}, предлагаем вам программу для
+            {% if sensitive_skin %}
+                Чувствительной
+            {% else %}
+                {{ skin|ending_word }}
+            {% endif %}
+            кожи на
+            {% if season == '1' %}
+                осень.
+            {% elif season == '2' %}
+                зиму.
+            {% elif season == '3' %}
+                весну.
+            {% else %}
+                лето.
+            {% endif %}
+        </p>
+      <p class="additional-tasks">
+          Дополнительные решаемые задачи: {% for skin_condition in skin_conditions %} {{ skin_condition }}{% if forloop.last %}.{% else %},{% endif %} {% endfor %}
+        </p>
+      </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog recomend__prog container container--bc">
+          <p class="recomend__heading text-uppercase">
+              {{ complexes.0.title }}
+          </p>
+          <p class="recomendation">
+            Рекомендации: {{ complexes.0.recommendation }}
+          </p>
+          <div class="recomend__product d-flex">
+
+            {% for id, slug, thumbnail, name, brand, rating in makeup_removers %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.0.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+            {{ complexes.1.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.1.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in cleansing %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.1.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.2.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.2.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in toning %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.2.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.3.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.3.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+            {% for id, slug, thumbnail, name, brand, rating in targeted_care %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.3.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.4.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.4.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in day_basic_care %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.4.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.5.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.5.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in night_basic_care %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.5.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+      </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.6.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.6.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in around_eyes %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.6.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.7.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.7.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+            {% for id, slug, thumbnail, name, brand, rating in sun_protection %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.7.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.8.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.8.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in exfoliation %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.8.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      <div class="recomend__wrap">
+        <div class="recomend recomend__prog container container--bc">
+        <p class="recomend__heading text-uppercase">
+          {{ complexes.9.title }}
+        </p>
+        <p class="recomendation">
+          Рекомендации: {{ complexes.9.recommendation }}
+        </p>
+        <div class="recomend__product d-flex">
+          {% for id, slug, thumbnail, name, brand, rating in additional_care %}
+              <div
+                      class="recomend__product__item"
+                      data-product-id="{{ id }}"
+                      data-complexes-name="{{ complexes.9.title }}"
+              >
+                <a href="{% url 'products:product_detail' slug %}">
+                <div class="recomend__product__item__wrap-img">
+                  {% if thumbnail %}
+                    <img src="{% get_media_prefix %}{{thumbnail}}" style="height:268px;width:190px;" alt="товар">
+                  {% endif %}
+                </div>
+               <div class="rating rating-sm">
+                <div class="rating__body">
+                    <div
+                      class="rating__active"
+                      style="width: {{ rating|default:'0' }}%;"
+                    ></div>
+                </div>
+              </div>
+                <p class="nameProduct">
+                  {{name}}
+                </p>
+                <p class="brand">
+                  {{brand}}
+                </p>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+    </section>
+    <section class="download_rezult download_rezult-saveing container container--bc">
+      <form action="">
+        <label for="nameFile">Название
+          <input class="form-control" type="text" placeholder="«{{nickname}}, тест от {% now "d.m.y" %}»" name="nameFile" id="nameFile">
+        </label>
+        <button id="butSave" class="text-uppercase"><p>Сохранить программу</p></button>
+      </form>
+    </section>
+  </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/jq.js" %}"></script>
+    <script src="{% static "js/programm-page.js" %}"></script>
+
+    <script>
+        function getTestName() {
+            const nameTest = document.getElementById('nameFile').value;
+            return nameTest ? nameTest : '{{nickname}},тест от {% now "d.m.y g:i" %}'
+        }
+
+        function requestPost(formData) {
+            $.ajax({
+                type: 'POST',
+                headers: { "X-CSRFToken": '{{ csrf_token }}' },
+                url: '{% url "programs:program_create" %}',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response['status'] === 'success') {
+                        window.location.href = '{% url "profile:profile_detail" %}'
+                    }
+                },
+            })
+        }
+
+        function titleProgramBuild() {
+            let season = '{{ season }}';
+            let skin = '{{ skin }}';
+            let sensitiveSkin = '{{ sensitive_skin }}';
+            let skinType;
+            let skinConditions = '{{ skin_conditions }}';
+
+            if (sensitiveSkin !== 'None') {
+                skinType = 'Чувствительной';
+            } else {
+                if (skin === 'Сухая') {
+                    skinType = 'Сухой';
+                } else if (skin === 'Нормальная') {
+                    skinType = 'Нормальной';
+                } else if (skin === 'Комбинированная') {
+                    skinType = 'Комбинированной';
+                } else if (skin === 'Жирная') {
+                    skinType = 'Жирной';
+                } else {
+                    skinType = 'Любой';
+                }
+            }
+
+            if (season === '1') {
+                season = 'осень';
+            } else if (season === '2') {
+                season = 'зиму';
+            } else if (season === '3') {
+                season = 'весну';
+            } else {
+                season = 'лето';
+            }
+
+            let additional_tasks = document.querySelector('.additional-tasks');
+            let tasks = additional_tasks.textContent.trim();
+            let word = `Программа для ${skinType} кожи на ${season}. ${skinConditions.length > 2 ? tasks : ''}`.trim();
+            return word;
+        }
+
+        $('#butSave').click(function(event) {
+            event.preventDefault();
+            $('#butSave').attr("disabled", true);
+            const productsBlocks = document.querySelectorAll('.recomend__wrap');
+            let data = [];
+            // Get Products Information
+            productsBlocks.forEach((el) => {
+                const recomendation = el.querySelector('.recomendation');
+                const products = el.querySelectorAll('.recomend__product__item');
+                if (products.length > 0) {
+                    let product = [];
+                    products.forEach((element) => {
+                        let productId = element.dataset.productId;
+                        let complexesName = element.dataset.complexesName;
+                        product.push({
+                            'recomendation': recomendation.textContent.trim().split('Рекомендации:')[1].trim(),
+                            'productId': productId,
+                            'complexesName': complexesName,
+                        })
+                    })
+                    data.push(product);
+                }
+            })
+            if (data.length > 0) {
+                let formData = new FormData();
+                formData.append('data', JSON.stringify(data));
+                formData.append('program_name', getTestName());
+                formData.append('program_id', '{{ program_id }}');
+                formData.append('program_description', titleProgramBuild());
+                requestPost(formData);
+            }
+        })
+    </script>
+{% endblock %}

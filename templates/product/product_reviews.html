@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{{ block.super }} - Отзывы{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="reviews">
+            <div class="container container--bc reviews__sticker">
+                <div class="row justify-content-center mb-4">
+                    <a href="{% url 'products:series_detail' product.series.slug %}"
+                       class="col-12 col-xxl-10 mb-2 mb-md-4 text-center title--h1 questions__heading-link--h1-link">
+                        {{ product.series.name }}
+                    </a>
+                    <div class="col-12">
+                        <a href="{% url 'products:product_detail' product.slug %}"
+                           class="questions__heading-link title__under d-flex justify-content-center align-items-center text-center">
+                            {{ product.name }}
+                        </a>
+                    </div>
+                </div>
+                <div class="offset-xxl-1 col-xxl-10">
+                    {% if user.is_authenticated %}
+                        <button type="button" class="btn-string mb-4" data-bs-target="#openQuestion"
+                                data-bs-toggle="modal" data-bs-whatever="{{ product.name }}">
+                            <img src="{% static '/img/pen-notice.svg' %}" class="me-1" alt=""/>Отправить
+                            отзыв
+                        </button>
+                    {% else %}
+                        <button type="button" class="btn-string mb-4" data-bs-toggle="modal"
+                                data-bs-whatever="{{ product.name }}" onclick="showAlert()">
+                            <img src="{% static '/img/pen-notice.svg' %}" class="me-1" alt=""/>
+                            Отправить отзыв
+                        </button>
+                        <script>
+                            function showAlert() {
+                                alert("Для написания отзыва необходимо авторизоваться22!");
+                            }
+                        </script>
+
+                    {% endif %}
+                    <h3 class="title--h4 mb-3">Отзывы покупателей ({{ page_obj.paginator.count }})</h3>
+                    <div class="feed d-flex flex-column mb-5">
+                        {% for review in page_obj %}
+                            <div class="feed__row">
+                                <div class="feed__user">
+                                    <a href="{% url 'profile:author-profile' review.author_id %}" class="feed__avatar">
+                                        {% if review.profile.avatar %}
+                                            <img src="{{ review.profile.avatar.url }}" alt="avatar"/>
+                                        {% endif %}
+                                    </a>
+                                    <div class="feed__info">
+                                        <a href="{% url 'profile:author-profile' review.author_id %}"
+                                           class="feed__name">
+                                            {{ review.profile.first_name }} {{ review.profile.last_name_slice }}.
+                                        </a>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rating">
+                                                <div class="rating__body">
+                                                    <div class="rating__active"
+                                                         style="width: {{ review.rating_int }}%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="feed__date">{{ review.created_at|date:"d.m.Y" }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="feed__text mb-3">
+                                    {{ review.text|safe }}
+                                </p>
+                                <section
+                                    id="feed-image-slider"
+                                    class="feed__splide splide"
+                                    aria-label="Feed slides"
+                                >
+                                    <div class="splide__track">
+                                        <div class="splide__list">
+                                            {% for image in review.images.all %}
+                                                <div class="splide__slide">
+                                                    <img
+                                                        src="{{image.image.url}}"
+                                                        alt="review-photo"
+                                                        data-modal-image
+                                                    />
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </section>
+                                {% if review.answer_text %}
+                                    <div class="feed__user">
+                                        <a href="{% url 'manufacturer:profile_manufacturer' review.product.brand.manufacturer.pk %}"
+                                        class="feed__avatar">
+                                            {% if review.product.brand.manufacturer.logo %}
+                                                <img src="{{ review.product.brand.manufacturer.logo.url }}"
+                                                    alt="avatar"/>
+                                            {% endif %}
+                                        </a>
+                                        <div class="feed__info">
+                                            <a href="{% url 'manufacturer:profile_manufacturer' review.product.brand.manufacturer.pk %}"
+                                            class="feed__name">
+                                                {{ review.answer_manufacturer_name }}
+                                            </a>
+                                            <div class="feed__date">
+                                                {{ review.answer_date|date:'d.m.Y' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="feed__text">
+                                        {{ review.answer_text|safe }}
+                                    </p>
+                                {% endif %}
+                                <div class="feed__footer">
+                                    <div class="feed__actions">
+                                        <button id="b-like-{{ review.pk }}" type="button"
+                                                class="feed__action feed__action--like feed__action--like_active">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                        d="M12.21 16.5754H9.36002C8.94002 16.5754 8.02502 16.4479 7.53752 15.9604L5.26502 14.2054L5.95502 13.3129L8.28002 15.1129C8.46752 15.2929 8.94002 15.4429 9.36002 15.4429H12.21C12.885 15.4429 13.6125 14.9029 13.7625 14.2954L15.5775 8.78286C15.6975 8.45286 15.675 8.15286 15.5175 7.93536C15.3525 7.70286 15.0525 7.56786 14.685 7.56786H11.685C11.295 7.56786 10.935 7.40286 10.6875 7.11786C10.4325 6.82536 10.32 6.43536 10.38 6.03036L10.755 3.62286C10.845 3.20286 10.56 2.73036 10.155 2.59536C9.78752 2.46036 9.31502 2.65536 9.15002 2.89536L6.07502 7.47036L5.14502 6.84786L8.22002 2.27286C8.69252 1.56786 9.72752 1.23036 10.5375 1.53786C11.475 1.84536 12.075 2.88036 11.865 3.84036L11.4975 6.20286C11.49 6.25536 11.49 6.33036 11.5425 6.39036C11.58 6.42786 11.6325 6.45036 11.6925 6.45036H14.6925C15.4275 6.45036 16.065 6.75786 16.44 7.29036C16.8075 7.80786 16.8825 8.49036 16.6425 9.15036L14.85 14.6104C14.5725 15.6979 13.4175 16.5754 12.21 16.5754Z"
+                                                        fill="#D9D9D9"
+                                                />
+                                                <path
+                                                        d="M4.03503 15.7508H3.28503C1.89753 15.7508 1.22253 15.0983 1.22253 13.7633V6.41328C1.22253 5.07828 1.89753 4.42578 3.28503 4.42578H4.03503C5.42253 4.42578 6.09753 5.07828 6.09753 6.41328V13.7633C6.09753 15.0983 5.42253 15.7508 4.03503 15.7508ZM3.28503 5.55078C2.46753 5.55078 2.34753 5.74578 2.34753 6.41328V13.7633C2.34753 14.4308 2.46753 14.6258 3.28503 14.6258H4.03503C4.85253 14.6258 4.97253 14.4308 4.97253 13.7633V6.41328C4.97253 5.74578 4.85253 5.55078 4.03503 5.55078H3.28503Z"
+                                                        fill="#D9D9D9"
+                                                />
+                                            </svg>
+                                            <span>{{ review.likes_count }}</span>
+                                        </button>
+                                        <button type="button" id="b-dislike-{{ review.pk }}"
+                                                class="feed__action feed__action--dislike feed__action--dislike_active">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                        d="M12.21 16.5754H9.36002C8.94002 16.5754 8.02502 16.4479 7.53752 15.9604L5.26502 14.2054L5.95502 13.3129L8.28002 15.1129C8.46752 15.2929 8.94002 15.4429 9.36002 15.4429H12.21C12.885 15.4429 13.6125 14.9029 13.7625 14.2954L15.5775 8.78286C15.6975 8.45286 15.675 8.15286 15.5175 7.93536C15.3525 7.70286 15.0525 7.56786 14.685 7.56786H11.685C11.295 7.56786 10.935 7.40286 10.6875 7.11786C10.4325 6.82536 10.32 6.43536 10.38 6.03036L10.755 3.62286C10.845 3.20286 10.56 2.73036 10.155 2.59536C9.78752 2.46036 9.31502 2.65536 9.15002 2.89536L6.07502 7.47036L5.14502 6.84786L8.22002 2.27286C8.69252 1.56786 9.72752 1.23036 10.5375 1.53786C11.475 1.84536 12.075 2.88036 11.865 3.84036L11.4975 6.20286C11.49 6.25536 11.49 6.33036 11.5425 6.39036C11.58 6.42786 11.6325 6.45036 11.6925 6.45036H14.6925C15.4275 6.45036 16.065 6.75786 16.44 7.29036C16.8075 7.80786 16.8825 8.49036 16.6425 9.15036L14.85 14.6104C14.5725 15.6979 13.4175 16.5754 12.21 16.5754Z"
+                                                        fill="#D9D9D9"
+                                                />
+                                                <path
+                                                        d="M4.03503 15.7508H3.28503C1.89753 15.7508 1.22253 15.0983 1.22253 13.7633V6.41328C1.22253 5.07828 1.89753 4.42578 3.28503 4.42578H4.03503C5.42253 4.42578 6.09753 5.07828 6.09753 6.41328V13.7633C6.09753 15.0983 5.42253 15.7508 4.03503 15.7508ZM3.28503 5.55078C2.46753 5.55078 2.34753 5.74578 2.34753 6.41328V13.7633C2.34753 14.4308 2.46753 14.6258 3.28503 14.6258H4.03503C4.85253 14.6258 4.97253 14.4308 4.97253 13.7633V6.41328C4.97253 5.74578 4.85253 5.55078 4.03503 5.55078H3.28503Z"
+                                                        fill="#D9D9D9"
+                                                />
+                                            </svg>
+                                            <span>{{ review.dislikes_count }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if page_obj.has_other_pages %}
+                        <div class="d-flex justify-content-center mt-4 mt-md-5">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    {% if page_obj.has_previous %}
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">〈</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if num == page_obj.number %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <li class="page-item">
+                                    {% if page_obj.has_next %}
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">〉</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Оставить отзыв -->
+    <div class="modal fade" id="openQuestion" tabindex="-1" role="dialog" aria-labelledby="openReviewLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document" style="transform: translate(0) !important">
+            <div class="modal-content leave-feed__modal-content p-0 p-xxl-4">
+                <div class="row modal-header">
+                    <h5 class="col-12 leave-feed__title text-center text-xxl-start">
+                        Отзыв о средстве
+                    </h5>
+                    <div class="col-12 modal-name leave-feed__name text-center text-xxl-start"
+                         id="openReviewLabel"></div>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'products:create_review' product.pk %}" enctype="multipart/form-data" method="post" class="needs-validation"
+                          novalidate>
+                        {% csrf_token %}
+                        <div class="row mb-4">
+                            <div class="text--15-30 text-start col-6">Оцените средство</div>
+                            <div class="col-6">
+                                <div class="rating rating--xl rating--set float-end">
+                                    <div class="rating__body">
+                                        <div class="rating__active"></div>
+                                        <div class="rating__items">
+                                            <input type="radio" class="rating__item" value="1" name="rating"/>
+                                            <input type="radio" class="rating__item" value="2" name="rating"/>
+                                            <input type="radio" class="rating__item" value="3" name="rating"/>
+                                            <input type="radio" class="rating__item" value="4" name="rating"/>
+                                            <input type="radio" class="rating__item" value="5" name="rating"/>
+                                        </div>
+                                    </div>
+                                    <div class="rating__value" style="display: none">0</div>
+                                    <!--Пока значение хранится здесь-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="text--15-30 text-start col-12 mb-3">
+                                Расскажите о средстве
+                            </div>
+                            <div class="col-12 position-relative leave-feed__textarea input--dark">
+                                <textarea class="form-control" id="feedFormControlTextarea" name="text"
+                                          maxlength="1400"></textarea>
+                                <div class="leave-feed__count">
+                                    <span class="leave-feed__num">0</span>
+                                    <span class="leave-feed__maximum">/ 1400</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="text--15-30 text-start col-12 mb-3">
+                                Загрузите до 5 фотографий
+                            </div>
+                            <div class="col-3 col-xxl-4">
+                                <div class="input input--modal input--image profile__input profile__image"
+                                     type="button">
+                                    <img src="{% static '/img/gallery-add.svg' %}" alt="add photos"
+                                         class="position-absolute top-50 start-50 translate-middle"/>
+                                    <input type="file" name="images" id="img-multiple"
+                                           class="file-input profile__file-input" accept="image/png, image/jpg"
+                                           multiple/>
+                                </div>
+                                <div class="leave-feed__img-list"></div>
+                            </div>
+                            <div class="col-9 col-xxl-8 d-flex justify-content-center flex-column">
+                                <p class="mb-1 leave-feed__comment">
+                                    Нажмите на область с иконкой
+                                </p>
+                                <p class="leave-feed__comment leave-feed__comment--light mb-1">
+                                    Фото до 10 МБ. Формат JPG, JPEG, BMP, GIF
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-10 d-flex justify-content-start justify-content-md-around flex-column flex-md-row flex-column-reverse">
+                                <button type="button" class="btn-string pre-color" data-bs-dismiss="modal">
+                                    <img src="{% static 'img/cansel-icon.svg' %}" class="me-1" alt=""/>Отменить
+                                </button>
+                                <button type="submit" class="btn-string mb-3 mb-md-0">
+                                    <img src="{% static 'img/pen-notice.svg' %}" class="me-1" alt=""/>
+                                    Отправить отзыв
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal__close">&times;</span>
+        <img class="image-modal__content" id="img01" alt=""/>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "/js/splide.min.js" %}"></script>
+    <script src="{% static "/js/image-modal.js" %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          Splide.defaults = {
+            perPage: 5,
+            gap: "1.5rem",
+            height: "219px",
+            pagination: false,
+            arrows: false,
+            breakpoints: {
+              1400: {
+                perPage: 4,
+                gap: "1rem",
+                height: "179px",
+                padding: { right: "1.5rem" },
+              },
+              768: {
+                perPage: 3,
+                gap: ".5rem",
+                height: "108px",
+                padding: { right: "1rem" },
+              },
+            },
+          };
+          document.querySelectorAll("#feed-image-slider").forEach(el => {
+              new Splide(el).mount();
+          })
+        });
+    </script>
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                    console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        } else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+        // ]]>
+    </script>
+    <script>
+        $("#subscribe").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '/author-action/{{ profile.pk }}/',
+                data: {'model': 'subscribe', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (result) {
+                    if (result['new_status'] === 1) {
+                        $("#subscribe").addClass("active").html("Отписаться");
+                    } else {
+                        $("#subscribe").removeClass("active").addClass("btn--base").html("Подписаться");
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#subscribe").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '/author-action/{{ profile.pk }}/',
+                data: {'model': 'subscribe', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (result) {
+                    if (result['new_status'] === 1) {
+                        $("#subscribe").addClass("active").html("Отписаться");
+                    } else {
+                        $("#subscribe").removeClass("active").addClass("btn--base").html("Подписаться");
+                    }
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        $("[id^='b-like-']").on("click", function () {
+            const obj_id = $(this).attr("id").split("-")[2];
+            $.ajax({
+                type: 'POST',
+                url: '/review_like/' + obj_id + '/',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (result) {
+                    $("#b-like-" + obj_id + " span").text(result['new_action_like']);
+                    $("#b-dislike-" + obj_id + " span").text(result['new_action_dislike']);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $("[id^='b-dislike-']").on("click", function () {
+            const obj_id = $(this).attr("id").split("-")[2];
+            $.ajax({
+                type: 'POST',
+                url: '/review_dislike/' + obj_id + '/',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (result) {
+                    $("#b-like-" + obj_id + " span").text(result['new_action_like']);
+                    $("#b-dislike-" + obj_id + " span").text(result['new_action_dislike']);
+                }
+            });
+        });
+    </script>
+{% endblock %}

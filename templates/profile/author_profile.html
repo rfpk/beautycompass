@@ -1,0 +1,647 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load profile_tags %}
+
+{% block title %}{{ block.super }} - Профиль {{ profile.profile.nickname }}{% endblock %}
+
+{% block content %}
+    <main class="user">
+
+        <section class="user-profile">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+
+                    <div class="user-profile__head">
+                        <div class="user-profile__avatar">
+                            {% if profile.profile.avatar %}
+                                <img src="{{ profile.profile.avatar.url }}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="user-profile__info d-flex flex-column gap-1">
+                            <div class="user-profile__nickname">
+                                <span class="title--20-36 lh-125 dark-semi">{{ profile.profile.nickname }}</span>
+                                {% if profile_type == 'A' and profile.profile.user != request.user %}
+                                    {% status_gratitude profile request.user as status %}
+                                    {% if status %}
+                                        <div id="gratitude"
+                                             class="user-profile__label user-profile__label--star active"></div>
+                                    {% else %}
+                                        <div id="gratitude" class="user-profile__label user-profile__label--star"
+                                             onclick="userThanks(this)">
+                                            <div class="user-profile__thanks fw-600 dark-semi">
+                                                Вы поблагодарили автора
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                {% endif %}
+                                <div class="user-profile__label user-profile__label--ban">
+                                    {% if profile.current_status == 'BU' %}
+                                        <span class="text--10_18 fw-600">
+                                        <img src="{% static 'img/user-label-ban.svg' %}" alt="">
+                                        Заблокирован до {{ author.close_at|date:'d-m-Y' }}
+                                    </span>
+                                    {% elif profile.current_status == 'BF' %}
+                                        <span class="text--10_18 fw-600">
+                                        <img src="{% static 'img/user-label-ban.svg' %}" alt="">
+                                            Заблокирован навсегда
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="user-profile__name fz-30 fw-600 lh-125 dark-semi">{{ profile.profile.first_name }} {{ profile.profile.last_name_slice }}.</div>
+                            <div class="user-profile__status text--10_18 dark-lighter">{{ profile.get_type_display }}
+                                BC
+                            </div>
+                            <div class="user-profile__stat d-flex flex-wrap gap-3 text--10_18 dark-lighter">
+                                <span>Место: {{ profile.get_rating_place }}</span>
+                                <span>Рейтинг: {{ profile.rating }}</span>
+                            </div>
+                            <div class="user-profile__action d-flex gap-3 mt-3">
+                                {% if profile_type == 'A' and profile.profile.user != request.user %}
+                                    {% status_subscribe profile request.user as status %}
+                                    {% if status %}
+                                        <div id="subscribe" class="btn btn--base active">Отписаться</div>
+                                    {% else %}
+                                        <div id="subscribe" class="btn btn--base">Подписаться</div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if profile.profile.user != request.user %}
+                                    <a href="#" class="btn btn--base">Написать</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-profile__body d-flex flex-column gap-4 mt-4">
+                        <div class="user-profile__descr title--12-18 fw-600">
+                            {{ profile.profile.description|safe }}
+                        </div>
+                        <div class="user-profile__details">
+                            <button class="user-profile__details__btn d-flex align-items-center gap-3 w-100 text--12-18 fw-600"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#user-profile__details"
+                                    aria-expanded="false" aria-controls="user-profile__details">
+                                {% if profile_type == "A" %}
+                                    <span>Информация об авторе</span>
+                                {% else %}
+                                    <span>Информация о читателе</span>
+                                {% endif %}
+                                <svg class="ease3" width="19" height="10" viewBox="0 0 19 10" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.75 0.878653C18.75 1.07766 18.6743 1.27667 18.5121 1.43379L11.4609 8.263C10.3145 9.37327 8.43277 9.37327 7.28641 8.263L0.23522 1.43379C-0.0784066 1.13003 -0.0784066 0.627271 0.23522 0.323518C0.548846 0.0197639 1.06795 0.0197639 1.38158 0.323518L8.43277 7.15273C8.95187 7.65549 9.79542 7.65549 10.3145 7.15273L17.3657 0.323518C17.6793 0.0197639 18.1985 0.0197639 18.5121 0.323518C18.6635 0.480631 18.75 0.679642 18.75 0.878653Z"
+                                          fill="#210E22"/>
+                                </svg>
+                            </button>
+                            {% if profile_type == "A" %}
+                                <div class="collapse" id="user-profile__details">
+                                    <dl class="user-profile__details__body d-flex flex-column text--12-18 fw-600">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Страна:</dt>
+                                            {% if profile.profile.country %}
+                                                <dd>{{ profile.profile.country }}</dd>
+                                            {% endif %}
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Город:</dt>
+                                            <dd>{{ profile.profile.city }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Возраст:</dt>
+                                            <dd>{{ profile.profile.age }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Тип кожи -</dt>
+                                            <dd>{{ profile.profile.skin_type.label }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Тип волос -</dt>
+                                            <dd>{{ profile.profile.hair_type.label }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>Написано отзывов:</dt>
+                                            <dd>{{ count_reviews }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Написано комментариев:</dt>
+                                            <dd>{{ count_write_overview_comments }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>E-mail:</dt>
+                                            <dd>{{ profile.profile.contact_email }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>Дата регистрации на сайте:</dt>
+                                            <dd>{{ profile.profile.created_at|date:'d-m-Y' }}
+                                                ({{ profile.profile.created_at|timesince }})
+                                            </dd>
+                                        </div>
+                                        <div class="d-flex align-items-center mt-3">
+                                            <dt>Статистика:</dt>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>Подписчиков:</dt>
+                                            <dd>{{ count_subscribers }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Опубликовано обзоров:</dt>
+                                            <dd>{{ count_overview }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Опубликовано отзывов:</dt>
+                                            <dd>{{ count_reviews }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Написано комментариев:</dt>
+                                            <dd>{{ count_write_overview_comments }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>Просмотры:</dt>
+                                            <dd>{{ count_views }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Лайки:</dt>
+                                            <dd>{{ count_likes_overview }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Добавление в избранное:</dt>
+                                            <dd>{{ count_favorite_overview }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Получено комментариев:</dt>
+                                            <dd>{{ count_get_overview_comments }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Получено благодарностей:</dt>
+                                            <dd>{{ count_gratitude }}</dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            {% else %}
+                                <div class="collapse" id="user-profile__details">
+                                    <dl class="user-profile__details__body d-flex flex-column text--12-18 fw-600">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Страна:</dt>
+                                            {% if profile.profile.country %}
+                                                <dd>{{ profile.profile.country }}</dd>
+                                            {% endif %}
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Город:</dt>
+                                            <dd>{{ profile.profile.city }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Возраст:</dt>
+                                            <dd>{% if profile.profile.date_of_birth %} {{ profile.profile.age }} {% endif %}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Тип кожи -</dt>
+                                            <dd>
+                                                {% if profile.profile.skin_type %}
+                                                    {{ profile.profile.skin_type.label }}
+                                                {% else %}
+                                                    в свободной форме
+                                                {% endif %}
+                                            </dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Тип волос -</dt>
+                                            <dd>
+                                                {% if profile.profile.hair_type %}
+                                                    {{ profile.profile.hair_type.label }}
+                                                {% else %}
+                                                    в свободной форме
+                                                {% endif %}
+                                            </dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>Написано отзывов:</dt>
+                                            <dd>{{ count_reviews }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <dt>Написано комментариев:</dt>
+                                            <dd>{{ count_write_overview_comments }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>E-mail:</dt>
+                                            <dd>{{ profile.profile.contact_email }}</dd>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mt-3">
+                                            <dt>Дата регистрации на сайте:</dt>
+                                            <dd>{{ profile.profile.created_at|date:'d-m-Y' }}
+                                                ({{ profile.profile.created_at|timesince }})
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="user-tabs">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1 my-5">
+                    <nav>
+                        <div class="nav user-links d-flex flex-wrap gap-3 mt-4" id="user-tab" role="tablist">
+                            {% if profile_type != 'R' %}
+                                <button class="btn btn--base btn--xs-full {% if not request.GET or request.GET.page_overview %}active{% endif %}" data-bs-toggle="tab"
+                                        data-bs-target="#user-tab-review" type="button" role="tab" aria-selected="true">
+                                    Обзоры автора
+                                </button>
+                                <button class="btn btn--base btn--xs-full {% if request.GET.page_review %}active{% endif %}" data-bs-toggle="tab"
+                                        data-bs-target="#user-tab-feed" type="button" role="tab" aria-selected="false">
+                                    Отзывы на средства
+                                </button>
+                            {% else %}
+                                <button class="btn btn--base btn--xs-full active" data-bs-toggle="tab"
+                                        data-bs-target="#user-tab-feed" type="button" role="tab" aria-selected="false">
+                                    Отзывы на средства
+                                </button>
+                            {% endif %}
+                            <button class="btn btn--base btn--xs-full" data-bs-toggle="tab"
+                                    data-bs-target="#user-tab-topic" type="button" role="tab" aria-selected="false">Темы
+                                в беседке
+                            </button>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        {% if profile_type == 'A' %}
+                            <div class="tab-pane fade {% if not request.GET or request.GET.page_overview %}show active{% endif %}" id="user-tab-review" role="tabpanel"
+                                 aria-labelledby="user-tab-review" tabindex="0">
+                                <div class="articles">
+                                    <div class="row justify-content-center">
+                                        <div class="col-10 col-xxl-4 mt-5 mb-3 mb-md-2 mb-xxl-0">
+                                            <div class="text-center title--h2">Обзоры</div>
+                                        </div>
+                                    </div>
+                                    <div class="row articles__list">
+                                        {% for overview in overviews %}
+                                            <div class="col-12 col-md-6 py-1 py-md-3">
+                                                <a href="{% url 'profile:detail_overview' overview.slug %}" class="shadow articles__item">
+                                                    <div class="row articles__info">
+                                                        <div class="col-6">
+                                                            <img src="{% static 'img/logo-min.png' %}" alt=""/>
+                                                        </div>
+                                                        <div class="col-6 text-end articles__date">{{ overview.created_at|date:"d-m-Y" }}</div>
+                                                    </div>
+                                                    {% if overview.thumbnail %}
+                                                    <img
+                                                        src="{{ overview.thumbnail.url }}"
+                                                        class="articles__img"
+                                                        alt=""
+                                                    />
+                                                    {% endif %}
+                                                    <h5 class="articles__title">
+                                                        {{ overview.title }}
+                                                    </h5>
+                                                    <p>
+                                                        {{ overview.description|truncatewords_html:20 }}
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% if overviews.has_other_pages %}
+                                        <div class="d-flex justify-content-center mt-4 mt-md-5">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    {% if overviews.has_previous %}
+                                                        <a class="page-link" href="?page_overview={{ overviews.previous_page_number }}"
+                                                        aria-label="Previous">
+                                                            <span aria-hidden="true">〈</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                                {% for num in overviews.paginator.page_range %}
+                                                    {% if num == overviews.number %}
+                                                        <li class="page-item active">
+                                                            <a class="page-link" href="?page_overview={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% elif num > overviews.number|add:'-3' and num < overviews.number|add:'3' %}
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="?page_overview={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                <li class="page-item">
+                                                    {% if overviews.has_next %}
+                                                        <a class="page-link" href="?page_overview={{ overviews.next_page_number }}"
+                                                        aria-label="Previous">
+                                                            <span aria-hidden="true">〉</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="tab-pane fade {% if request.GET.page_review %}show active{% endif %}" id="user-tab-feed" role="tabpanel"
+                                 aria-labelledby="user-tab-feed" tabindex="0">
+                                <div class="user-feed__item">
+                                    {% for review in reviews %}
+                                        <div class="feed d-flex flex-column mb-5">
+                                            <div class="row mb-2 mb-md-3">
+                                                <a href="{% url 'products:series_detail' review.product.series.slug %}"
+                                                   class="text--15-36 questions__heading-link--h1-link">
+                                                    {{ review.product.series }}
+                                                </a>
+                                                <a href="{% url 'products:product_detail' review.product.slug %}"
+                                                   class="text--10-30 questions__heading-link title__under fw-600">
+                                                    {{ review.product.name }}
+                                                </a>
+                                            </div>
+                                            <div class="feed__row">
+                                                <div class="feed__user">
+                                                    <a href="#" class="feed__avatar">
+                                                        {% if profile.profile.avatar %}
+                                                            <img src="{{ profile.profile.avatar.url }}" alt="avatar"/>
+                                                        {% endif %}
+                                                    </a>
+                                                    <div class="feed__info">
+                                                        <a href="#"
+                                                           class="feed__name">{{ profile.profile.first_name }} {{ profile.profile.last_name_slice }}.</a>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div class="rating">
+                                                                <div class="rating__body">
+                                                                    <div class="rating__active"
+                                                                         style="width:{{ review.get_normalizated_rating }}%"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="feed__date">{{ review.created_at|date:"d-m-Y" }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="#" class="feed__text feed__text--preview dark-semi mb-3">
+                                                    {{ review.text|safe }}
+                                                </a>
+
+                                                <section id="feed-image-slider" class="feed__splide splide"
+                                                         aria-label="Feed slides">
+                                                    <div class="splide__track">
+                                                        <div class="splide__list">
+                                                            {% for image_review in review.images.all %}
+                                                                <div class="splide__slide">
+                                                                    <img src="{{ image_review.image.url }}"
+                                                                         alt="review-photo" data-modal-image/>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    {% if reviews.has_other_pages %}
+                                        <div class="d-flex justify-content-center mt-4 mt-md-5">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    {% if reviews.has_previous %}
+                                                        <a class="page-link" href="?page_review={{ reviews.previous_page_number }}"
+                                                        aria-label="Previous">
+                                                            <span aria-hidden="true">〈</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                                {% for num in reviews.paginator.page_range %}
+                                                    {% if num == reviews.number %}
+                                                        <li class="page-item active">
+                                                            <a class="page-link" href="?page_review={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% elif num > reviews.number|add:'-3' and num < reviews.number|add:'3' %}
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="?page_review={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                <li class="page-item">
+                                                    {% if reviews.has_next %}
+                                                        <a class="page-link" href="?page_review={{ reviews.next_page_number }}"
+                                                        aria-label="Previous">
+                                                            <span aria-hidden="true">〉</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="tab-pane fade show active" id="user-tab-feed" role="tabpanel"
+                                 aria-labelledby="user-tab-feed" tabindex="0">
+                                <div class="user-feed">
+
+                                    <div class="row justify-content-center">
+                                        <div class="col-10 col-xxl-4 mt-5 mb-3 mb-md-2 mb-xxl-0">
+                                            <div class="text-center title--h2">Отзывы</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="user-feed__item">
+                                        {% for review in reviews %}
+                                            <div class="feed d-flex flex-column mb-5">
+                                                <div class="row mb-2 mb-md-3">
+                                                    <a href="{% url 'products:series_detail' review.product.series.slug %}"
+                                                       class="text--15-36 questions__heading-link--h1-link">
+                                                        {{ review.product.series }}
+                                                    </a>
+                                                    <a href="{% url 'products:product_detail' review.product.slug %}"
+                                                       class="text--10-30 questions__heading-link title__under fw-600">
+                                                        {{ review.product.name }}
+                                                    </a>
+                                                </div>
+                                                <div class="feed__row">
+                                                    <div class="feed__user">
+                                                        <a href="#" class="feed__avatar">
+                                                            {% if profile.profile.avatar %}
+                                                                <img src="{{ profile.profile.avatar.url }}"
+                                                                     alt="avatar"/>
+                                                            {% endif %}
+                                                        </a>
+                                                        <div class="feed__info">
+                                                            <a href="#"
+                                                               class="feed__name">
+                                                                {{ profile.profile.first_name }} {{ profile.profile.last_name_slice }}.
+                                                            </a>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="rating">
+                                                                    <div class="rating__body">
+                                                                        <div class="rating__active"
+                                                                             style="width:{% if review.rating %}{{ review.get_normalizated_rating }}{% else %}0{% endif %}%"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="feed__date">{{ review.created_at|date:"d-m-Y" }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="feed__text feed__text--preview dark-semi mb-3">
+                                                        {{ review.text|safe }}
+                                                    </a>
+
+                                                    <section id="feed-image-slider" class="feed__splide splide"
+                                                             aria-label="Feed slides">
+                                                        <div class="splide__track">
+                                                            <div class="splide__list">
+                                                                {% for image_review in review.images.all %}
+                                                                    <div class="splide__slide">
+                                                                        <img src="{{ image_review.image.url }}"
+                                                                             alt="review-photo" data-modal-image/>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+
+                                    {% if reviews.has_other_pages %}
+                                        <div class="d-flex justify-content-center mt-4 mt-md-5">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    {% if reviews.has_previous %}
+                                                        <a class="page-link" href="?page_review={{ reviews.previous_page_number }}"
+                                                        aria-label="Previous">
+                                                            <span aria-hidden="true">〈</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                                {% for num in reviews.paginator.page_range %}
+                                                    {% if num == reviews.number %}
+                                                        <li class="page-item active">
+                                                            <a class="page-link" href="?page_review={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% elif num > reviews.number|add:'-3' and num < reviews.number|add:'3' %}
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="?page_review={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                <li class="page-item">
+                                                    {% if reviews.has_next %}
+                                                        <a class="page-link" href="?page_review={{ reviews.next_page_number }}"
+                                                        aria-label="Previous">
+                                                            <span aria-hidden="true">〉</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="tab-pane fade" id="user-tab-topic" role="tabpanel" aria-labelledby="user-tab-chat"
+                             tabindex="0">
+                            <div class="user-topic">
+
+                                <div class="row justify-content-center">
+                                    <div class="col-10 col-xxl-4 mt-5 mb-3 mb-md-2 mb-xxl-0">
+                                        <div class="text-center title--h2">Темы в беседке</div>
+                                    </div>
+                                </div>
+
+                                <div class="user-topic__list d-flex flex-column gap-4">
+                                    {% for conversation in profile.profile.profile_conversation_posts.all %}
+                                        <div class="user-topic__item white-box">
+                                            <div class="feed__date fw-600">{{ conversation.created_at|date:'d-m-Y' }}</div>
+                                            <a href="{{ conversation.get_absolute_url }}"
+                                               class="text--15-36 questions__heading-link--h1-link">
+                                                {{ conversation.title }}
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/splide.min.js' %}"></script>
+    <script src="{% static 'js/user-subscribe.js' %}"></script>
+    <script src="{% static 'js/user-thanks.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Splide.defaults = {
+                perPage: 5,
+                gap: "1.5rem",
+                height: "219px",
+                pagination: false,
+                arrows: false,
+                breakpoints: {
+                    1400: {
+                        perPage: 4,
+                        gap: "1rem",
+                        height: "179px",
+                        padding: {right: "1.5rem"},
+                    },
+                    768: {
+                        perPage: 3,
+                        gap: ".5rem",
+                        height: "108px",
+                        padding: {right: "1rem"},
+                    },
+                },
+            };
+            document.querySelectorAll("#feed-image-slider").forEach(el => {
+                new Splide(el).mount();
+            })
+            // new Splide("#feed-image-slider").mount();
+            // new Splide("#feed-image-slider1").mount();
+        });
+    </script>
+    <script>
+        $("#gratitude").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '/author-action/{{ profile.pk }}/',
+                data: {'model': 'gratitude', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (result) {
+                    if (result['new_status'] === 1) {
+                        $("#gratitude").addClass("active");
+                    } else {
+                        $("#gratitude").removeClass("active");
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#subscribe").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '/author-action/{{ profile.pk }}/',
+                data: {'model': 'subscribe', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (result) {
+                    if (result['new_status'] === 1) {
+                        $("#subscribe").addClass("active").html("Отписаться");
+                    } else {
+                        $("#subscribe").removeClass("active").addClass("btn--base").html("Подписаться");
+                    }
+
+                }
+            });
+        });
+    </script>
+{% endblock %}

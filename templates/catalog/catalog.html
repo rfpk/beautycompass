@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{{ block.super }} - Каталог{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="categories">
+            <div class="container container--bc">
+                <div class="row">
+                    {% for category in categories %}
+                        <div class="col-lg-3">
+                            <div class="categories-item">
+                                <div class="categories-item__title">
+                                    <a href="{% url 'catalog:category' category.slug %}">{{ category.name }}</a>
+                                </div>
+                                {% for dop_category in category.children.all %}
+                                    <div class="categories-dop">
+                                        <div class="categories-dop__title">
+                                            <a href="{% url 'catalog:sub_category' category.slug dop_category.slug %}">{{ dop_category.name }}</a>
+                                        </div>
+                                        {% for product in dop_category.children.all %}
+                                            <div class="categories-product">
+                                                <div class="categories-product__title">
+                                                    <a href={% url 'catalog:sub_products' category.slug dop_category.slug product.slug %}>{{ product.name }}</a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

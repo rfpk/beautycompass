@@ -1,0 +1,63 @@
+@import "vars.sass"
+.shops
+  margin-top: 25px
+  margin-bottom: 28px
+  @media screen and (min-width: $first-breack-point)
+    margin-top: 42px
+    margin-bottom: 52px
+  &__container
+    display: flex
+    flex-wrap: wrap
+    column-gap: 11px
+    row-gap: 22px
+    @media screen and (min-width: $first-breack-point)
+      row-gap: 30px
+      column-gap: 42px
+  &__item
+    flex-shrink: 0
+    position: relative
+    width: 233px
+    height: 146px
+    padding: 29px 17px 25px 15px
+    border-radius: 15px
+    background: $main-color
+    box-shadow: $box-shadow-regular
+    @media screen and (min-width: $first-breack-point)
+      width: 382px
+      height: 212px
+      padding: 56px 34px 32px 22px
+    i.tag-close
+      position: absolute
+      top: -11px
+      right: -11px
+      width: 22px
+      height: 22px
+      background-color: $pre-color
+      -webkit-border-radius: 50px
+      -moz-border-radius: 50px
+      border-radius: 50px
+      display: flex
+      align-items: center
+      justify-content: center
+      color: $sub-color
+      font-size: 10px
+      font-style: normal
+      font-weight: 700
+      line-height: normal
+      text-transform: uppercase
+      cursor: pointer
+      &:hover
+        opacity: 0.8
+  &__name
+    margin-bottom: 30px
+  &__plus
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-left: 16px
+    &.center
+      @media screen and (min-width: $first-breack-point)
+        width: 100%
+    svg
+      width: 50px
+      height: 50px

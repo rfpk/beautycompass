@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Опубликованные обзоры{% endblock %}
+
+
+{% block content %}
+    <main class="lk-users-review-draft">
+
+        <section>
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+                    <div class="page-title d-flex flex-wrap align-items-center">
+                        <div class="col-1 col-xxl-12 order-xxl-1">
+                            <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="vuesax/outline/arrow-left">
+                                        <g id="arrow-left">
+                                            <path id="Vector" d="M11.9633 23.5254C11.7258 23.5254 11.4883 23.4379 11.3008 23.2504L3.71328 15.6629C3.35078 15.3004 3.35078 14.7004 3.71328 14.3379L11.3008 6.75039C11.6633 6.38789 12.2633 6.38789 12.6258 6.75039C12.9883 7.11289 12.9883 7.71289 12.6258 8.07539L5.70078 15.0004L12.6258 21.9254C12.9883 22.2879 12.9883 22.8879 12.6258 23.2504C12.4508 23.4379 12.2008 23.5254 11.9633 23.5254Z" fill="#1560BD"></path>
+                                            <path id="Vector_2" d="M25.6234 15.9375H4.58594C4.07344 15.9375 3.64844 15.5125 3.64844 15C3.64844 14.4875 4.07344 14.0625 4.58594 14.0625H25.6234C26.1359 14.0625 26.5609 14.4875 26.5609 15C26.5609 15.5125 26.1359 15.9375 25.6234 15.9375Z" fill="#1560BD"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span class="text-decoration-none text-uppercase d-none d-xxl-block ms-2">Вернуться в кабинет</span>
+                            </a>
+                        </div>
+                        <div class="col text-center col-xxl-12">
+                            <h1 class="title--20-36 text-uppercase">Опубликованные обзоры</h1>
+                        </div>
+                        <div class="col-1 d-xxl-none"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="articles-preview mb-5">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+                    <div class="articles-preview__list d-flex flex-column gap-3">
+
+                        {% for overview in publish_overviews %}
+                            <div class="articles-preview-item white-box white-box--px-10">
+                                <div class="articles-preview-item__header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                    <a href="{% url 'profile:author-profile' overview.author.id %}" class="articles-preview-item__owner">
+                                        {% if overview.author.profile.avatar %}
+                                            <img
+                                                src="{{overview.author.profile.avatar.url}}"
+                                                alt="logo"
+                                                style="max-width: 40px;max-height: 40px;border-radius: 50%;height: 40px;width: 40px;"
+                                            >
+                                        {% endif %}
+                                    </a>
+                                    <span class="dark-semi fw-600 text--12-18">будeт опубликовано 01.01.2023</span>
+                                </div>
+                                <div class="articles-preview-item__body">
+                                    <a href="{% url 'profile:detail_overview' overview.slug %}" class="articles-preview-item__pic">
+                                        {% if overview.thumbnail %}
+                                            <img src="{{overview.thumbnail.url}}" alt="{{overview.thumbnail.pk}}">
+                                        {% endif %}
+                                    </a>
+                                    <a href="{% url 'profile:detail_overview' overview.slug %}" class="articles-preview-item__text text--hover-gray d-flex flex-column align-items-start gap-2 gap-xxl-3 dark-semi my-3">
+                                        <span class="text--15-30 lh-1 text--preview-2">
+                                            {{overview.title}}
+                                        </span>
+                                        <span class="text--12-18 fw-600 text--preview-3">
+                                            {{overview.description}}
+                                        </span>
+                                    </a>
+                                    <div class="articles-preview-item__action d-flex justify-content-between mt-4">
+                                        
+                                        <button
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-delete"
+                                            data-overview-id="{{overview.pk}}"
+                                            style="border: 0; background: none;"
+                                            class="d-flex align-items-center pre-color text-uppercase text--15-30 fw600 hover-opacity btn_delete"
+                                        >Удалить</button>
+
+                                        <div class="d-flex justify-content-between gap-4 gap-xxl-5">
+                                            <a href="#" class="btn__svg-confirm text--15-30 fw600 main-color hover-red d-flex align-items-center">
+                                                <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7338 37.8204C9.55197 37.8204 8.4476 37.4135 7.65322 36.6579C6.64572 35.7085 6.16135 34.2747 6.33572 32.7247L7.0526 26.4472C7.18822 25.2654 7.9051 23.696 8.73822 22.8435L24.6451 6.00662C28.617 1.80224 32.7632 1.68599 36.9676 5.65787C41.172 9.62975 41.2882 13.776 37.3163 17.9804L21.4095 34.8172C20.5957 35.6891 19.0845 36.5029 17.9026 36.6966L11.6638 37.7622C11.3345 37.7816 11.0438 37.8204 10.7338 37.8204ZM30.8645 5.6385C29.3726 5.6385 28.0745 6.5685 26.757 7.9635L10.8501 24.8197C10.4626 25.2266 10.017 26.1954 9.93947 26.7572L9.2226 33.0347C9.1451 33.6741 9.3001 34.1972 9.64885 34.5266C9.9976 34.856 10.5207 34.9722 11.1601 34.8754L17.3988 33.8097C17.9607 33.7129 18.8907 33.2091 19.2782 32.8022L35.1851 15.9654C37.5876 13.4079 38.4595 11.0441 34.9526 7.75037C33.4026 6.2585 32.0657 5.6385 30.8645 5.6385Z" fill="#1560BD"/>
+                                                    <path d="M33.5949 21.2147C33.5561 21.2147 33.498 21.2147 33.4593 21.2147C27.4143 20.614 22.5511 16.0222 21.6211 10.0159C21.5049 9.22154 22.0474 8.48529 22.8418 8.34966C23.6361 8.23341 24.3724 8.77591 24.508 9.57029C25.2443 14.259 29.0418 17.8628 33.7693 18.3278C34.5636 18.4053 35.1449 19.1222 35.0674 19.9165C34.9705 20.6528 34.3311 21.2147 33.5949 21.2147Z" fill="#1560BD"/>
+                                                    <path d="M40.6875 44.0781H5.8125C5.01812 44.0781 4.35938 43.4194 4.35938 42.625C4.35938 41.8306 5.01812 41.1719 5.8125 41.1719H40.6875C41.4819 41.1719 42.1406 41.8306 42.1406 42.625C42.1406 43.4194 41.4819 44.0781 40.6875 44.0781Z" fill="#1560BD"/>
+                                                </svg>
+                                                <span class="text-decoration-none text-uppercase ms-2">Редактировать</span>
+                                            </a>
+
+                                            <button
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal-publish"
+                                                style="border: 0; background: none;"
+                                                data-overview-slug="{{overview.slug}}"
+                                                class="btn__svg-confirm text--15-30 fw600 main-color hover-red d-flex align-items-center publish-overview"
+                                            >
+                                                <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M23.5 44.5781C12.0106 44.5781 2.67188 35.2394 2.67188 23.75C2.67188 12.2606 12.0106 2.92188 23.5 2.92188C34.9894 2.92188 44.3281 12.2606 44.3281 23.75C44.3281 35.2394 34.9894 44.5781 23.5 44.5781ZM23.5 5.82812C13.6188 5.82812 5.57812 13.8688 5.57812 23.75C5.57812 33.6313 13.6188 41.6719 23.5 41.6719C33.3813 41.6719 41.4219 33.6313 41.4219 23.75C41.4219 13.8688 33.3813 5.82812 23.5 5.82812Z" fill="#1560BD"/>
+                                                    <path d="M20.7478 30.6859C20.3603 30.6859 19.9922 30.5309 19.7209 30.2596L14.2378 24.7765C13.6759 24.2146 13.6759 23.2846 14.2378 22.7227C14.7997 22.1609 15.7297 22.1609 16.2916 22.7227L20.7478 27.179L30.7066 17.2202C31.2684 16.6584 32.1984 16.6584 32.7603 17.2202C33.3222 17.7821 33.3222 18.7121 32.7603 19.274L21.7747 30.2596C21.5034 30.5309 21.1353 30.6859 20.7478 30.6859Z" fill="#1560BD"/>
+                                                </svg>
+                                                <span
+                                                    class="text-decoration-none text-uppercase ms-2"
+                                                >Снять с Публикации</span>
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% if page_obj.has_other_pages %}
+                            <div class="d-flex justify-content-center mt-4 mt-md-5">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        {% if page_obj.has_previous %}
+                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                            aria-label="Previous">
+                                                <span aria-hidden="true">〈</span>
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                    {% for num in page_obj.paginator.page_range %}
+                                        {% if num == page_obj.number %}
+                                            <li class="page-item active">
+                                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                            </li>
+                                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <li class="page-item">
+                                        {% if page_obj.has_next %}
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                            aria-label="Previous">
+                                                <span aria-hidden="true">〉</span>
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Delete -->
+    <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-petition">
+
+            <div class="modal-petition__header d-flex justify-content-center mb-4 mb-xxl-5">
+                <div class="text--15-36 fw700 main-color text-center">Вы хотите снять с публикации?</div>
+            </div>
+
+            <div class="modal-petition__body d-flex justify-content-center gap-5">
+
+                <a href="#" data-bs-dismiss="modal" class="d-flex align-items-center gap-2 pre-color text-uppercase text--15-30 fw600 hover-red">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.0537 30.6734C17.6796 30.6734 17.3055 30.5355 17.0102 30.2402C16.4393 29.6693 16.4393 28.7243 17.0102 28.1534L28.1534 17.0102C28.7243 16.4393 29.6693 16.4393 30.2402 17.0102C30.8112 17.5812 30.8112 18.5262 30.2402 19.0971L19.0971 30.2402C18.8215 30.5355 18.4277 30.6734 18.0537 30.6734Z" fill="#E31E24"/>
+                        <path d="M29.1968 30.6734C28.8227 30.6734 28.4487 30.5355 28.1534 30.2402L17.0102 19.0971C16.4393 18.5262 16.4393 17.5812 17.0102 17.0102C17.5812 16.4393 18.5262 16.4393 19.0971 17.0102L30.2402 28.1534C30.8112 28.7243 30.8112 29.6693 30.2402 30.2402C29.9449 30.5355 29.5709 30.6734 29.1968 30.6734Z" fill="#E31E24"/>
+                        <path d="M29.5312 44.7891H17.7188C7.02844 44.7891 2.46094 40.2216 2.46094 29.5312V17.7188C2.46094 7.02844 7.02844 2.46094 17.7188 2.46094H29.5312C40.2216 2.46094 44.7891 7.02844 44.7891 17.7188V29.5312C44.7891 40.2216 40.2216 44.7891 29.5312 44.7891ZM17.7188 5.41406C8.64281 5.41406 5.41406 8.64281 5.41406 17.7188V29.5312C5.41406 38.6072 8.64281 41.8359 17.7188 41.8359H29.5312C38.6072 41.8359 41.8359 38.6072 41.8359 29.5312V17.7188C41.8359 8.64281 38.6072 5.41406 29.5312 5.41406H17.7188Z" fill="#E31E24"/>
+                    </svg>
+                    <span>Нет</span>
+                </a>
+                <button style="background: none;border: none;" class="d-flex align-items-center gap-2 main-color text-uppercase text--15-30 fw600 hover-red" id="delete-btn">
+                    <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.5 44.5781C12.0106 44.5781 2.67188 35.2394 2.67188 23.75C2.67188 12.2606 12.0106 2.92188 23.5 2.92188C34.9894 2.92188 44.3281 12.2606 44.3281 23.75C44.3281 35.2394 34.9894 44.5781 23.5 44.5781ZM23.5 5.82812C13.6188 5.82812 5.57812 13.8688 5.57812 23.75C5.57812 33.6313 13.6188 41.6719 23.5 41.6719C33.3813 41.6719 41.4219 33.6313 41.4219 23.75C41.4219 13.8688 33.3813 5.82812 23.5 5.82812Z" fill="#1560BD"/>
+                        <path d="M20.7478 30.6859C20.3603 30.6859 19.9922 30.5309 19.7209 30.2596L14.2378 24.7765C13.6759 24.2146 13.6759 23.2846 14.2378 22.7227C14.7997 22.1609 15.7297 22.1609 16.2916 22.7227L20.7478 27.179L30.7066 17.2202C31.2684 16.6584 32.1984 16.6584 32.7603 17.2202C33.3222 17.7821 33.3222 18.7121 32.7603 19.274L21.7747 30.2596C21.5034 30.5309 21.1353 30.6859 20.7478 30.6859Z" fill="#1560BD"/>
+                    </svg>
+                    <span>Да</span>
+                </button>
+
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal Publish -->
+     <div class="modal fade" id="modal-publish" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-petition">
+
+            <div class="modal-petition__header d-flex justify-content-center mb-4 mb-xxl-5">
+                <div class="text--15-36 fw700 main-color text-center">Вы хотите опубликовать?</div>
+            </div>
+
+            <div class="modal-petition__body d-flex justify-content-center gap-5">
+
+                <a
+                    href="#"
+                    class="d-flex align-items-center gap-2 pre-color text-uppercase text--15-30 fw600 hover-red"
+                    data-bs-dismiss="modal"
+                >
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.0537 30.6734C17.6796 30.6734 17.3055 30.5355 17.0102 30.2402C16.4393 29.6693 16.4393 28.7243 17.0102 28.1534L28.1534 17.0102C28.7243 16.4393 29.6693 16.4393 30.2402 17.0102C30.8112 17.5812 30.8112 18.5262 30.2402 19.0971L19.0971 30.2402C18.8215 30.5355 18.4277 30.6734 18.0537 30.6734Z" fill="#E31E24"/>
+                        <path d="M29.1968 30.6734C28.8227 30.6734 28.4487 30.5355 28.1534 30.2402L17.0102 19.0971C16.4393 18.5262 16.4393 17.5812 17.0102 17.0102C17.5812 16.4393 18.5262 16.4393 19.0971 17.0102L30.2402 28.1534C30.8112 28.7243 30.8112 29.6693 30.2402 30.2402C29.9449 30.5355 29.5709 30.6734 29.1968 30.6734Z" fill="#E31E24"/>
+                        <path d="M29.5312 44.7891H17.7188C7.02844 44.7891 2.46094 40.2216 2.46094 29.5312V17.7188C2.46094 7.02844 7.02844 2.46094 17.7188 2.46094H29.5312C40.2216 2.46094 44.7891 7.02844 44.7891 17.7188V29.5312C44.7891 40.2216 40.2216 44.7891 29.5312 44.7891ZM17.7188 5.41406C8.64281 5.41406 5.41406 8.64281 5.41406 17.7188V29.5312C5.41406 38.6072 8.64281 41.8359 17.7188 41.8359H29.5312C38.6072 41.8359 41.8359 38.6072 41.8359 29.5312V17.7188C41.8359 8.64281 38.6072 5.41406 29.5312 5.41406H17.7188Z" fill="#E31E24"/>
+                    </svg>
+                    <span>Нет</span>
+                </a>
+                <button style="background: none;border: none;" class="d-flex align-items-center gap-2 main-color text-uppercase text--15-30 fw600 hover-red" id="publish-btn">
+                    <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.5 44.5781C12.0106 44.5781 2.67188 35.2394 2.67188 23.75C2.67188 12.2606 12.0106 2.92188 23.5 2.92188C34.9894 2.92188 44.3281 12.2606 44.3281 23.75C44.3281 35.2394 34.9894 44.5781 23.5 44.5781ZM23.5 5.82812C13.6188 5.82812 5.57812 13.8688 5.57812 23.75C5.57812 33.6313 13.6188 41.6719 23.5 41.6719C33.3813 41.6719 41.4219 33.6313 41.4219 23.75C41.4219 13.8688 33.3813 5.82812 23.5 5.82812Z" fill="#1560BD"/>
+                        <path d="M20.7478 30.6859C20.3603 30.6859 19.9922 30.5309 19.7209 30.2596L14.2378 24.7765C13.6759 24.2146 13.6759 23.2846 14.2378 22.7227C14.7997 22.1609 15.7297 22.1609 16.2916 22.7227L20.7478 27.179L30.7066 17.2202C31.2684 16.6584 32.1984 16.6584 32.7603 17.2202C33.3222 17.7821 33.3222 18.7121 32.7603 19.274L21.7747 30.2596C21.5034 30.5309 21.1353 30.6859 20.7478 30.6859Z" fill="#1560BD"/>
+                    </svg>
+                    <span>Да</span>
+                </button>
+
+            </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/onClickActive.js" %}"></script>
+
+    <!-- Delete -->
+    <script>
+        const deleteButtons = document.querySelectorAll('.btn_delete');
+        const deleteBtn = document.getElementById('delete-btn');
+        let overviewId = null;
+
+        deleteButtons.forEach(el => {
+            el.addEventListener('click', () => {
+                overviewId = el.dataset.overviewId
+            })
+        });
+
+        
+        deleteBtn.addEventListener('click', () => {
+            $.ajax({
+                url: `/delete-overview/${overviewId}`,
+                type: 'get',
+                data: 'json',
+                success: function(response) {
+                    if (response['status'] === 'complete') {
+                        if (overviews.length <= 1) {
+                            setQueryParam();
+                        } else {
+                            window.location.reload()
+                        }
+                    }
+                },
+            })
+        })
+    </script>
+
+    <script>
+        const overviews = document.querySelectorAll('.articles-preview-item');
+
+        function setQueryParam() {
+            let url = new URL(location.href);
+            let queryString = url.search;
+            let searchParams = new URLSearchParams(queryString);
+            try {
+                const param = searchParams.get('page');
+                if (param) {
+                    if (param === '1') {
+                        searchParams.delete('page');
+                    } else {
+                        searchParams.set('page', param - 1);
+                    }
+                }
+                location.search = searchParams;
+            } catch (e) {
+                searchParams.delete('page');
+                location.search = searchParams;
+            }
+        }
+
+    </script>
+
+    <!-- Update Overview -->
+    <script>
+        const updateBtns = document.querySelectorAll('.publish-overview');
+        const updateBtn = document.getElementById('publish-btn');
+        let overviewSlug = null;
+
+        updateBtns.forEach((el) => {
+            el.addEventListener('click', () => {
+                overviewSlug = el.dataset.overviewSlug
+            })
+        })
+
+        updateBtn.addEventListener('click', () => {
+            $.ajax({
+                url: `/publish-overview/${overviewSlug}/`,
+                type: 'post',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'is_draft': true,
+                    'is_publish': false,
+                },
+                success: function(response) {
+                    if (response['status'] === 'complete') {
+                        if (overviews.length <= 1) {
+                            setQueryParam();
+                        } else {
+                            window.location.reload()
+                        }
+                    }
+                },
+            })
+        })
+    </script>
+{% endblock %}

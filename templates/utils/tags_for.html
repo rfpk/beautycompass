@@ -1,0 +1,14 @@
+{% load catalog_tags %}
+{% for tag in data %}
+    <div
+        class="select-block__item"
+    >
+        <span></span>
+        <input
+            name="{{tag.tag__slug}}"
+            class="filter__item-check__inp"
+            value="{{tag.tag__slug}}"
+        />
+        <label class="label-title">{{tag.tag__name|to_bold:word}}</label>
+    </div>
+{% endfor %}

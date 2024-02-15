@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ block.super }} - {{ landing_page.title }}{% endblock %}
+
+
+{% block content %}
+    <main>
+        <div class="col-10 col-xxl-4">
+            <a href="" class="text-center mb-4 title--h2">{{ landing_page.title }}</a>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,47 @@
+.confirm-news__checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.confirm-news__input {
+  display: none;
+}
+.confirm-news__input:checked + .confirm-news__checkmark {
+  background-color: #FFFFFF;
+}
+.confirm-news__input:checked + .confirm-news__checkmark:after {
+  content: "";
+  position: absolute;
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  background-image: url(../img/cross-black.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #210E22;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@media screen and (min-width: 1400px) {
+  .confirm-news__input:checked + .confirm-news__checkmark:after {
+    width: 20px;
+    height: 20px;
+  }
+}
+.confirm-news__checkmark {
+  width: 17px;
+  height: 17px;
+  border: 1px solid #210E22;
+  border-radius: 5px;
+  margin-left: 16px;
+  position: relative;
+}
+@media screen and (min-width: 1400px) {
+  .confirm-news__checkmark {
+    width: 30px;
+    height: 30px;
+  }
+}/*# sourceMappingURL=confirm-news.css.map */

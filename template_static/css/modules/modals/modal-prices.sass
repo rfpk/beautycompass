@@ -1,0 +1,44 @@
+@import "../vars.sass"
+.modal
+  &__prices
+    &-content
+      border-radius: 20px
+      max-width: 1200px
+      margin: auto
+      @media screen and (max-width: $first-breack-point)
+        max-width: 774px
+    &-header
+      padding-bottom: 0
+    &-close
+      top: -10px
+      right: -10px
+      width: 20px
+      height: 20px
+      @media screen and (min-width: $second-breack-point)
+        width: 44px
+        height: 44px
+        top: -22px
+        right: -22px
+    &-body
+      @media screen and (min-width: $first-breack-point)
+        padding: 74px 40px 54px 54px
+      tbody, td, tfoot, th, thead, tr
+        border-color: inherit
+        border-style: none
+        border-width: 0
+      th, td
+        text-align: center
+        vertical-align: middle
+        white-space: nowrap
+        padding: 7px 12px
+        @media screen and (min-width: $first-breack-point)
+          padding: 12px 26px
+        &:not(:last-child)
+          border-right: 1px solid $dark-color
+      tr
+        &:not(:last-child)
+          border-bottom: 1px solid $dark-color
+      td
+        cursor: pointer
+        &:hover
+          color: $pre-color

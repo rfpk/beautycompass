@@ -1,0 +1,49 @@
+{% load static %}
+<footer class="footer py-5">
+    <div class="container footer__container">
+        <div class="row justify-content-center footer__nav">
+            <div class="col-12 col-md-4 col-xxl-3">
+                <div class="footer__title">О нас</div>
+                <ul class="footer__list">
+                    <li><a href="{% url 'landing:landing_page' 'o-proekte' %}">О проекте</a></li>
+                    <li><a href="">Отзывы и предложения</a></li>
+                    <li><a href="{% url 'landing:landing_page' 'kontakty' %}">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-4 col-xxl-4 text-start text-md-center">
+                <div class="footer__title">Пользователям</div>
+                <ul class="footer__list">
+                    <li><a href="">Подбор косметики</a></li>
+                    <li><a href="">Избранное</a></li>
+                    <li><a href="">Авторизация</a></li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-4 col-xxl-3 text-start text-md-end">
+                <div class="footer__title">Брендам</div>
+                <ul class="footer__list">
+                    <li><a href="">Сотрудничество</a></li>
+                    <li><a href="">Отправить заявку</a></li>
+                    <li><a href="">Авторизация</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center order-1 order-xxl-2">
+            <div class="col-10 col-xxl-12 text-center footer__logo">
+                <img src="{% static "img/logo.svg" %}" alt=""/>
+            </div>
+        </div>
+        <div class="row justify-content-center order-3 order-xxl-3">
+            <div class="col-3 col-xxl-1">
+                <a href="" class="footer__social footer__social--email" target="_blank"></a>
+            </div>
+            <div class="col-3 col-xxl-1">
+                <a href="" class="footer__social footer__social--telegram" target="_blank"></a>
+            </div>
+            <div class="col-3 col-xxl-1">
+                <a href="" class="footer__social footer__social--vk" target="_blank"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% include 'inc/authorization_form.html' %}

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вопросы{% endblock %}
+
+
+{% block content %}
+    <main class="lk-users-question">
+        <section>
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+                    <div class="page-title d-flex flex-wrap align-items-center">
+                        <div class="col-1 col-xxl-12 order-xxl-1">
+                            <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="vuesax/outline/arrow-left">
+                                        <g id="arrow-left">
+                                            <path id="Vector" d="M11.9633 23.5254C11.7258 23.5254 11.4883 23.4379 11.3008 23.2504L3.71328 15.6629C3.35078 15.3004 3.35078 14.7004 3.71328 14.3379L11.3008 6.75039C11.6633 6.38789 12.2633 6.38789 12.6258 6.75039C12.9883 7.11289 12.9883 7.71289 12.6258 8.07539L5.70078 15.0004L12.6258 21.9254C12.9883 22.2879 12.9883 22.8879 12.6258 23.2504C12.4508 23.4379 12.2008 23.5254 11.9633 23.5254Z" fill="#1560BD"></path>
+                                            <path id="Vector_2" d="M25.6234 15.9375H4.58594C4.07344 15.9375 3.64844 15.5125 3.64844 15C3.64844 14.4875 4.07344 14.0625 4.58594 14.0625H25.6234C26.1359 14.0625 26.5609 14.4875 26.5609 15C26.5609 15.5125 26.1359 15.9375 25.6234 15.9375Z" fill="#1560BD"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span class="text-decoration-none text-uppercase d-none d-xxl-block ms-2">Вернуться в кабинет</span>
+                            </a>
+                        </div>
+                        <div class="col text-center col-xxl-12">
+                            <h1 class="title--20-36 text-uppercase">Вопросы</h1>
+                        </div>
+                        <div class="col-1 d-xxl-none"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+                    <h3 class="title--h4 mb-4 mb-xl-5">Вопросы
+                        <span>({{page_obj.paginator.count}})</span>
+                    </h3>
+                    {% for question in questions %}
+                        <div class="feed d-flex flex-column mb-5">
+                            <div class="row mb-2 mb-md-3 gap-2">
+                                <a href="{% url 'products:series_detail' question.product.series.slug %}" class="text--15-36 questions__heading-link--h1-link">
+                                    {{question.product.series.name}}
+                                </a>
+                                <a href="{% url 'products:product_detail' question.product.slug %}" class="text--10-30 questions__heading-link title__under fw-600" >
+                                    {{question.product.name}}
+                                </a>
+                            </div>
+                            <div class="feed__row">
+                                <div class="feed__user">
+                                <a href="#" class="feed__avatar">
+                                    {% if question.profile.avatar %}
+                                        <img src="{{question.profile.avatar.url}}" alt="avatar" />
+                                    {% endif %}
+                                </a>
+                                <div class="feed__info">
+                                    <a href="#" class="feed__name">{{question.profile.first_name}} {{question.profile.last_name_slice}}.</a>
+                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="feed__date">{{question.date|date:'d.m.y'}}</div>
+                                    </div>
+                                </div>
+                                </div>
+                                <a href="#" class="feed__text dark-semi mb-3">
+                                    {{question.text}}
+                                </a>
+                                {% for answer in question.question_answers.all %}
+                                    <div class="feed__user mt-4">
+                                        <a href="{% url 'manufacturer:profile_manufacturer' question.answer_manufacturer_id %}" class="feed__avatar">
+                                        <img src="{% get_media_prefix %}{{question.answer_manufacturer_logo}}"  alt="avatar" />
+                                        </a>
+                                        <div class="feed__info">
+                                        <a href="{% url 'manufacturer:profile_manufacturer' question.answer_manufacturer_id %}" class="feed__name">{{question.answer_manufacturer_name}}</a>
+                                        <div class="feed__date">{{answer.date|date:'d.m.y'}}</div>
+                                        </div>
+                                    </div>
+                                    <p class="feed__text">
+                                        {{answer.text}}
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% if page_obj.has_other_pages %}
+            <div class="d-flex justify-content-center mt-4 mt-md-5">
+                <ul class="pagination">
+                    <li class="page-item">
+                        {% if page_obj.has_previous %}
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">〈</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <li class="page-item active">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item">
+                        {% if page_obj.has_next %}
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">〉</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+          {% endif %}
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/splide.min.js" %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          Splide.defaults = {
+            perPage: 5,
+            gap: "1.5rem",
+            height: "219px",
+            pagination: false,
+            arrows: false,
+            breakpoints: {
+              1400: {
+                perPage: 4,
+                gap: "1rem",
+                height: "179px",
+                padding: { right: "1.5rem" },
+              },
+              768: {
+                perPage: 3,
+                gap: ".5rem",
+                height: "108px",
+                padding: { right: "1rem" },
+              },
+            },
+          };
+          document.querySelectorAll("#feed-image-slider").forEach(el => {
+              new Splide(el).mount();
+          })
+        });
+      </script>
+{% endblock %}

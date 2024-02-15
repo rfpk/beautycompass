@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Техподдержка{% endblock %}
+
+{% block content %}
+  <main class="chat">
+    <section class="brand__title">
+      <div class="container container--bc">
+          <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+              <div class="col-1 col-xxl-12 order-xxl-1">
+                  <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                      <img src="{% static "img/arrow-left.svg" %}" alt="Стрелка налево">
+                      <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                  </a>
+              </div>
+              <div class="col text-center col-xxl-12">
+                  <h1 class="title--20-36 text-uppercase">чат с bc</h1>
+              </div>
+          </div>
+      </div>
+    </section>
+    <section class="sysInf">
+      <div class="container container--bc">
+        <button data-bs-toggle="modal" data-bs-target="#sendMess" id="createRev" class="feed-button text-uppercase"><p>написать сообщение</p></button>
+        <p id="numberMess">Все сообщения ({{page_obj.paginator.count}})</p>
+      </div>
+    </section>
+    <section class="pagin container container--bc">
+      <div class="pagin__output-info">
+        <p>
+          <ul>
+            {% if appeals %}
+              {% for appeal in appeals %}
+                <li class="">
+                  <a href="#" class="d-flex justify-content-between align-items-center">
+                    <div class="infProg">
+                      <p class="title bing">
+                        {{appeal.get_subject_appeal_display }}
+                      </p>
+                      <small>№ {{appeal.pk}} от {{appeal.date|date:'d.m.Y'}}</small>
+                      <p class="descr">
+                        {{appeal.text}}
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </p>
+        <div class="pagin__output-info" id="viewChatBC"></div>
+      </div>
+    </section>
+
+    {% if page_obj.has_other_pages %}
+      <div class="d-flex justify-content-center mt-4 mt-md-5">
+          <ul class="pagination">
+              <li class="page-item">
+                  {% if page_obj.has_previous %}
+                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                         aria-label="Previous">
+                          <span aria-hidden="true">〈</span>
+                      </a>
+                  {% endif %}
+              </li>
+              {% for num in page_obj.paginator.page_range %}
+                  {% if num == page_obj.number %}
+                      <li class="page-item active">
+                          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                      </li>
+                  {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                      <li class="page-item">
+                          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                      </li>
+                  {% endif %}
+              {% endfor %}
+
+              <li class="page-item">
+                  {% if page_obj.has_next %}
+                      <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                         aria-label="Previous">
+                          <span aria-hidden="true">〉</span>
+                      </a>
+                  {% endif %}
+              </li>
+          </ul>
+      </div>
+    {% endif %}
+  </main>
+
+  <div class="modal modal-send-mess modal__create-rev fade" id="sendMess" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header chat text-center">
+          <h5 class="modal-title" id="deleteProfileLabel">Сообщение</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <form
+                  method="post"
+                  id="appeal-form"
+                  class="send-mess-tech"
+                  enctype="multipart/form-data"
+                  action="{% url 'profile:create_appeal' %}"
+          >
+              {% csrf_token %}
+            <div class="titleModal" id="title-block">
+              <label for="appeal" class="select-wrap" id="appeal">
+                <small> 
+                  Заголовок обращения
+                </small>
+                {{form.title}}
+              </label>
+              <div class="select-wrap">
+                <small>Тема обращения</small>
+                {{form.subject_appeal}}
+              </div>
+            </div>
+            <label for="textApeal" class="select-wrap" id="text-block"
+              <small> 
+                Текст обращения
+              </small>
+              {{form.text}}
+            </label>
+            <label id="ava" class="select-wrap visPrfile">
+              <small>
+                Загрузите до 5 фотографий
+              </small>
+              <div class="previewImage">
+                <div id="avatar" class="addImage">
+                  <input multiple type="file" name="images" id="form__pic" class="file-input file-input-modal"/>
+                </div>
+                <div class="previewImage_text">
+                  <p>Нажмите на область с иконкой</p>
+                  <small>Фото до 10 МБ. Формат JPG, JPEG, BMP, GIF</small>
+                </div>
+              </div>
+            </label>
+          </form> 
+        </div>
+        <div class="modal-footer modal-footer-tech d-flex">
+          <button type="button" class="close text-uppercase" data-bs-dismiss="modal">отмена</button>
+          <button id="sendBtn" type="button" class="sendMess text-uppercase">отправить</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static "js/jq.js" %}"></script>
+  <script src="{% static "js/select2.js" %}" defer></script>
+  <script src="{% static "js/pogination.js" %}"></script>
+
+    <script>
+        const buttonSend = document.getElementById('sendBtn');
+
+        function validateForm() {
+            let errors = [];
+            const titleBlock = document.getElementById('title-block').querySelector('input[name="title"]');
+            const textBlock = document.getElementById('text-block').querySelector('input[name="text"]');
+            if (titleBlock.value.length < 1) {
+                errors.push(titleBlock);
+            }
+
+            if (textBlock.value.length < 1) {
+                errors.push(textBlock);
+            }
+
+            if (errors.length > 0) {
+                errors[0].focus();
+            } else {
+                return true;
+            }
+        }
+
+        buttonSend.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Validate
+            const isValid = validateForm();
+            if (isValid) {
+                const form = document.getElementById('appeal-form');
+                form.submit();
+            }
+        })
+    </script>
+{% endblock %}
+

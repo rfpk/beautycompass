@@ -1,0 +1,1341 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load profile_tags %}
+
+{% block title %}Личный Кабинет{% endblock %}
+
+
+{% block content %}
+    <main class="manufacturer">
+      <section class="profile mb-3">
+        <div class="container container--bc">
+          <div class="profile__title row d-flex mb-4">
+            <div class="col-12">
+              <div class="row justify-content-center align-items-center">
+                <div class="col-4 offset-4 text-center">
+                  <h1
+                    class="inherit profile__link text-decoration-none title--h2 text-uppercase"
+                  >
+                    Профиль
+                  </h1>
+                </div>
+                <div class="col-4 d-flex justify-content-end">
+                  <button  class="text-uppercase feed-button feed-button__settng d-flex "><p class="text--12-18">настроить</p></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container container--bc">
+            <form
+                    method="post"
+                    id="profileInfo"
+                    enctype="multipart/form-data"
+                    action="{% url 'manufacturer:manufacturer_update' %}"
+                    class="profile__body-modify col-xxl-10 offset-xxl-1"
+            >
+            {% csrf_token %}
+              <label for="shop__file-input" class="select-wrap profile__body-photo position-relative" >
+                <small class="logo-text">
+                  Логотип
+                </small>
+                <div role="button" class="d-flex justify-content-center align-content-center overflow-hidden">
+                  <img
+                    src="
+                    {% if form.logo.value %}
+                        {% get_media_prefix %}{{ form.logo.value }}
+                    {% else %}
+                        {% static 'img/gallery-add.svg' %}
+                    {% endif %}
+                    "
+                    alt="gallery-add logo"
+                    class="position-absolute top-50 start-50 translate-middle"
+                  />
+                  <input
+                    type="file"
+                    id="shop__file-input"
+                    name="{{form.logo.name}}"
+                    onchange="handleFileSelected(event)"
+                    class="input--file"
+                  />
+                </div>
+
+              </label>
+              <div class="profile__body-name">
+                <label for="name" class="select-wrap">
+                  <small>
+                    Название компании
+                  </small>
+                    {{ form.name }}
+                </label>
+              </div>
+              <div class="profile__body-tel">
+                <label for="phone" class="select-wrap">
+                  <small>
+                    Телефон
+                  </small>
+                    {{ form.phone }}
+                </label>
+              </div>
+              <div class="profile__body-email">
+                <label for="email" class="select-wrap">
+                  <small>
+                    E-mail
+                  </small>
+                    {{ form.email }}
+                </label>
+              </div>
+              <div class="profile__body-passw">
+                <label for="pass" class="select-wrap">
+                  <small>
+                    Пароль
+                  </small>
+                  <div class="passw">
+                    <input class="form-control" type="password" name="pass" id="pass">
+                    <button id="visPassword" class="feed-button passw__vis"></button>
+                  </div>
+                </label>
+              </div>
+              <div class="profile__body-passw-rep">
+                <label for="passRep" class="select-wrap">
+                  <small>
+                    Повтор пароля
+                  </small>
+                  <div class="passw">
+                    <input class="form-control" type="password" name="passRep" id="passRep">
+                    <button id="visPasswordRep" class="feed-button passw__vis"></button>
+                  </div>
+                </label>
+              </div>
+              <div class="profile__body-btn-save">
+                <button type="submit" class="btn btn--blue text--15-24">Сохранить</button>
+              </div>
+              <div
+                class="col-md-8 offset-md-1 col-xxl-10 offset-xxl-0 profile__body-inf d-flex align-items-center justify-content-center"
+              >
+                <div class="row row-g-3 ms-3">
+                  <div class="col-12">
+                    <div>
+                      <p class="title--h4">{% if form.email.value %}{{ form.email.value }}{% endif %}</p>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div>
+                      <p class="title--h4">{% if form.phone.value %}{{ form.phone.value }}{% endif %}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section class="add-info">
+        <div class="container container--bc">
+          <div class="col-xxl-10 offset-xxl-1 pb-3">
+            <a
+                    class="add-info__button text--15-24"
+                    href="
+                    {% if manufacturer %}
+                        {% url 'manufacturer:change_manufacturer' %}
+                    {% else %}
+                        {% url 'manufacturer:manufacturer_create' %}
+                    {% endif %}
+                    "
+            >
+              Редактирование информации о производителе
+            </a>
+            
+          </div>
+          <div
+            class="add-info__wrapper d-flex flex-column col-12 col-xxl-10 offset-xxl-1 px-3 pb-3"
+          >
+            <div
+              role="button"
+              class="add-info__trigger d-flex justify-content-center align-items-center col-12 pt-3"
+            >
+              <p class="title--h4 add-info__title me-3">
+                Добавление информации о брендах, сериях и средствах
+              </p>
+              <img class="ease3" src="{% static "img/Vector.svg" %}" alt="arrow image" />
+            </div>
+              <div class="add-info__content ease3 col-12 overflow-hidden">
+                  <div class="add-info__schemes p-2 col-12">
+                      <div id="view-all-item">
+                          <div class="outputInf">
+                              <div class="details__search_wrap">
+                                  <div class="input input--general">
+                                      <label for="search" class="details__search label label--light label--profile">Поиск
+                                          бренда</label>
+                                      <input id="search" value="" type="text" class="details__search-input ">
+                                  </div>
+                                  <a href="{% url 'products:create_brand' %}" class="details__btn btn btn--blue">
+                                    <p class="text--15-25">Добавить бренд</p>
+                                </a>
+                            </div>
+                                <ul class="all-object">
+                                    {% for brand in brands %}
+                                        <div class="details__view ">
+                                            <input type="text" value="0" class="details__view-place">
+                                            <details class="details">
+                                                <summary class="details__summary ">
+                                                    <p class="title--h5">{{ brand.name }}</p>
+                                                    <div class="details-button">
+                                                            <a
+                                                                class="details-button__edit btn change_item"
+                                                                href="{% url 'products:change_brand' brand.slug %}"
+                                                            >
+                                                                <img src="/static/img/btn_pen.svg" alt="Изменить">
+                                                            </a>
+                                                            <a
+                                                                data-bs-toggle="modal" data-bs-pathdb="link_to_brands"
+                                                                data-bs-iditm="65123f0221c5eb55adf13ba6" data-bs-target="#remItm"
+                                                                class="details-button__del btn rem_item"
+                                                            >
+                                                                <img src="/static/img/destr.svg" alt="Удаление">
+                                                            </a>
+                                                        </div>
+                                                </summary>
+                                                <div class="content">
+                                                    <div class="pagin__output-info">
+                                                        <div class="pagin__output-info"
+                                                            id="view-all-brand-65123f0221c5eb55adf13ba6">
+                                                            <div class="outputInf">
+                                                                <div class="details__search_wrap">
+                                                                    <div class="input input--general">
+                                                                        <label for="search" class="details__search label label--light label--profile">Поиск средства/ серии</label>
+                                                                        <input id="search" value="" type="text" class="details__search-input ">
+                                                                    </div>
+                                                                        <a href="{% url 'products:create_series' brand.slug %}"
+                                                                            class="details__btn btn btn--blue"><p
+                                                                                class="text--15-25">Добавить серию</p></a>
+                                                                    </div>
+                                                                {% get_test name='series' value=brand.id as series_data %}
+                                                                {% for series in series_data %}
+                                                                    <ul class="all-object">
+                                                                    <div class="details__view "><input type="text" value="0" class="details__view-place">
+                                                                        <details class="details">
+                                                                            <summary class="details__summary "><p
+                                                                                    class="title--h5">{{ series.name }}</p>
+                                                                                <div class="details-button">
+                                                                                    <a class="details-button__edit btn change_item"
+                                                                                    href="page-series-info.html?id=65123f024b30ca4244be39bc"
+                                                                                    >
+                                                                                    <img src="/static/img/btn_pen.svg" alt="Изменить" />
+                                                                                    </a>
+                                                                                    <a
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-pathdb="link_to_serie"
+                                                                                        data-bs-iditm="65123f024b30ca4244be39bc"
+                                                                                        data-bs-target="#remItm"
+                                                                                        class="details-button__del btn rem_item"
+                                                                                    >
+                                                                                        <img src="/static/img/destr.svg" alt="Удаление" />
+                                                                                    </a>
+                                                                                </div>
+                                                                            </summary>
+                                                                            <div class="content">
+                                                                                <div class="pagin__output-info">
+                                                                                    <div class="pagin__output-info"
+                                                                                        id="view-all-serie-65123f024b30ca4244be39bc">
+                                                                                        <div class="outputInf">
+                                                                                            <div class="details__search_wrap">
+                                                                                                <div class="input input--general">
+                                                                                                    <label for="search"
+                                                                                                        class="details__search label label--light label--profile"
+                                                                                                    >
+                                                                                                        Поиск средства
+                                                                                                    </label>
+                                                                                                    <input id="search"
+                                                                                                        value=""
+                                                                                                        type="text"
+                                                                                                        class="details__search-input" />
+                                                                                                </div>
+                                                                                                <a href="{% url 'products:create_product' brand.slug series.slug %}"
+                                                                                                class="details__btn btn btn--blue">
+                                                                                                    <p class="text--15-25">Добавить средство</p>
+                                                                                                </a>
+                                                                                            </div>
+
+                                                                                            {% get_test name='products' value=series.id as products %}
+                                                                                            {% for product in products %}
+                                                                                                <ul class="all-object">
+                                                                                                    <div class="details__view ">
+                                                                                                        <input type="text"
+                                                                                                            value="0"
+                                                                                                            class="details__view-place">
+                                                                                                        <details class="details">
+                                                                                                            <summary class="details__summary details__summary--last-item ">
+                                                                                                                <p class="title--h5">{{ product.name }}</p>
+                                                                                                                <div class="details-button">
+                                                                                                                    <a
+                                                                                                                        class="details-button__edit btn change_item"
+                                                                                                                        href="page-product-info.html?id=65123f02cec62cbd94f45682"
+                                                                                                                    >
+                                                                                                                        <img src="/static/img/btn_pen.svg" alt="Изменить" />
+                                                                                                                    </a>
+                                                                                                                    <a
+                                                                                                                        data-bs-toggle="modal"
+                                                                                                                        data-bs-pathdb="link_to_cosmetic"
+                                                                                                                        data-bs-iditm="65123f02cec62cbd94f45682"
+                                                                                                                        data-bs-target="#remItm"
+                                                                                                                        class="details-button__del btn rem_item"
+                                                                                                                    >
+                                                                                                                        <img src="/static/img/destr.svg" alt="Удаление">
+                                                                                                                    </a>
+                                                                                                                </div>
+                                                                                                            </summary>
+                                                                                                        </details>
+                                                                                                    </div>
+                                                                                                </ul>
+                                                                                            {% endfor %}
+                                                                                            
+                                                                                            {% if products.has_other_pages %}
+                                                                                                <div class="paginationjs">
+                                                                                                    <div class="paginationjs-pages">
+                                                                                                        <ul>
+                                                                                                            <li class="paginationjs-prev">
+                                                                                                                {% if products.has_previous %}
+                                                                                                                    <a href="?products_page={{ products.previous_page_number }}">〈</a>
+                                                                                                                {% endif %}
+                                                                                                            </li>
+                                                                                                            {% for num in products.paginator.page_range %}
+                                                                                                                {% if num == products.number %}
+                                                                                                                    <li class="paginationjs-page J-paginationjs-page active" data-num="{{ num }}">
+                                                                                                                        <a href="?products_page={{ num }}">{{ num }}</a>
+                                                                                                                    </li>
+                                                                                                                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                                                                                                    <li class="paginationjs-page J-paginationjs-page" data-num="{{ num }}">
+                                                                                                                        <a href="?products_page={{ num }}">{{ num }}</a>
+                                                                                                                    </li>
+                                                                                                                {% endif %}
+                                                                                                            {% endfor %}
+                                                                                                            <li class="paginationjs-next">
+                                                                                                                {% if brands.has_next %}
+                                                                                                                    <a href="?products_page={{ num }}">〉</a>
+                                                                                                                {% endif %}
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            {% endif %}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </details>
+                                                                    </div>
+                                                                    
+                                                                    </ul>
+                                                                    {% endfor %}
+
+                                                                    {% if series_data.has_other_pages %}
+                                                                        <div class="paginationjs">
+                                                                            <div class="paginationjs-pages">
+                                                                                <ul>
+                                                                                    <li class="paginationjs-prev">
+                                                                                        {% if series_data.has_previous %}
+                                                                                            <a href="?series_page={{ series.previous_page_number }}">〈</a>
+                                                                                        {% endif %}
+                                                                                    </li>
+                                                                                    {% for num in series_data.paginator.page_range %}
+                                                                                        {% if num == series_data.number %}
+                                                                                            <li class="paginationjs-page J-paginationjs-page active" data-num="{{ num }}">
+                                                                                                <a href="?series_page={{ num }}">{{ num }}</a>
+                                                                                            </li>
+                                                                                        {% elif num > series_data.number|add:'-3' and num < series_data.number|add:'3' %}
+                                                                                            <li class="paginationjs-page J-paginationjs-page" data-num="{{ num }}">
+                                                                                                <a href="?series_page={{ num }}">{{ num }}</a>
+                                                                                            </li>
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                    <li class="paginationjs-next">
+                                                                                        {% if series_data.has_next %}
+                                                                                            <a href="?series_page={{ num }}">〉</a>
+                                                                                        {% endif %}
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </details>
+                                        </div>
+                                    {% endfor %}
+                                </ul>
+                                {% if brands.has_other_pages %}
+                                    <div class="paginationjs">
+                                        <div class="paginationjs-pages">
+                                            <ul>
+                                                <li class="paginationjs-prev">
+                                                    {% if brands.has_previous %}
+                                                        <a href="?brand_page={{ brands.previous_page_number }}">〈</a>
+                                                    {% endif %}
+                                                </li>
+                                                {% for num in brands.paginator.page_range %}
+                                                    {% if num == brands.number %}
+                                                        <li class="paginationjs-page J-paginationjs-page active" data-num="{{ num }}">
+                                                            <a href="?brand_page={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% elif num > brands.number|add:'-3' and num < brands.number|add:'3' %}
+                                                        <li class="paginationjs-page J-paginationjs-page" data-num="{{ num }}">
+                                                            <a href="?brand_page={{ num }}">{{ num }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <li class="paginationjs-next">
+                                                    {% if brands.has_next %}
+                                                        <a href="?brand_page={{ num }}">〉</a>
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container container--bc">
+          <div
+            class="add-info__buttons d-flex flex-column align-items-start flex-md-row flex-wrap col-md-10 col-xxl-9 offset-xxl-1 my-3"
+          >
+            <a
+              href=""
+              type="button"
+              class="add-info__button title--h4_blue d-flex align-items-center me-4 mb-3 text-uppercase text--12-18"
+            >
+              <svg
+                class="me-1"
+                viewBox="0 0 17 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3.88283 13.6807C3.45532 13.6807 3.05584 13.5335 2.7685 13.2602C2.40407 12.9168 2.22886 12.3982 2.29194 11.8375L2.55124 9.56683C2.6003 9.13932 2.85961 8.57165 3.16097 8.26328L8.91481 2.17304C10.3515 0.652232 11.8513 0.610182 13.3721 2.04689C14.8929 3.4836 14.935 4.98338 13.4983 6.50419L7.74442 12.5944C7.45007 12.9098 6.90342 13.2042 6.47591 13.2742L4.21923 13.6597C4.10009 13.6667 3.99496 13.6807 3.88283 13.6807ZM11.1645 2.03988C10.6248 2.03988 10.1553 2.37628 9.67872 2.88088L3.92488 8.97813C3.78471 9.12531 3.62352 9.47572 3.59549 9.67897L3.33618 11.9497C3.30814 12.1809 3.36421 12.3702 3.49036 12.4893C3.61651 12.6084 3.80574 12.6505 4.03701 12.6155L6.29369 12.23C6.49693 12.195 6.83333 12.0127 6.9735 11.8656L12.7273 5.77532C13.5964 4.85022 13.9118 3.99521 12.6432 2.80379C12.0826 2.26415 11.599 2.03988 11.1645 2.03988Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M12.1532 7.67483C12.1392 7.67483 12.1182 7.67483 12.1042 7.67483C9.91757 7.45757 8.15848 5.7966 7.82208 3.62401C7.78003 3.33667 7.97626 3.07035 8.2636 3.0213C8.55094 2.97925 8.81726 3.17548 8.86632 3.46282C9.13264 5.15884 10.5063 6.46239 12.2163 6.63059C12.5036 6.65862 12.7139 6.91793 12.6859 7.20527C12.6508 7.47159 12.4195 7.67483 12.1532 7.67483Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M14.7168 15.9438H2.1018C1.81446 15.9438 1.57617 15.7055 1.57617 15.4182C1.57617 15.1309 1.81446 14.8926 2.1018 14.8926H14.7168C15.0041 14.8926 15.2424 15.1309 15.2424 15.4182C15.2424 15.7055 15.0041 15.9438 14.7168 15.9438Z"
+                  fill="#1560BD"
+                />
+              </svg>
+
+              <span class="hover--red">Создать статью</span>
+            </a>
+            <a
+              href="{% url 'manufacturer:manufacturer_drafts' %}"
+              type="button"
+              class="add-info__button title--h4_blue d-flex align-items-center me-4 mb-3 text-uppercase text--12-18"
+            >
+              <svg
+                class="me-1"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.60065 15.166H5.06732C2.14065 15.166 0.833984 13.8593 0.833984 10.9327V8.39935C0.833984 5.47268 2.14065 4.16602 5.06732 4.16602H7.06732C7.34065 4.16602 7.56732 4.39268 7.56732 4.66602C7.56732 4.93935 7.34065 5.16602 7.06732 5.16602H5.06732C2.68065 5.16602 1.83398 6.01268 1.83398 8.39935V10.9327C1.83398 13.3193 2.68065 14.166 5.06732 14.166H7.60065C9.98732 14.166 10.834 13.3193 10.834 10.9327V8.93268C10.834 8.65935 11.0607 8.43268 11.334 8.43268C11.6073 8.43268 11.834 8.65935 11.834 8.93268V10.9327C11.834 13.8593 10.5273 15.166 7.60065 15.166Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M11.3331 9.43365H9.19974C7.32641 9.43365 6.56641 8.67365 6.56641 6.80032V4.66698C6.56641 4.46698 6.68641 4.28032 6.87307 4.20698C7.05974 4.12698 7.27307 4.17365 7.41974 4.31365L11.6864 8.58032C11.8264 8.72032 11.8731 8.94032 11.7931 9.12698C11.7197 9.31365 11.5331 9.43365 11.3331 9.43365ZM7.56641 5.87365V6.80032C7.56641 8.12698 7.87307 8.43365 9.19974 8.43365H10.1264L7.56641 5.87365Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M10.3991 1.83398H7.73242C7.45909 1.83398 7.23242 1.60732 7.23242 1.33398C7.23242 1.06065 7.45909 0.833984 7.73242 0.833984H10.3991C10.6724 0.833984 10.8991 1.06065 10.8991 1.33398C10.8991 1.60732 10.6724 1.83398 10.3991 1.83398Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M4.66602 3.83398C4.39268 3.83398 4.16602 3.60732 4.16602 3.33398C4.16602 1.95398 5.28602 0.833984 6.66602 0.833984H8.41268C8.68602 0.833984 8.91268 1.06065 8.91268 1.33398C8.91268 1.60732 8.68602 1.83398 8.41268 1.83398H6.66602C5.83935 1.83398 5.16602 2.50732 5.16602 3.33398C5.16602 3.60732 4.93935 3.83398 4.66602 3.83398Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M12.793 11.834C12.5196 11.834 12.293 11.6073 12.293 11.334C12.293 11.0607 12.5196 10.834 12.793 10.834C13.553 10.834 14.1663 10.214 14.1663 9.46065V5.33398C14.1663 5.06065 14.393 4.83398 14.6663 4.83398C14.9396 4.83398 15.1663 5.06065 15.1663 5.33398V9.46065C15.1663 10.7673 14.0996 11.834 12.793 11.834Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M14.666 5.833H12.666C10.8927 5.833 10.166 5.10633 10.166 3.333V1.333C10.166 1.133 10.286 0.946334 10.4727 0.873C10.6593 0.793 10.8727 0.839667 11.0193 0.979667L15.0193 4.97967C15.1593 5.11967 15.206 5.33967 15.126 5.52633C15.0527 5.713 14.866 5.833 14.666 5.833ZM11.166 2.53967V3.333C11.166 4.553 11.446 4.833 12.666 4.833H13.4593L11.166 2.53967Z"
+                  fill="#1560BD"
+                />
+              </svg>
+
+              <span class="hover--red">Черновики</span>
+            </a>
+            <a
+              href="{% url 'manufacturer:manufacturer_publish' %}"
+              type="button"
+              class="add-info__button title--h4_blue d-flex align-items-center me-4 mb-3 text-uppercase text--12-18"
+            >
+              <svg
+                class="me-1"
+                viewBox="0 0 17 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10.5134 15.9449H6.30841C2.50289 15.9449 0.876953 14.3189 0.876953 10.5134V6.30841C0.876953 2.50289 2.50289 0.876953 6.30841 0.876953H9.81258C10.0999 0.876953 10.3382 1.11524 10.3382 1.40258C10.3382 1.68992 10.0999 1.9282 9.81258 1.9282H6.30841C3.07757 1.9282 1.9282 3.07757 1.9282 6.30841V10.5134C1.9282 13.7443 3.07757 14.8936 6.30841 14.8936H10.5134C13.7443 14.8936 14.8936 13.7443 14.8936 10.5134V7.00924C14.8936 6.7219 15.1319 6.48362 15.4192 6.48362C15.7066 6.48362 15.9449 6.7219 15.9449 7.00924V10.5134C15.9449 14.3189 14.3189 15.9449 10.5134 15.9449Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M15.4174 7.53383H12.6141C10.2173 7.53383 9.28516 6.60173 9.28516 4.20488V1.40154C9.28516 1.19129 9.41131 0.99506 9.60754 0.917969C9.80377 0.833869 10.028 0.882927 10.1822 1.0301L15.7889 6.63677C15.9361 6.78394 15.9851 7.01522 15.901 7.21145C15.8169 7.40768 15.6277 7.53383 15.4174 7.53383ZM10.3364 2.67005V4.20488C10.3364 6.01303 10.806 6.48258 12.6141 6.48258H14.1489L10.3364 2.67005Z"
+                  fill="#1560BD"
+                />
+              </svg>
+
+              <span class="hover--red">опубликованное</span>
+            </a>
+            <a
+              href="{% url 'manufacturer:create-mailing' %}"
+              type="button"
+              class="add-info__button title--h4_blue d-flex align-items-center me-4 text-uppercase text--12-18"
+            >
+              <svg
+                class="me-1"
+                viewBox="0 0 17 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.30687 12.4398C6.23679 12.4398 6.17372 12.4258 6.10363 12.3978C5.9074 12.3207 5.78125 12.1245 5.78125 11.9142V7.70922C5.78125 7.42188 6.01953 7.18359 6.30687 7.18359C6.59422 7.18359 6.8325 7.42188 6.8325 7.70922V10.6457L7.3371 10.1411C7.54034 9.93787 7.87674 9.93787 8.07998 10.1411C8.28322 10.3444 8.28322 10.6808 8.07998 10.884L6.67832 12.2857C6.5802 12.3838 6.44003 12.4398 6.30687 12.4398Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M6.30835 12.4394C6.17519 12.4394 6.04204 12.3904 5.93691 12.2853L4.53524 10.8836C4.332 10.6804 4.332 10.344 4.53524 10.1407C4.73849 9.93747 5.07489 9.93747 5.27813 10.1407L6.67979 11.5424C6.88304 11.7456 6.88304 12.082 6.67979 12.2853C6.57467 12.3904 6.44151 12.4394 6.30835 12.4394Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M10.5134 15.9449H6.30841C2.50289 15.9449 0.876953 14.3189 0.876953 10.5134V6.30841C0.876953 2.50289 2.50289 0.876953 6.30841 0.876953H9.81258C10.0999 0.876953 10.3382 1.11524 10.3382 1.40258C10.3382 1.68992 10.0999 1.9282 9.81258 1.9282H6.30841C3.07757 1.9282 1.9282 3.07757 1.9282 6.30841V10.5134C1.9282 13.7443 3.07757 14.8936 6.30841 14.8936H10.5134C13.7443 14.8936 14.8936 13.7443 14.8936 10.5134V7.00924C14.8936 6.7219 15.1319 6.48362 15.4192 6.48362C15.7066 6.48362 15.9449 6.7219 15.9449 7.00924V10.5134C15.9449 14.3189 14.3189 15.9449 10.5134 15.9449Z"
+                  fill="#1560BD"
+                />
+                <path
+                  d="M15.4174 7.53383H12.6141C10.2173 7.53383 9.28516 6.60173 9.28516 4.20488V1.40154C9.28516 1.19129 9.41131 0.99506 9.60754 0.917969C9.80377 0.833869 10.028 0.882927 10.1822 1.0301L15.7889 6.63677C15.9361 6.78394 15.9851 7.01522 15.901 7.21145C15.8169 7.40768 15.6277 7.53383 15.4174 7.53383ZM10.3364 2.67005V4.20488C10.3364 6.01303 10.806 6.48258 12.6141 6.48258H14.1489L10.3364 2.67005Z"
+                  fill="#1560BD"
+                />
+              </svg>
+              <span class="hover--red">создать рассылку</span>
+            </a>
+          </div>
+        </div>
+      </section>
+      <section class="relations">
+        <div class="container container--bc">
+          <div class="relations__prices col-xxl-10 offset-xxl-1">
+            <div class="row my-3 my-xxl-4">
+              <div class="col-12">
+                <h3
+                  class="title--h3 relations__prices--title text-center d-flex justify-content-center align-items-center"
+                >
+                  Тарифы и оплата
+                </h3>
+              </div>
+            </div>
+            <div class="row my-3 my-xxl-4">
+              <div class="col-12">
+                <p
+                  class="title--h4_blue relations__prices--subtitle d-flex justify-content-center align-items-center text-center"
+                >
+                  до конца оплаченного периода осталось 90 дней
+                </p>
+              </div>
+            </div>
+            <div class="row my-3">
+              <div class="col-6 d-flex justify-content-center col-xxl-4">
+                <a
+                  class="card--button-blue relations__prices--button d-flex justify-content-center align-items-center w-100"
+                  role="button"
+                  data-bs-toggle="modal"
+                  href="#modal--prices"
+                >
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8.41044 15.9449C7.86379 15.9449 7.33116 15.6645 6.96673 15.174L6.25888 14.2278C6.11171 14.0316 5.91548 13.9195 5.70523 13.9054C5.49498 13.8984 5.28473 13.9895 5.11653 14.1648L4.71705 13.8073L5.10251 14.1648C4.09331 15.244 3.31538 15.1599 2.94394 15.0128C2.56549 14.8656 1.92773 14.382 1.92773 12.8262V4.93478C1.92773 1.82308 2.8248 0.876953 5.76129 0.876953H11.0596C13.9961 0.876953 14.8932 1.82308 14.8932 4.93478V12.8262C14.8932 14.375 14.2554 14.8586 13.8769 15.0128C13.5055 15.1599 12.7346 15.244 11.7184 14.1648C11.5502 13.9825 11.3399 13.8844 11.1227 13.9054C10.9124 13.9195 10.7092 14.0316 10.562 14.2278L9.85416 15.174C9.48973 15.6645 8.95709 15.9449 8.41044 15.9449ZM5.66318 12.8472C5.69121 12.8472 5.72625 12.8472 5.75428 12.8472C6.2729 12.8752 6.76348 13.1485 7.09288 13.5901L7.80072 14.5362C8.14413 14.9917 8.66975 14.9917 9.01316 14.5362L9.721 13.5901C10.0574 13.1485 10.541 12.8752 11.0666 12.8472C11.5852 12.8192 12.1038 13.0364 12.4823 13.4429C13.0149 14.0106 13.3583 14.0807 13.4845 14.0316C13.6527 13.9615 13.8349 13.555 13.8349 12.8262V4.93478C13.8349 2.40477 13.3934 1.9282 11.0526 1.9282H5.76129C3.42051 1.9282 2.97898 2.40477 2.97898 4.93478V12.8262C2.97898 13.562 3.1612 13.9685 3.3294 14.0316C3.44854 14.0807 3.79896 14.0106 4.33159 13.4429C4.71004 13.0574 5.1796 12.8472 5.66318 12.8472Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M11.3743 8.23484H7.51977C7.23242 8.23484 6.99414 7.99656 6.99414 7.70922C6.99414 7.42188 7.23242 7.18359 7.51977 7.18359H11.3743C11.6617 7.18359 11.9 7.42188 11.9 7.70922C11.9 7.99656 11.6617 8.23484 11.3743 8.23484Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M11.3743 5.43211H7.51977C7.23242 5.43211 6.99414 5.19383 6.99414 4.90648C6.99414 4.61914 7.23242 4.38086 7.51977 4.38086H11.3743C11.6617 4.38086 11.9 4.61914 11.9 4.90648C11.9 5.19383 11.6617 5.43211 11.3743 5.43211Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M5.45279 5.60674C5.06733 5.60674 4.75195 5.29137 4.75195 4.90591C4.75195 4.52045 5.06733 4.20508 5.45279 4.20508C5.83825 4.20508 6.15362 4.52045 6.15362 4.90591C6.15362 5.29137 5.83825 5.60674 5.45279 5.60674Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M5.45279 8.40948C5.06733 8.40948 4.75195 8.0941 4.75195 7.70865C4.75195 7.32319 5.06733 7.00781 5.45279 7.00781C5.83825 7.00781 6.15362 7.32319 6.15362 7.70865C6.15362 8.0941 5.83825 8.40948 5.45279 8.40948Z"
+                      fill="#1560BD"
+                    />
+                  </svg>
+
+                  <span>тарифы</span>
+                </a>
+              </div>
+              <div class="col-6 d-flex justify-content-center col-xxl-8">
+                <a
+                  href=""
+                  class="card--button-blue relations__prices--button d-flex justify-content-center align-items-center w-100"
+                >
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8.41044 15.9449C7.86379 15.9449 7.33116 15.6645 6.96673 15.174L6.25888 14.2278C6.11171 14.0316 5.91548 13.9195 5.70523 13.9054C5.49498 13.8984 5.28473 13.9895 5.11653 14.1648L4.71705 13.8073L5.10251 14.1648C4.09331 15.244 3.31538 15.1599 2.94394 15.0128C2.56549 14.8656 1.92773 14.382 1.92773 12.8262V4.93478C1.92773 1.82308 2.8248 0.876953 5.76129 0.876953H11.0596C13.9961 0.876953 14.8932 1.82308 14.8932 4.93478V12.8262C14.8932 14.375 14.2554 14.8586 13.8769 15.0128C13.5055 15.1599 12.7346 15.244 11.7184 14.1648C11.5502 13.9825 11.3399 13.8844 11.1227 13.9054C10.9124 13.9195 10.7092 14.0316 10.562 14.2278L9.85416 15.174C9.48973 15.6645 8.95709 15.9449 8.41044 15.9449ZM5.66318 12.8472C5.69121 12.8472 5.72625 12.8472 5.75428 12.8472C6.2729 12.8752 6.76348 13.1485 7.09288 13.5901L7.80072 14.5362C8.14413 14.9917 8.66975 14.9917 9.01316 14.5362L9.721 13.5901C10.0574 13.1485 10.541 12.8752 11.0666 12.8472C11.5852 12.8192 12.1038 13.0364 12.4823 13.4429C13.0149 14.0106 13.3583 14.0807 13.4845 14.0316C13.6527 13.9615 13.8349 13.555 13.8349 12.8262V4.93478C13.8349 2.40477 13.3934 1.9282 11.0526 1.9282H5.76129C3.42051 1.9282 2.97898 2.40477 2.97898 4.93478V12.8262C2.97898 13.562 3.1612 13.9685 3.3294 14.0316C3.44854 14.0807 3.79896 14.0106 4.33159 13.4429C4.71004 13.0574 5.1796 12.8472 5.66318 12.8472Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M11.3743 8.23484H7.51977C7.23242 8.23484 6.99414 7.99656 6.99414 7.70922C6.99414 7.42188 7.23242 7.18359 7.51977 7.18359H11.3743C11.6617 7.18359 11.9 7.42188 11.9 7.70922C11.9 7.99656 11.6617 8.23484 11.3743 8.23484Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M11.3743 5.43211H7.51977C7.23242 5.43211 6.99414 5.19383 6.99414 4.90648C6.99414 4.61914 7.23242 4.38086 7.51977 4.38086H11.3743C11.6617 4.38086 11.9 4.61914 11.9 4.90648C11.9 5.19383 11.6617 5.43211 11.3743 5.43211Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M5.45279 5.60674C5.06733 5.60674 4.75195 5.29137 4.75195 4.90591C4.75195 4.52045 5.06733 4.20508 5.45279 4.20508C5.83825 4.20508 6.15362 4.52045 6.15362 4.90591C6.15362 5.29137 5.83825 5.60674 5.45279 5.60674Z"
+                      fill="#1560BD"
+                    />
+                    <path
+                      d="M5.45279 8.40948C5.06733 8.40948 4.75195 8.0941 4.75195 7.70865C4.75195 7.32319 5.06733 7.00781 5.45279 7.00781C5.83825 7.00781 6.15362 7.32319 6.15362 7.70865C6.15362 8.0941 5.83825 8.40948 5.45279 8.40948Z"
+                      fill="#1560BD"
+                    />
+                  </svg>
+                  <span>доп. услуги</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="relations__new col-xxl-10 offset-xxl-1">
+            <div class="row my-xxl-4">
+              <div class="col-12">
+                <a
+                  href=""
+                  class="title--h3 relations__new--title text-center d-flex justify-content-center align-items-center"
+                >
+                  Новое
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-4 my-3 my-md-0">
+                <div class="row">
+                  <div class="col-12">
+                    <a
+                      href="{% url 'manufacturer:manufacturer_comments' %}"
+                      class="card--button-blue relations__new--button d-flex justify-content-center align-items-center card--tagged"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.5247 15.327C12.3074 15.327 12.0902 15.2709 11.8939 15.1518L9.08359 13.4838C8.78924 13.4768 8.49488 13.4558 8.21455 13.4137C8.02532 13.3857 7.86413 13.2595 7.79404 13.0773C7.72396 12.8951 7.75901 12.6988 7.88516 12.5517C8.34771 12.012 8.58599 11.3673 8.58599 10.6804C8.58599 8.98443 7.09321 7.60378 5.25703 7.60378C4.57021 7.60378 3.91143 7.79303 3.35777 8.15747C3.20358 8.25558 3.01436 8.26959 2.84616 8.1925C2.68497 8.11541 2.56583 7.96121 2.54481 7.77899C2.52378 7.58276 2.50977 7.38654 2.50977 7.1833C2.50977 3.70716 5.52335 0.882812 9.22375 0.882812C12.9242 0.882812 15.9377 3.70716 15.9377 7.1833C15.9377 9.08956 15.0547 10.8416 13.4988 12.0401L13.7371 13.9464C13.7932 14.4229 13.5829 14.8715 13.1835 15.1308C12.9872 15.2569 12.7559 15.327 12.5247 15.327ZM9.21673 12.4255C9.31485 12.4185 9.41297 12.4466 9.49707 12.5026L12.4336 14.2477C12.5107 14.2968 12.5737 14.2757 12.6158 14.2477C12.6508 14.2267 12.7069 14.1706 12.6929 14.0725L12.4195 11.8578C12.3985 11.6616 12.4826 11.4724 12.6368 11.3603C14.0665 10.3581 14.8865 8.83024 14.8865 7.16927C14.8865 4.27483 12.3495 1.92003 9.22375 1.92003C6.21718 1.92003 3.75024 4.10666 3.56802 6.85393C4.09365 6.65068 4.66133 6.53854 5.25003 6.53854C7.6679 6.53854 9.63023 8.38871 9.63023 10.6664C9.63724 11.2832 9.49006 11.8789 9.21673 12.4255Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M3.20958 15.9431C3.02737 15.9431 2.85216 15.894 2.69096 15.7889C2.37559 15.5857 2.2074 15.2353 2.24945 14.8638L2.38961 13.7845C1.44349 13.0136 0.882812 11.8712 0.882812 10.6728C0.882812 9.30617 1.59767 8.03067 2.7961 7.26676C3.51795 6.7972 4.37296 6.54492 5.26302 6.54492C7.6809 6.54492 9.64323 8.39509 9.64323 10.6728C9.64323 11.5979 9.30683 12.509 8.69009 13.2309C7.89815 14.191 6.71375 14.7517 5.4102 14.7937L3.70017 15.8099C3.54598 15.901 3.37778 15.9431 3.20958 15.9431ZM5.25602 7.59617C4.5692 7.59617 3.91041 7.78538 3.35675 8.14981C2.45969 8.7245 1.92706 9.6636 1.92706 10.6728C1.92706 11.647 2.40363 12.537 3.24463 13.1117C3.40582 13.2239 3.48991 13.4131 3.46889 13.6093L3.3147 14.8077L4.9897 13.8126C5.0738 13.7635 5.16491 13.7354 5.25602 13.7354C6.28624 13.7354 7.2604 13.2939 7.87714 12.5441C8.33969 11.9974 8.58497 11.3526 8.58497 10.6658C8.58497 8.97677 7.0922 7.59617 5.25602 7.59617Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+
+                      <span>комментарии</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="row">
+                  <div class="col-6">
+                    <a
+                      href="{% url 'manufacturer:manufacturer_reviews' %}"
+                      class="card--button-blue relations__new--button d-flex justify-content-center align-items-center w-100 card--tagged"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M9.97246 11.2902H8.58481C8.26243 11.2902 7.79286 11.192 7.51954 10.9187L6.44026 10.0847L7.08503 9.25071L8.21337 10.1267C8.29747 10.1898 8.45165 10.2319 8.58481 10.2319H9.97246C10.1827 10.2319 10.435 10.0497 10.4841 9.86744L11.3671 7.16925C11.3881 7.11318 11.4092 7.03608 11.3741 6.98001C11.3461 6.93796 11.269 6.90995 11.1779 6.90995H9.72016C9.46085 6.90995 9.21555 6.79785 9.04035 6.60162C8.87215 6.40539 8.79506 6.13904 8.8301 5.87273L9.01232 4.7023C9.03334 4.6112 8.97027 4.50611 8.89318 4.47808C8.8301 4.45705 8.72498 4.49205 8.69694 4.5271L7.20417 6.74877L6.32812 6.16009L7.8209 3.93842C8.11525 3.4969 8.73899 3.29364 9.24359 3.48286C9.81127 3.67209 10.1757 4.30284 10.0495 4.89154L9.90238 5.85168H11.1779C11.6194 5.85168 12.0049 6.0409 12.2362 6.37029C12.4604 6.69267 12.5095 7.10616 12.3693 7.50564L11.5003 10.1548C11.3391 10.7785 10.6663 11.2902 9.97246 11.2902Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M5.99978 10.891H5.63535C4.54205 10.891 4.38086 10.1271 4.38086 9.67151V6.10421C4.38086 5.64867 4.54205 4.88477 5.63535 4.88477H5.99978C7.09308 4.88477 7.25428 5.64867 7.25428 6.10421V9.67151C7.25428 10.1271 7.09308 10.891 5.99978 10.891ZM5.45313 9.83269C5.47416 9.83269 5.53022 9.8397 5.63535 9.8397H5.99978C6.11192 9.8397 6.17499 9.82567 6.19602 9.81866C6.19602 9.80464 6.20303 9.76262 6.20303 9.67151V6.10421C6.20303 6.0131 6.19602 5.96406 6.18901 5.95005C6.17499 5.95005 6.11892 5.94303 5.99978 5.94303H5.63535C5.52321 5.94303 5.46014 5.95707 5.43911 5.96408C5.43911 5.97809 5.43211 6.02012 5.43211 6.11122V9.67853C5.43211 9.76964 5.43912 9.81868 5.44613 9.8397C5.44613 9.8327 5.45313 9.83269 5.45313 9.83269Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M8.4093 15.9437C7.91871 15.9437 7.42112 15.7545 7.04968 15.383L5.85126 14.1986C5.5499 13.9043 5.15743 13.7431 4.73693 13.7431H4.2043C2.75357 13.7431 1.57617 12.5727 1.57617 11.136V3.48989C1.57617 2.05318 2.75357 0.882812 4.2043 0.882812H12.6143C14.065 0.882812 15.2424 2.05318 15.2424 3.48989V11.136C15.2424 12.5727 14.065 13.7431 12.6143 13.7431H12.0817C11.6612 13.7431 11.2617 13.9043 10.9673 14.1986L9.76892 15.383C9.39747 15.7545 8.89988 15.9437 8.4093 15.9437ZM4.2043 1.92705C3.33526 1.92705 2.62742 2.62786 2.62742 3.48288V11.129C2.62742 11.991 3.33526 12.6848 4.2043 12.6848H4.73693C5.43776 12.6848 6.09655 12.9581 6.59414 13.4487L7.79256 14.6332C8.13597 14.9696 8.68963 14.9696 9.03304 14.6332L10.2315 13.4487C10.7291 12.9581 11.3878 12.6848 12.0887 12.6848H12.6143C13.4833 12.6848 14.1912 11.984 14.1912 11.129V3.48288C14.1912 2.62085 13.4833 1.92705 12.6143 1.92705H4.2043Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+
+                      <span>Отзывы</span>
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a
+                      href="{% url 'manufacturer:manufacturer_questions' %}"
+                      class="card--button-blue relations__new--button d-flex justify-content-center align-items-center w-100 card--tagged"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5.60758 15.6417C5.41134 15.6417 5.20809 15.5927 5.02587 15.4946C4.6264 15.2843 4.38112 14.8638 4.38112 14.4153V13.4202C2.2646 13.2029 0.876953 11.647 0.876953 9.41834V5.21339C0.876953 2.80252 2.49588 1.18359 4.90674 1.18359H11.9151C14.3259 1.18359 15.9449 2.80252 15.9449 5.21339V9.41834C15.9449 11.8292 14.3259 13.4481 11.9151 13.4481H9.27292L6.28737 15.4386C6.08412 15.5717 5.84586 15.6417 5.60758 15.6417ZM4.90674 2.22783C3.09859 2.22783 1.9282 3.39822 1.9282 5.20637V9.41141C1.9282 11.2196 3.09859 12.39 4.90674 12.39C5.19409 12.39 5.43237 12.6282 5.43237 12.9156V14.4084C5.43237 14.4995 5.48844 14.5415 5.52348 14.5625C5.55852 14.5835 5.62861 14.6046 5.70571 14.5555L8.82442 12.4811C8.90852 12.425 9.01363 12.39 9.11876 12.39H11.9221C13.7302 12.39 14.9006 11.2196 14.9006 9.41141V5.20637C14.9006 3.39822 13.7302 2.22783 11.9221 2.22783H4.90674Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M8.40969 8.48625C8.12235 8.48625 7.88407 8.24797 7.88407 7.96063V7.81348C7.88407 7.00051 8.47976 6.60103 8.70403 6.44684C8.96334 6.27164 9.04743 6.1525 9.04743 5.97028C9.04743 5.61987 8.76011 5.3325 8.40969 5.3325C8.05928 5.3325 7.77195 5.61987 7.77195 5.97028C7.77195 6.25762 7.53367 6.49591 7.24633 6.49591C6.95899 6.49591 6.7207 6.25762 6.7207 5.97028C6.7207 5.03817 7.47758 4.28125 8.40969 4.28125C9.3418 4.28125 10.0987 5.03817 10.0987 5.97028C10.0987 6.76923 9.51001 7.1687 9.29275 7.31587C9.01942 7.49809 8.93532 7.61724 8.93532 7.81348V7.96063C8.93532 8.25498 8.69703 8.48625 8.40969 8.48625Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M8.41039 10.2329C8.11604 10.2329 7.88477 9.99461 7.88477 9.70727C7.88477 9.41992 8.12305 9.18164 8.41039 9.18164C8.69773 9.18164 8.93602 9.41992 8.93602 9.70727C8.93602 9.99461 8.70474 10.2329 8.41039 10.2329Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+
+                      <span>Вопросы</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="statistics col-xxl-10 offset-xxl-1">
+            <div class="row my-3 my-xxl-4">
+              <div class="col-12">
+                <h3
+                  class="title--h3 relations__new--title text-center d-flex justify-content-center align-items-center"
+                >
+                  Статистика
+                </h3>
+              </div>
+            </div>
+            <div class="row my-3 my-xxl-4 my-xxl-4">
+              <div class="col-12">
+                <div class="row row-g-3">
+                  <div
+                    class="col-6 col-md-4 d-flex justify-content-center order-md-1"
+                  >
+                    <a
+                      href=""
+                      class="card--button-blue relations__statistics--button d-flex justify-content-center align-items-center w-100 card--tagged"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.45831 15.4047C7.47014 15.4047 6.47495 15.0263 5.72506 14.2764L2.55029 11.1016C1.77937 10.3307 1.37289 9.26542 1.42195 8.17913L1.59015 4.66795C1.66724 2.99296 2.99181 1.66839 4.67381 1.58429L8.17798 1.41609C9.27128 1.36703 10.3295 1.77351 11.1005 2.54443L14.2752 5.7192C15.782 7.22599 15.782 9.68592 14.2752 11.1927L11.1986 14.2694C10.4417 15.0263 9.4535 15.4047 8.45831 15.4047ZM3.29317 10.3517L6.46795 13.5265C7.56825 14.6268 9.35538 14.6268 10.4557 13.5265L13.5323 10.4498C14.6327 9.34952 14.6327 7.56239 13.5323 6.46209L10.3506 3.29432C9.7899 2.73365 9.02599 2.4393 8.22003 2.47434L4.71586 2.64254C3.58051 2.6916 2.69045 3.58166 2.63439 4.71701L2.46619 8.22819C2.43115 9.01312 2.7325 9.79104 3.29317 10.3517Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M6.65857 8.93628C5.40408 8.93628 4.38086 7.91306 4.38086 6.65857C4.38086 5.40408 5.40408 4.38086 6.65857 4.38086C7.91306 4.38086 8.93628 5.40408 8.93628 6.65857C8.93628 7.91306 7.91306 8.93628 6.65857 8.93628ZM6.65857 5.43211C5.98577 5.43211 5.43211 5.98577 5.43211 6.65857C5.43211 7.33137 5.98577 7.88503 6.65857 7.88503C7.33137 7.88503 7.88503 7.33137 7.88503 6.65857C7.88503 5.98577 7.33137 5.43211 6.65857 5.43211Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M9.11176 12.4407C8.9786 12.4407 8.84545 12.3917 8.74032 12.2865C8.53708 12.0833 8.53708 11.7469 8.74032 11.5437L11.5437 8.74032C11.7469 8.53708 12.0833 8.53708 12.2865 8.74032C12.4898 8.94356 12.4898 9.27996 12.2865 9.4832L9.4832 12.2865C9.37808 12.3917 9.24492 12.4407 9.11176 12.4407Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+
+                      <span>БРЕНДЫ</span>
+                    </a>
+                  </div>
+                  <div
+                    class="col-6 col-md-4 d-flex justify-content-center order-md-0"
+                  >
+                    <a
+                      href=""
+                      class="card--button-blue relations__statistics--button d-flex justify-content-center align-items-center w-100"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M10.5134 15.9449H6.30841C2.50289 15.9449 0.876953 14.3189 0.876953 10.5134V6.30841C0.876953 2.50289 2.50289 0.876953 6.30841 0.876953H9.81258C10.0999 0.876953 10.3382 1.11524 10.3382 1.40258C10.3382 1.68992 10.0999 1.9282 9.81258 1.9282H6.30841C3.07757 1.9282 1.9282 3.07757 1.9282 6.30841V10.5134C1.9282 13.7443 3.07757 14.8936 6.30841 14.8936H10.5134C13.7443 14.8936 14.8936 13.7443 14.8936 10.5134V7.00924C14.8936 6.7219 15.1319 6.48362 15.4192 6.48362C15.7066 6.48362 15.9449 6.7219 15.9449 7.00924V10.5134C15.9449 14.3189 14.3189 15.9449 10.5134 15.9449Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M15.4174 7.53383H12.6141C10.2173 7.53383 9.28516 6.60173 9.28516 4.20488V1.40154C9.28516 1.19129 9.41131 0.99506 9.60754 0.917969C9.80377 0.833869 10.028 0.882927 10.1822 1.0301L15.7889 6.63677C15.9361 6.78394 15.9851 7.01522 15.901 7.21145C15.8169 7.40768 15.6277 7.53383 15.4174 7.53383ZM10.3364 2.67005V4.20488C10.3364 6.01303 10.806 6.48258 12.6141 6.48258H14.1489L10.3364 2.67005Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M9.11148 9.63719H4.90648C4.61914 9.63719 4.38086 9.3989 4.38086 9.11156C4.38086 8.82422 4.61914 8.58594 4.90648 8.58594H9.11148C9.39883 8.58594 9.63711 8.82422 9.63711 9.11156C9.63711 9.3989 9.39883 9.63719 9.11148 9.63719Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M7.70982 12.4399H4.90648C4.61914 12.4399 4.38086 12.2016 4.38086 11.9143C4.38086 11.627 4.61914 11.3887 4.90648 11.3887H7.70982C7.99716 11.3887 8.23544 11.627 8.23544 11.9143C8.23544 12.2016 7.99716 12.4399 7.70982 12.4399Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+                      <span>СТАТЬИ</span>
+                    </a>
+                  </div>
+                  <div
+                    class="col-6 col-md-4 d-flex justify-content-center order-md-2"
+                  >
+                    <a
+                      href=""
+                      class="card--button-blue relations__statistics--button d-flex justify-content-center align-items-center w-100"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M0.82771 14.2029C1.07201 14.2599 1.26184 14.3318 1.54653 14.378C3.26437 14.6572 4.88643 14.6615 6.61843 14.4979C6.9877 14.463 7.88764 14.3261 8.14436 14.2029V15.5272C8.0585 15.5472 8.0426 15.5631 7.97101 15.5856C7.88956 15.6112 7.84709 15.6229 7.76627 15.6457C6.76411 15.9281 5.52843 15.9535 4.49953 15.9841L3.04536 15.925C2.61448 15.9215 1.66865 15.7723 1.23156 15.6531C1.10212 15.6178 0.968224 15.5599 0.82771 15.5272V14.2029ZM0.82771 7.714C1.41048 7.99364 3.17938 8.11303 3.97292 8.11123C4.31184 8.11048 4.33714 8.13891 4.47139 8.1428C4.59276 8.14628 4.74708 8.11007 4.93279 8.11106C5.10857 8.11199 5.28865 8.11477 5.46404 8.11263C6.07094 8.10514 7.74487 7.90574 8.14436 7.714V13.3091C6.96409 13.9336 2.00804 13.9336 0.82771 13.3091V7.714ZM1.62229 5.16479H7.34978C8.36099 5.16479 8.14436 6.2353 8.14436 6.85322C7.87795 6.9153 7.77324 6.98393 7.33609 7.0713C5.84027 7.37032 3.17723 7.38064 1.66348 7.07687C1.22013 6.98788 1.1117 6.91942 0.827652 6.85328C0.827652 6.52717 0.774046 5.91319 0.863158 5.66378C0.963177 5.38357 1.23614 5.16485 1.62224 5.16485L1.62229 5.16479ZM3.5425 3.14526C3.5425 2.41374 4.5511 1.91678 5.1576 2.52334C5.54387 2.90966 5.42957 3.6489 5.42957 4.33708H3.5425V3.14521V3.14526ZM3.01276 0.331212V0.529858C3.01276 0.632661 3.20792 0.827826 3.31072 0.827826H4.07218V1.48996C3.72281 1.51903 3.30429 1.84496 3.12136 2.06205C2.60206 2.67835 2.71479 3.47862 2.71479 4.33714C1.74842 4.33714 1.15445 4.21078 0.51518 4.753C0.275459 4.95634 0 5.40179 0 5.82698V15.6928C0 16.0205 0.460761 16.2653 0.724036 16.3593C1.51821 16.6429 2.54416 16.7118 3.41173 16.7836L4.13965 16.784C4.313 16.7862 4.3278 16.8163 4.47034 16.8197C4.62466 16.8234 4.61811 16.7933 4.76721 16.7852L5.79357 16.7521C6.46133 16.7177 8.97196 16.5529 8.97196 15.6928V5.7938C8.97196 5.30258 8.56167 4.75566 8.23353 4.57889C7.60772 4.24182 7.07838 4.33708 6.25717 4.33708C6.25717 3.46128 6.38602 2.66281 5.8351 2.04436C5.64006 1.82541 5.26226 1.52001 4.89978 1.48984V0.82771H6.81998C7.24912 0.82771 7.40356 0 6.62133 0H3.54238C3.24842 0 3.01264 0.16929 3.01264 0.331096L3.01276 0.331212Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M9.67099 7.153C9.67099 7.73513 10.1635 7.61851 10.5666 7.5851C11.2716 7.52673 13.465 7.63644 14.0473 7.70966C14.4362 7.75851 15.1167 7.85185 15.4914 7.95396C15.6214 7.98941 15.7878 8.04725 15.9283 8.07997V8.14617C15.7919 8.15754 15.6396 8.22727 15.485 8.2658C14.0822 8.61505 12.2872 8.66251 10.7953 8.64412C10.3398 8.63849 9.67099 8.40718 9.67099 9.0732C9.67099 9.20408 9.76346 9.30265 9.84451 9.36316C9.96263 9.45129 10.5225 9.46121 10.6972 9.47061C11.6613 9.52271 13.2818 9.40783 14.1707 9.3352C15.0511 9.26326 15.3975 9.11068 16.1269 8.94075V9.60288C16.0257 9.62986 16.0601 9.63491 15.9405 9.68132L15.2469 9.88165C13.609 10.2044 12.6944 10.1988 10.9953 10.1988C10.5718 10.1988 10.0142 10.1029 9.82223 10.2507C9.55687 10.455 9.61436 10.9894 10.0997 10.995C10.3866 10.9983 10.5831 11.0265 10.8959 11.0265C12.1885 11.0265 13.473 11.0265 14.7267 10.8181C15.1205 10.7527 15.2578 10.7424 15.6705 10.6364C15.7814 10.6079 16.0461 10.5355 16.1269 10.4968V14.3703C15.7702 14.6092 14.5132 14.8328 14.0069 14.8658C13.6266 14.8906 13.2025 14.9456 12.8163 14.9664C12.6021 14.978 12.368 14.9545 12.1538 14.9661C11.298 15.0124 11.1959 14.9662 10.4324 14.9663C10.2289 14.9664 9.68247 14.8684 9.65677 15.3345C9.64923 15.4714 9.72401 15.625 9.82879 15.7024C9.93983 15.7844 10.1112 15.7958 10.2992 15.7948C10.9072 15.7914 11.5918 15.8699 12.225 15.7988C12.583 15.7586 13.3999 15.7726 13.8565 15.7088C14.1371 15.6696 14.361 15.6644 14.6276 15.6192C15.087 15.5412 16.9545 15.2929 16.9545 14.536V8.08015C16.9545 7.66469 16.5096 7.43936 16.1982 7.31347C15.8706 7.18102 15.3511 7.05391 14.9584 6.99722C13.2394 6.74897 12.5819 6.75588 10.8959 6.75588C10.5978 6.75588 10.3951 6.7886 10.1333 6.7879C9.89963 6.78727 9.67093 6.89297 9.67093 7.15317L9.67099 7.153Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M8.17933 2.35338C8.17933 1.72676 8.67322 1.16336 8.70901 1.02912C9.16368 1.33358 9.6936 3.04864 8.74214 3.04864C8.37154 3.04864 8.17933 2.71906 8.17933 2.35338ZM7.35162 2.28719C7.35162 2.8048 7.52758 3.23841 7.83518 3.52518L8.10582 3.71803C9.27066 4.39571 11.0461 2.92785 9.53075 0.703938C9.42406 0.547354 9.06163 0.119256 8.88933 0.0518415C8.37473 -0.149647 7.7622 0.948532 7.62534 1.26977C7.50826 1.54459 7.35156 1.98162 7.35156 2.28719H7.35162Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M4.50321 10.6627C3.92427 10.6627 3.71403 9.66951 4.56941 9.66951C4.90172 9.66951 5.15311 10.1912 4.84342 10.5064C4.77844 10.5725 4.61524 10.6627 4.50316 10.6627H4.50321ZM4.6356 8.84185C4.18726 8.84185 3.78005 8.91072 3.48997 9.28538C3.28059 9.5558 3.14831 9.82064 3.17036 10.2111C3.23888 11.4251 4.64628 11.8521 5.38952 11.1187C5.62605 10.8853 5.75983 10.6724 5.8106 10.2464C5.89658 9.52499 5.20654 8.8418 4.63555 8.8418L4.6356 8.84185Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M12.1841 12.451C12.8419 12.451 12.8632 13.4443 12.1841 13.4443C11.5193 13.4443 11.5637 12.451 12.1841 12.451ZM12.0517 14.2719C12.4996 14.2719 12.768 14.2301 13.1159 13.9125C13.296 13.748 13.5084 13.3572 13.5084 13.1132V12.8483C13.5084 11.8836 12.1539 11.1554 11.2933 11.9906C11.0187 12.257 10.9312 12.4723 10.8765 12.8676C10.8211 13.267 11.0242 13.5884 11.1901 13.8092C11.3265 13.991 11.7424 14.2719 12.0516 14.2719H12.0517Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M2.91406 12.482C2.91406 12.8695 3.17711 12.9488 3.50919 12.9463C3.86964 12.9435 4.10489 12.9786 4.4701 12.9786C4.67693 12.9786 5.69812 12.961 5.83927 12.891C6.2303 12.6973 6.05892 12.1178 5.69505 12.1178L4.80288 12.1195C4.18055 12.1711 4.46007 12.1178 3.87416 12.1178C3.58472 12.1178 2.91406 12.0212 2.91406 12.482Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+                      <span>СРЕДСТВА</span>
+                    </a>
+                  </div>
+                  <div
+                    class="col-6 col-md-4 d-flex justify-content-center order-md-3"
+                  >
+                    <a
+                      href=""
+                      class="card--button-blue relations__statistics--button d-flex justify-content-center align-items-center w-100"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.30815 7.53427C5.24288 7.53427 4.38086 6.67225 4.38086 5.60698C4.38086 4.54171 5.24288 3.67969 6.30815 3.67969C7.37342 3.67969 8.23544 4.54171 8.23544 5.60698C8.23544 6.67225 7.37342 7.53427 6.30815 7.53427ZM6.30815 4.73094C5.82458 4.73094 5.43211 5.1234 5.43211 5.60698C5.43211 6.09055 5.82458 6.48302 6.30815 6.48302C6.79173 6.48302 7.18419 6.09055 7.18419 5.60698C7.18419 5.1234 6.79173 4.73094 6.30815 4.73094Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M10.5134 15.9449H6.30841C2.50289 15.9449 0.876953 14.3189 0.876953 10.5134V6.30841C0.876953 2.50289 2.50289 0.876953 6.30841 0.876953H9.11174C9.39909 0.876953 9.63737 1.11524 9.63737 1.40258C9.63737 1.68992 9.39909 1.9282 9.11174 1.9282H6.30841C3.07757 1.9282 1.9282 3.07757 1.9282 6.30841V10.5134C1.9282 13.7443 3.07757 14.8936 6.30841 14.8936H10.5134C13.7443 14.8936 14.8936 13.7443 14.8936 10.5134V7.00924C14.8936 6.7219 15.1319 6.48362 15.4192 6.48362C15.7066 6.48362 15.9449 6.7219 15.9449 7.00924V10.5134C15.9449 14.3189 14.3189 15.9449 10.5134 15.9449Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M14.8919 4.02977H11.0373C10.75 4.02977 10.5117 3.79148 10.5117 3.50414C10.5117 3.2168 10.75 2.97852 11.0373 2.97852H14.8919C15.1793 2.97852 15.4176 3.2168 15.4176 3.50414C15.4176 3.79148 15.1793 4.02977 14.8919 4.02977Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M12.9651 5.95661C12.6777 5.95661 12.4395 5.71833 12.4395 5.43099V1.57641C12.4395 1.28906 12.6777 1.05078 12.9651 1.05078C13.2524 1.05078 13.4907 1.28906 13.4907 1.57641V5.43099C13.4907 5.71833 13.2524 5.95661 12.9651 5.95661Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M1.87149 13.8066C1.70329 13.8066 1.53509 13.7225 1.43697 13.5753C1.27578 13.337 1.33885 13.0077 1.57714 12.8465L5.03225 10.5267C5.78915 10.0221 6.83339 10.0782 7.5202 10.6599L7.75148 10.8631C8.1019 11.1645 8.6976 11.1645 9.04101 10.8631L11.9565 8.36113C12.7064 7.72337 13.8698 7.72337 14.6196 8.36113L15.762 9.3423C15.9793 9.53152 16.0073 9.86091 15.8181 10.0852C15.6288 10.3024 15.2995 10.3305 15.0752 10.1412L13.9328 9.16008C13.5824 8.85872 12.9867 8.85872 12.6433 9.16008L9.72783 11.6621C8.98495 12.2998 7.81455 12.2998 7.06466 11.6621L6.83339 11.4588C6.511 11.1855 5.97837 11.1575 5.62095 11.4027L2.17285 13.7225C2.07473 13.7786 1.9696 13.8066 1.87149 13.8066Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+                      <span>баннеры</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="correspondence col-xxl-10 offset-xxl-1">
+            <div class="row my-3 my-xxl-4">
+              <div class="col-12">
+                <h3
+                  class="title--h3 relations__new--title text-center d-flex justify-content-center align-items-center"
+                >
+                  Переписка
+                </h3>
+              </div>
+            </div>
+            <div class="row my-3 my-xxl-4">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-6 col-md-4 d-flex justify-content-center">
+                    <a
+                      href="{% url 'profile:profile_appeals' %}"
+                      class="card--button-blue relations__correspondence--button d-flex justify-content-center align-items-center w-100"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.041 16.1152H4.95768C1.83393 16.1152 0.884766 15.1661 0.884766 12.0423V10.6257C0.884766 7.5019 1.83393 6.55273 4.95768 6.55273H12.041C15.1648 6.55273 16.1139 7.5019 16.1139 10.6257V12.0423C16.1139 15.1661 15.1648 16.1152 12.041 16.1152ZM4.95768 7.61523C2.42185 7.61523 1.94727 8.0969 1.94727 10.6257V12.0423C1.94727 14.5711 2.42185 15.0527 4.95768 15.0527H12.041C14.5768 15.0527 15.0514 14.5711 15.0514 12.0423V10.6257C15.0514 8.0969 14.5768 7.61523 12.041 7.61523H4.95768Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M4.25 7.61393C3.95958 7.61393 3.71875 7.3731 3.71875 7.08268V5.66602C3.71875 3.61185 4.21458 0.884766 8.5 0.884766C11.6733 0.884766 13.2812 2.25185 13.2812 4.95768C13.2812 5.2481 13.0404 5.48893 12.75 5.48893C12.4596 5.48893 12.2188 5.2481 12.2188 4.95768C12.2188 3.55518 11.7937 1.94727 8.5 1.94727C5.41167 1.94727 4.78125 3.43477 4.78125 5.66602V7.08268C4.78125 7.3731 4.54042 7.61393 4.25 7.61393Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M8.49935 13.6354C7.23143 13.6354 6.19727 12.6013 6.19727 11.3333C6.19727 10.0654 7.23143 9.03125 8.49935 9.03125C9.76727 9.03125 10.8014 10.0654 10.8014 11.3333C10.8014 12.6013 9.76727 13.6354 8.49935 13.6354ZM8.49935 10.0938C7.81935 10.0938 7.25977 10.6533 7.25977 11.3333C7.25977 12.0133 7.81935 12.5729 8.49935 12.5729C9.17935 12.5729 9.73893 12.0133 9.73893 11.3333C9.73893 10.6533 9.17935 10.0938 8.49935 10.0938Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+
+                      <span>чат с ВС</span>
+                    </a>
+                  </div>
+                  <div class="col-6 col-md-4 d-flex justify-content-center">
+                    <a
+                      href="{% url 'profile:profile_chats' %}"
+                      class="card--button-blue relations__correspondence--button d-flex justify-content-center align-items-center w-100 card--tagged"
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 17 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14.7176 14.1919H7.70922C7.42188 14.1919 7.18359 13.9536 7.18359 13.6662C7.18359 13.3789 7.42188 13.1406 7.70922 13.1406H14.7176C15.0049 13.1406 15.2432 13.3789 15.2432 13.6662C15.2432 13.9536 15.0049 14.1919 14.7176 14.1919Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M14.7176 9.28562H7.70922C7.42188 9.28562 7.18359 9.04734 7.18359 8.76C7.18359 8.47266 7.42188 8.23438 7.70922 8.23438H14.7176C15.0049 8.23438 15.2432 8.47266 15.2432 8.76C15.2432 9.04734 15.0049 9.28562 14.7176 9.28562Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M14.7176 4.37937H7.70922C7.42188 4.37937 7.18359 4.14109 7.18359 3.85375C7.18359 3.56641 7.42188 3.32812 7.70922 3.32812H14.7176C15.0049 3.32812 15.2432 3.56641 15.2432 3.85375C15.2432 4.14109 15.0049 4.37937 14.7176 4.37937Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M2.80283 5.08169C2.66967 5.08169 2.53651 5.03263 2.43139 4.9275L1.73056 4.22667C1.52731 4.02343 1.52731 3.68703 1.73056 3.48379C1.9338 3.28054 2.2702 3.28054 2.47344 3.48379L2.80283 3.81318L4.53389 2.08212C4.73713 1.87888 5.07353 1.87888 5.27677 2.08212C5.48001 2.28536 5.48001 2.62176 5.27677 2.825L3.17427 4.9275C3.06915 5.03263 2.93599 5.08169 2.80283 5.08169Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M2.80283 9.98598C2.66967 9.98598 2.53651 9.93692 2.43139 9.8318L1.73056 9.13097C1.52731 8.92772 1.52731 8.59132 1.73056 8.38808C1.9338 8.18484 2.2702 8.18484 2.47344 8.38808L2.80283 8.71747L4.53389 6.98642C4.73713 6.78317 5.07353 6.78317 5.27677 6.98642C5.48001 7.18966 5.48001 7.52606 5.27677 7.7293L3.17427 9.8318C3.06915 9.93692 2.93599 9.98598 2.80283 9.98598Z"
+                          fill="#1560BD"
+                        />
+                        <path
+                          d="M2.80283 14.8922C2.66967 14.8922 2.53651 14.8432 2.43139 14.738L1.73056 14.0372C1.52731 13.834 1.52731 13.4976 1.73056 13.2943C1.9338 13.0911 2.2702 13.0911 2.47344 13.2943L2.80283 13.6237L4.53389 11.8927C4.73713 11.6894 5.07353 11.6894 5.27677 11.8927C5.48001 12.0959 5.48001 12.4323 5.27677 12.6355L3.17427 14.738C3.06915 14.8432 2.93599 14.8922 2.80283 14.8922Z"
+                          fill="#1560BD"
+                        />
+                      </svg>
+                      <span>Чаты</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+<!--modal prices-->
+    <div
+      class="modal__prices modal fade"
+      id="modal--prices"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="container">
+          <div class="modal__prices-content modal-content position-relative">
+            <img
+              src="{% static "img/close-red.svg" %}"
+              alt="close-logo"
+              class="modal__prices-close modal-close col-2 position-absolute"
+              data-bs-dismiss="modal"
+              role="button"
+            />
+
+            <div
+              class="modal__prices-header modal-header d-flex justify-content-center d-xxl-none"
+            >
+              <h5 class="modal__prices-title title--20-36_red modal-title">
+                Тарифы
+              </h5>
+            </div>
+
+            <div class="modal__prices-body modal-body table-responsive">
+              <table class="table m-0">
+                <thead>
+                  <tr>
+                    <th
+                      class="text-start title--10_24_dark-lighter"
+                      scope="col"
+                    >
+                      Период\кол-во <br />
+                      средств в каталоге
+                    </th>
+                    <th scope="col" class="title--10_24_dark-lighter">
+                      до <span>10</span>
+                    </th>
+                    <th scope="col" class="title--10_24_dark-lighter">
+                      до <span>50</span>
+                    </th>
+                    <th scope="col" class="title--10_24_dark-lighter">
+                      до <span>200</span>
+                    </th>
+                    <th scope="col" class="title--10_24_dark-lighter">
+                      до <span>1000</span>
+                    </th>
+                    <th scope="col" class="title--10_24_dark-lighter">
+                      более <span>1000</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th
+                      class="text-start title--10_24_dark-lighter"
+                      scope="row"
+                    >
+                      3 месяца
+                    </th>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>200</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>300</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>400</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>500</span> р.</td>
+                  </tr>
+                  <tr>
+                    <th
+                      class="text-start title--10_24_dark-lighter"
+                      scope="row"
+                    >
+                      6 месяцев
+                    </th>
+                    <td class="title--10_24_dark-semi center">
+                      <span>600</span> р.
+                    </td>
+                    <td class="title--10_24_dark-semi"><span>700</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>800</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>900</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                  </tr>
+                  <tr>
+                    <th
+                      class="text-start title--10_24_dark-lighter"
+                      scope="row"
+                    >
+                      12 месяцев
+                    </th>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                    <td class="title--10_24_dark-semi"><span>100</span> р.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{#    <main class="lk-user">#}
+{#        <section class="review container container--bc mt-4 mb-4">#}
+{#            <div class="shell shell__rev">#}
+{#                <button id="createRev" class="feed-button text-uppercase">#}
+{#                    <p>создать статью</p>#}
+{#                </button>#}
+{#                <button#}
+{#                    id="drafRev"#}
+{#                    class="feed-button text-uppercase"#}
+{#                    onclick="location.href='{% url 'manufacturer:manufacturer_drafts' %}'"#}
+{#                >#}
+{#                    <p>Черновики</p>#}
+{#                </button>#}
+{#                <button#}
+{#                    id="publRev"#}
+{#                    class="feed-button text-uppercase"#}
+{#                    onclick="location.href='{% url 'manufacturer:manufacturer_publish' %}'"#}
+{#                >#}
+{#                    <p>Опубликованные</p>#}
+{#                </button>#}
+{#                <button#}
+{#                    id="mailRev"#}
+{#                    class="feed-button text-uppercase"#}
+{#                    onclick="location.href='{% url 'manufacturer:create-mailing' %}'"#}
+{#                >#}
+{#                    <p>создать рассылку</p>#}
+{#                </button>#}
+{#            </div>#}
+{#        </section>#}
+{#        #}
+{#        <section class="select container container--bc">#}
+{#        <p class="title--20-36 text-uppercase text-center">Тарифы и оплата</p>#}
+{#        <p class="text-decoration-none text-uppercase d-none d-xxl-block ms-2 btn__svg-confirm text--15-30 fw-600 main-color d-block m-auto text-center">#}
+{#            до конца оплаченного периода осталось <strong>90</strong> дней#}
+{#        </p>#}
+{#        <div class="shell shell__select">#}
+{#            <button id="prog" class="feed-button d-progMin text-uppercase">          #}
+{#                <p>подбор программы</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button id="testS" class="feed-button text-uppercase">  #}
+{#                <p>Тарифы</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button id="prog" class="feed-button d-progMax text-uppercase">#}
+{#            <p>Дополнительные услуги</p>#}
+{#            <div class="notice">#}
+{#                <p>999</p>#}
+{#            </div>#}
+{#            </button>#}
+{#        </div>#}
+{#        </section>#}
+{##}
+{#        <section class="select container container--bc">#}
+{#        <p class="title--20-36 text-uppercase text-center">Новое</p>#}
+{#        <div class="shell shell__select">#}
+{#            <button#}
+{#                id="comment"#}
+{#                class="comment feed-button d-progMin text-uppercase"#}
+{#                onclick="location.href='{% url 'manufacturer:manufacturer_comments' %}'"#}
+{#            >#}
+{#                    <p>комментарии</p>#}
+{#                    <div class="notice">#}
+{#                        <p>999</p>#}
+{#                    </div>#}
+{#            </button>#}
+{#            #}
+{#            <button#}
+{#                id="feedback"#}
+{#                class="feed-button d-progMin text-uppercase"#}
+{#                onclick="location.href='{% url 'manufacturer:manufacturer_reviews' %}'"#}
+{#            >#}
+{#                <p>отзывы</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button#}
+{#                id="quest"#}
+{#                class="feed-button text-uppercase"#}
+{#                onclick="location.href='{% url 'manufacturer:manufacturer_questions' %}'"#}
+{#            >  #}
+{#                <p>вопросы</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button#}
+{#                id="feedback"#}
+{#                class="feed-button d-progMax text-uppercase"#}
+{#                onclick="location.href='{% url 'manufacturer:manufacturer_reviews' %}'"#}
+{#            >#}
+{#                <p>отзывы</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button#}
+{#                id="comment"#}
+{#                class="comment feed-button d-progMax text-uppercase"#}
+{#                onclick="location.href='{% url 'manufacturer:manufacturer_comments' %}'"#}
+{#            >#}
+{#                <p>комментарии</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button disabled id="dummy" class="feed-button text-uppercase"></button>#}
+{#        </div>#}
+{#        </section>#}
+{#        <section class="select container container--bc">#}
+{#        <p class="title--20-36 text-uppercase text-center">Статистика</p>#}
+{#        <div class="shell shell__select">#}
+{#            <button id="articl" class="d-progMax feed-button text-uppercase">  #}
+{#                <p>статьи</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button id="brend" class="feed-button text-uppercase">          #}
+{#                <p>бренды</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button id="articl" class="feed-button d-progMin text-uppercase">  #}
+{#                <p>статьи</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{##}
+{#            <button id="tool" class="feed-button text-uppercase">#}
+{#                <p>средства</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{#            #}
+{#            <button id="banner" class="feed-button text-uppercase">#}
+{#                <p>баннеры</p>#}
+{#                <div class="notice">#}
+{#                    <p>999</p>#}
+{#                </div>#}
+{#            </button>#}
+{#        </div>#}
+{#        </section>#}
+{#        <section class="select chatsAll container container--bc">#}
+{#        <p class="title--20-36 text-uppercase text-center">Переписка</p>#}
+{#        <div class="shell shell__select">#}
+{#            <button#}
+{#                id="techChat"#}
+{#                class="feed-button text-uppercase"#}
+{#                onclick="location.href='{% url 'profile:profile_appeals' %}'"#}
+{#            >#}
+{#            <p>чат с ВС</p>#}
+{#            <div class="notice">#}
+{#                <p>999</p>#}
+{#            </div>#}
+{#            </button>#}
+{#            #}
+{#                <button#}
+{#                    id="review"#}
+{#                    class="feed-button text-uppercase"#}
+{#                    onclick="location.href='{% url 'profile:profile_chats' %}'"#}
+{#                >#}
+{#                        <p>чаты</p>#}
+{#                        <div class="notice">#}
+{#                            <p>999</p>#}
+{#                        </div>#}
+{#                </button>#}
+{#            <button id="dummy" class="feed-button d-progMax text-uppercase">#}
+{#            </button>#}
+{#        </div>#}
+{#        </section>#}
+{#    </main>#}
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/jq.js" %}"></script>
+    <script src="{% static "js/select2.js" %}" defer></script>
+{#    <script src="{% static "js/user-lk.js" %}"></script>#}
+    <script defer src="{% static "js/profile.js" %}"></script>
+
+    <div class="modal fade modal__del-profile" id="deleteProfile" tabindex="-1" aria-labelledby="deleteProfileLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h5 class="m-auto modal-title" id="deleteProfileLabel">Вы уверены?</h5>
+            </div>
+            <div class="modal-footer d-flex flex-column">
+              <button class="feed-button text-uppercase text--12-18" type="button" data-bs-dismiss="modal">отмена</button>
+              <button class="feed-button text--12-18" id="deleteProfileBtn" type="button">Удалить профиль</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Send Request Delete Profile -->
+      <script>
+        const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+        deleteProfileBtn.addEventListener('click', () => {
+            fetch('/delete-profile/', {
+                method: 'POST',
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data['status'] == 'complete') {
+                    window.location.href = '/'
+                } else {
+                    alert(`${data['status']}:  ${data['message']}`)
+                }
+            });
+        });
+      </script>
+
+      <script>
+        function form1_onsubmit()
+        {
+            console.log('11111111111111')
+            $('#profile__confidInf :input[isacopy]').remove();
+
+            $('#form_open_profile :input').not(':submit').clone().hide().attr('isacopy','y').appendTo('#profile__confidInf');
+
+            return true;
+        }
+      </script>
+{% endblock %}

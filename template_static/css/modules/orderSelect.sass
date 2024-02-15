@@ -1,0 +1,352 @@
+@import vars
+@import test
+
+.brand__title
+    margin-bottom: 20px
+
+.quest-b
+    .questText
+        background: none
+        padding: 0
+        color: $dark-semi-light
+.selectInpOrder 
+    width: 100%
+.selectWrap
+    width: calc( (100% / 3) - 5% )
+    margin: 15px 0
+    @media screen and (max-width: $second-breack-point) 
+        width: calc( (100% / 2) - 5% )
+        
+    small
+        text-transform: none
+        color: $gray-light
+        font-size: 18px
+        line-height: $lineHeightText
+        @media screen and (max-width: $second-breack-point) 
+            font-size: 10px
+            margin-top: -15px
+    select
+        box-shadow: $box-shadow-sm
+        border-radius: $border-radius
+        appearance: none
+        height: 42px    
+        &:focus
+            box-shadow: none
+
+.select2-dropdown
+    min-width: 180px
+
+.select2
+    height: 42px !important
+    border: 0 solid #000
+    position: unset
+    box-shadow: $box-shadow-sm
+    border-radius: $border-radius
+    overflow-y: scroll
+    overflow-x: hidden
+    -ms-overflow-style: none
+    scrollbar-width: none
+    &::-webkit-scrollbar
+        display: none
+
+    max-height: 80px
+    width: 100% !important
+    @media screen and (max-width: $xs-breack-point) 
+        max-width: 100%
+
+    &:-webkit-scrollbar-track 
+        background: $gray-light
+    
+    &:-webkit-scrollbar-thumb 
+        background-color: $main-color
+        border: 3px solid $dark-semi-light
+        
+    *
+        border: 0 solid $white-color !important
+        font-size: 15px !important
+
+    .select2-search__field
+        margin-left: 15px !important
+        margin-top: 5px !important
+        font-size: 18px !important
+        color: #000 !important
+        height: 30px !important
+        width: auto !important
+        @media screen and (max-width: $second-breack-point) 
+            font-size: 16px !important
+
+    ul
+        li
+            background-color: $main-color !important
+            color: $white-color
+            border-radius: 10px !important
+            margin-top: 3px !important
+            overflow: hidden
+            @media screen and (max-width: $second-breack-point) 
+                height: 32px
+                padding: 8px 20px !important
+            button
+                opacity: 1
+                color: $white-color !important
+                transition: 0.3s
+                height: 100%
+                margin: 0
+                @media screen and (max-width: $second-breack-point) 
+                    padding: 5px 4px !important
+                &:hover
+                    background-color: $pre-color !important
+                    background-size: 200%
+                    color: $white-color !important
+                    opacity: 0.7
+
+.select2-results__option
+    display: flex
+    align-items: center
+    background-color: #00000000 !important
+    color: $dark-lighter !important
+
+.select2-results__option--highlighted
+    background-color: #00000000 !important
+    border-bottom: 1px solid $main-color
+    color: $dark-lighter !important
+
+.select2-results__option--selected
+    &::before
+        background-image: url("../img/check.svg")
+    
+.select2-results__option 
+    padding-right: 20px
+    vertical-align: middle
+
+.select2-results__option::before 
+    flex-shrink: 0
+    content: ''
+    display: inline-block
+    width: 20px
+    aspect-ratio: 1
+    border: 2px solid $colorBorderCheck
+    border-radius: 30%
+    margin-right: 20px
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: 68%
+
+    @media screen and (max-width: $second-breack-point) 
+        width: 17px
+        border-radius: 5px 
+        border: 1px solid $colorBorderCheck
+        margin-right: 10px
+
+    .adaptQuest
+        width: fit-content
+        @media screen and (max-width: $first-breack-point) 
+        width: 100%
+        p
+            b
+                font-weight: 600 !important
+    .select2-selection__choice
+        background: $main-color !important
+        color: $white-color !important
+        button
+            width: 23px
+            span
+                color: $white-color
+                transition: opacity 0.3s
+            &:hover
+                opacity: 0.7
+                background-color: #f1f1f100
+                outline: none
+
+.checkInp
+    display: flex
+    flex-direction: column
+    align-items: start
+
+.checkInpOrder
+    
+    .checkWrap
+        box-shadow: none
+        margin-bottom: 0
+        padding: 10px 0
+    input+label
+        text-transform: none
+    
+
+.radioInp
+
+    input[type=radio]
+        position: absolute
+        z-index: -1
+        opacity: 0
+
+        &:checked+label::before
+            border-color: $white-color
+            background-color: $main-color
+
+        &:checked+label::after
+            border-color: $white-color
+            background-color: $main-color
+
+        &:not(:disabled)
+            &:active+label:before
+                border-color: $white-color
+                background-color: $main-color
+
+        &:not(:disabled)
+            &:active+label:after
+                border-color: $white-color
+                background-color: $main-color
+
+    input[typy=radio]+label
+        display: inline-flex
+        align-items: center
+        user-select: none
+        
+    label
+        display: flex
+        align-items: center
+        text-transform: uppercase
+        margin-bottom: 15px
+
+        &::before
+            content: ''
+            display: inline-block
+            width: 1.3em
+            aspect-ratio: 1
+            border: 9px solid $white-color
+            background: $white-color
+            border-radius: 50%
+            margin-right: 0.5em
+            box-shadow: $box-shadow-sm
+            flex-shrink: 0
+            @media screen and (max-width: $second-breack-point) 
+                border: 5px solid $white-color
+
+        &::after
+            content: ''
+            width: 1.3em
+            aspect-ratio: 1
+            border: 9px solid $white-color
+            background: $white-color
+            border-radius: 50%
+            margin-left: 0.5em
+            box-shadow: $box-shadow-sm
+            display: none
+            flex-shrink: 0
+            @media screen and (max-width: $second-breack-point) 
+                border: 5px solid $white-color
+
+
+        @media screen and (max-width: $second-breack-point) 
+            &::after
+                display: inline-block 
+            &::before
+                display: none
+    .option
+        margin-bottom: 15px
+
+        label
+            &::before
+                display: inline-block
+            &::after
+                display: none
+        p
+            text-transform: none
+            margin-left:1.8em 
+
+        @media screen  and (max-width: $second-breack-point)
+            img
+                width: 100%
+.adaptOrder
+
+    display: grid
+    grid-template-columns: repeat(4,25%)
+
+    @media screen and (max-width: $second-breack-point) 
+        grid-template-columns: 100%
+
+    label
+        width: 183px
+        margin-right: 20px
+
+        @media screen and (max-width: $second-breack-point) 
+            justify-content: end
+            width: auto
+.select2-selection__choice
+    min-height: 25px
+    padding: calc( 5px / 2  ) 0 !important
+    padding-left: 20px !important
+    *
+        margin: calc( 5px / 2  )
+.selectInpDls
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-wrap: wrap
+    @media screen and (max-width: $second-breack-point) 
+        flex-direction: column
+    .selectWrap
+        &:last-child
+            width: 100%
+        display: flex
+        flex-direction: column
+        padding: 0
+        @media screen and (max-width: $second-breack-point) 
+            width: 100%
+        .select2
+            width: 100% !important
+            margin-top: 15px !important
+        select
+            margin-top: 15px !important
+.selectInp
+    margin-bottom: 20px
+.alerg
+    margin: 10px 0
+    width: 100% !important
+.downloadRezult
+    form.order
+        justify-content: space-between
+        button
+            @media screen and (max-width: $second-breack-point)
+                width: 100%
+                margin-top: 25px
+
+            &:before
+                border: 0px
+                background-size: 100%
+                border-radius: 0
+
+                @media screen and (max-width: $first-breack-point)
+                    width: 20px !important
+#paySelect
+    &:before
+        background-image: url("../img/receipt-item.svg")
+#selectProgram
+    &:before                
+        background-image: url("../img/wallet-money.svg")
+
+.selectSave
+    display: block
+.choseSave
+    display: flex
+    align-items: center
+    justify-content: space-between
+    height: 100px
+    .inputAnswer
+        width: 30%
+    .selectWrap
+        width: 70%
+        margin: 0
+        margin-top: -30px
+        display: none 
+        @media screen and (min-width: $second-breack-point)
+            display: none !important
+
+.quest-b
+    .selectWrapchoseSave
+        margin-top: -18px
+        display: none 
+        width: 70%
+        @media screen and (max-width: $second-breack-point)
+            display: none !important

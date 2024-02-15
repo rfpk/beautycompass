@@ -1,0 +1,81 @@
+.shops {
+  margin-top: 25px;
+  margin-bottom: 28px;
+}
+@media screen and (min-width: 1400px) {
+  .shops {
+    margin-top: 42px;
+    margin-bottom: 52px;
+  }
+}
+.shops__container {
+  display: flex;
+  flex-wrap: wrap;
+  -moz-column-gap: 11px;
+       column-gap: 11px;
+  row-gap: 22px;
+}
+@media screen and (min-width: 1400px) {
+  .shops__container {
+    row-gap: 30px;
+    -moz-column-gap: 42px;
+         column-gap: 42px;
+  }
+}
+.shops__item {
+  flex-shrink: 0;
+  position: relative;
+  width: 233px;
+  height: 146px;
+  padding: 29px 17px 25px 15px;
+  border-radius: 15px;
+  background: #1560BD;
+  box-shadow: 0px 4px 20px 0 rgba(14, 14, 14, 0.07);
+}
+@media screen and (min-width: 1400px) {
+  .shops__item {
+    width: 382px;
+    height: 212px;
+    padding: 56px 34px 32px 22px;
+  }
+}
+.shops__item i.tag-close {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  width: 22px;
+  height: 22px;
+  background-color: #E31E24;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FAFAFA;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.shops__item i.tag-close:hover {
+  opacity: 0.8;
+}
+.shops__name {
+  margin-bottom: 30px;
+}
+.shops__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16px;
+}
+@media screen and (min-width: 1400px) {
+  .shops__plus.center {
+    width: 100%;
+  }
+}
+.shops__plus svg {
+  width: 50px;
+  height: 50px;
+}/*# sourceMappingURL=shops.css.map */

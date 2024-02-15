@@ -1,0 +1,172 @@
+@import "vars.sass"
+.profile
+  display: grid
+
+  &__brand
+    grid-auto-columns: 114px auto auto
+    grid-column-gap: 11px
+    grid-row-gap: 27px
+    grid-template-areas: 'image . .' 'image . .' 'image . .' 'name name name' 'description description description'
+    margin-top: 27px
+    margin-bottom: 27px
+    @media screen and (min-width: $first-breack-point)
+      grid-template-areas: 'image name name' 'image description description' 'image description description'
+      grid-auto-columns: 187px auto auto
+      grid-column-gap: 38px
+      grid-row-gap: 38px
+      margin-top: 58px
+      margin-bottom: 37px
+    &-image
+      position: relative
+      width: 114px
+      height: 114px
+      img
+        width: 54px
+        height: auto
+      @media screen and (min-width: $first-breack-point)
+        width: 187px
+        height: 187px
+    &-input
+      &.profile__image
+        grid-area: image
+      &.brand__name
+        grid-area: name
+      &.brand__description
+        grid-area: description
+    &-description
+      height: 52px
+      resize: none
+      @media all and (min-width: $first-breack-point)
+        height: 108px
+
+
+  &__manufacturer
+    grid-template-columns: 114px auto auto
+    grid-template-rows: repeat(4, 1fr)
+    grid-column-gap: 11px
+    grid-template-areas: 'image name name' 'image . .' 'image email email' 'image phone phone'
+    @media screen and (min-width: $first-breack-point)
+      grid-template-columns: 187px auto auto
+      grid-column-gap: 38px
+    &-image
+      grid-area: image
+      position: relative
+      width: 114px
+      height: 114px
+      img
+        width: 54px
+        height: auto
+      @media screen and (min-width: $first-breack-point)
+        width: 187px
+        height: 187px
+    &-name
+      grid-area: name
+      padding-top: 10px
+    &-email
+      grid-area: email
+    &-phone
+      grid-area: phone
+
+
+  &__manufacturer-info
+    grid-auto-columns: 114px auto auto
+    grid-column-gap: 11px
+    grid-row-gap: 22px
+    grid-template-areas: 'name name name' 'image country country' 'image town town' 'image . .' 'photo photo photo' 'email email email' 'description description description' 'history history history' 'principles principles principles'
+    @media screen and (min-width: $first-breack-point)
+      grid-auto-columns: 187px auto auto
+      //grid-auto-rows: 62px 62px 62px 108px 108px 108px
+      grid-column-gap: 38px
+      grid-row-gap: 31px
+      grid-template-areas: 'image name country' 'image email town' 'image photo .' 'description description description' 'history history history' 'principles principles principles'
+    &_input
+      &.name
+        grid-area: name
+      &.image
+        grid-area: image
+        position: relative
+        width: 114px
+        height: 114px
+        img
+          width: 54px
+          height: auto
+        @media screen and (min-width: $first-breack-point)
+          width: 188px
+          height: 188px
+      &.country
+        grid-area: country
+      &.town
+        grid-area: town
+      &.phone
+        grid-area: photo
+      &.email
+        grid-area: email
+      &.description
+        grid-area: description
+      &.history
+        grid-area: history
+      &.principles
+        grid-area: principles
+
+  &__products
+    display: flex
+    flex-wrap: wrap
+    flex-direction: column
+    column-gap: 11px
+    row-gap: 27px
+    @media screen and (min-width: $first-breack-point)
+      justify-content: flex-start
+      flex-direction: row
+      column-gap: 38px
+      row-gap: 38px
+    &-images
+      width: 100%
+      display: flex
+      align-items: center
+      flex-wrap: wrap
+      row-gap: 18px
+      column-gap: 12px
+      @media screen and (min-width: $first-breack-point)
+        column-gap: 40px
+        row-gap: 38px
+    &-image 
+      grid-area: image
+      position: relative
+      width: 114px
+      height: 114px
+      @media screen and (min-width: $first-breack-point)
+        width: 187px
+        height: 187px
+      &_cloud
+        top: -65px
+        right: -115%
+        width: 150px
+        padding: 6px 8px
+        @media screen and (min-width: $first-breack-point)
+          top: -66%
+          right: auto
+          width: 440px
+          padding: 14px 20px 10px
+      label
+        top: -40px
+      img
+        width: 54px
+        height: auto
+
+    &-assignment, &-format, &-region, &-assignment2, &_price-category, &_age-recommendations, &_key-action, &-gender
+      @media screen and (min-width: $first-breack-point)
+        width: 31%
+    &_formal-name, &_explanatory-name, &-description, &-INCI, &-usage, &_catalog-section
+      width: 100%
+    &-plus
+      margin-left: 21px
+      width: 30px
+      height: 30px
+      @media screen and (min-width: $first-breack-point)
+        width: 42px
+        height: 42px
+        margin-left: 10px
+
+
+
+

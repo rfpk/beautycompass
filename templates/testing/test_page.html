@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Тест{% endblock %}
+
+
+{% block content %}
+    <main>
+      <section class="brand__title">
+        <div class="container container--bc">
+            <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+                <div class="col-1 col-xxl-12 order-xxl-1">
+                    <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                        <img src="{% static 'img/arrow-left.svg' %}" alt="Стрелка налево">
+                        <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                    </a>
+                </div>
+                <div class="col text-center col-xxl-12">
+                    <h1 class="title--20-36">ТЕСТ</h1>
+                </div>
+            </div>
+        </div>
+      </section>
+      <section>
+        <form action="{% url 'testing:result_test' %}" method="get" id="test-form" class="container container--bc">
+          {% for field in form %}
+            {% if field.field.widget.input_type == 'radio' %}
+              <div class="quest">
+                <div class="quest__text">
+                  <small>{{field.label}}</small>
+                </div>
+                <div class="{{field.field.widget.attrs.class}}">
+                  {% for pk, text, desc, images in field.field.widget.choices %}
+                    <div class="radio__option">
+                      <input
+                        type="radio"
+                        name="{{field.name}}"
+                        value="{{pk}}"
+                        class="quest__resp radio__inpt"
+                        required=""
+                        id="id_{{field.name}}_{{forloop.counter}}"
+                        {% if forloop.first %}checked{% endif %}
+                      />
+                      <label for="id_{{field.name}}_{{forloop.counter}}">{{text}}</label>
+                      {% if desc %}
+                        <p>{{desc}}</p>
+                      {% endif %}
+                      {% for image in images %}
+                        <img src="{% get_media_prefix %}{{image.image}}" alt="photo">
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% elif field.field.widget.input_type == 'checkbox' %}
+              <div class="quest">
+                <div class="quest__text">
+                  <small>{{field.label}}</small>
+                </div>
+                <div class="quest__resp check-right">
+                  {% for pk, text, desc, images in field.field.widget.choices %}
+                    <div class="check__wrap">
+                      <input type="checkbox" name="{{field.name}}" value="{{pk}}" id="id_{{field.name}}_{{forloop.counter}}">
+                      <label for="id_{{field.name}}_{{forloop.counter}}">{{text}}</label>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          <div class="quest d-flex align-items-center">
+              <input class="quest__show_result text-uppercase" type="submit" value="Показать результаты">
+          </div>
+        </form>
+      </section>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/jq.js" %}"></script>
+    <script defer src="{% static "js/test.js" %}"></script>
+{% endblock %}
+

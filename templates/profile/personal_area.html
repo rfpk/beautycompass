@@ -1,0 +1,449 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личный Кабинет{% endblock %}
+
+
+{% block content %}
+    <main class="lk-user">
+            <section>
+                <div class="container container--bc">
+                    <div class="col-12 col-xxl-12">
+                    <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+                        <div class="col head__wrap  text-center col-xxl-12">
+                            <div class="head__page ">
+                                <h1 class="title--20-36 text-uppercase">
+                                    <p>профиль</p>
+                                </h1>
+                                <div class="dls">
+                                    <button
+                                        onclick="form1_onsubmit(); document.getElementById('profile__confidInf').submit();"
+                                        type="submit"
+                                        id="saveProfile"
+                                        class="feed-button text-uppercase"
+                                    >
+                                        <p>сохранить</p>
+                                    </button>
+                                    <button onclick="" id="changeProfile" class="text-uppercase feed-button">
+                                        <p>настроить</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </section>
+            <section class="profile container container--bc">
+                <div class="col-12 col-xxl-12">
+                    <form action="{% url 'profile:change_profile' %}" method="post" class="persData profile__confidInf" id="profile__confidInf" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label id="ava" class="select-wrap visPrfile">
+                            <small class="redPrfile">
+                                Аватар
+                            </small>
+                            <div id="avatar" {% if user.user_profile.avatar %} style="background-image: url('{{user.user_profile.avatar.url}}');" {% endif %}>
+                                {{form.avatar}}
+                            </div>
+                        
+                        </label>
+                            <label
+                                for="dateBirth"
+                                class="d-noneMinSec select-wrap redPrfile"
+                                id="dateBirth"
+                            >
+                        <small>
+                            Дата рождения
+                        </small>
+                            {{form.date_of_birth}}
+                        </label>
+                        
+                        <label
+                            for="phone"
+                            class="d-noneMinSec select-wrap redPrfile" id="phone">
+                        <small> 
+                            Телефон
+                        </small>
+                        {{form.phone}}
+                        </label>
+                        <label for="nikname" class="select-wrap redPrfile" id="nikname">
+                        <small>
+                            Ник
+                        </small>
+                            {{form.nickname}}
+                        </label>
+                        <div class="select-wrap d-noneMaxSec redPrfile" id="gender">
+                        <small>Пол</small>
+                            {{form.sex}}
+                        </div>
+                        <label for="realName" class="select-wrap redPrfile" id="realName">
+                        <small>
+                            Имя
+                        </small>
+                            {{form.first_name}}
+                        </label>
+                        <label for="partName" class="select-wrap redPrfile" id="partName">
+                        <small>
+                            Фамилия
+                        </small>
+                            {{form.last_name}}
+                        </label>
+                        <label
+                            for="login"
+                            class="select-wrap redPrfile"
+                            id="login"
+                        >
+                        <small>
+                            Логин
+                        </small>
+                            {{form.email}}
+                        </label>
+                        <label for="password" class="select-wrap redPrfile" id="password">
+                        <small>
+                            Пароль
+                        </small>
+                        <div class="passw">
+                            {{form.password}}
+                            <button id="visPassword" class="feed-button passw__vis"></button>
+                        </div>
+                        </label>
+                        <label for="password_repit" class="select-wrap redPrfile" id="password_repit">
+                        <small>
+                            Повтор пароля
+                        </small>
+                        <div class="passw">
+                            {{form.confirm_password}}
+                            <button id="visPasswordRep" class="feed-button passw__vis"></button>
+                        </div>            
+                        </label>
+                        <label for="email" class="select-wrap redPrfile" id="email">
+                        <small>
+                            Email для связи с администрацией
+                        </small>
+                            {{form.contact_email}}
+                        </label>
+                        <label class="select-wrap visPrfile">
+                        <p class="outputMail mb-2">{{profile.email}}</p>
+                        <p class="outputPhone mb-2">{% if profile.phone %} {{profile.phone}} {% endif %}</p>
+                        </label>
+                    </form>
+                </div>
+            </section>
+            <form id="form_open_profile" class="container container--bc redPrfile">
+                <p class="title--20-36 text-uppercase">Информация для открытого профиля</p>
+                <div class="profile__infOpen">
+                    <label class="select-wrap descrProf">
+                        <small>
+                            Описание профиля
+                        </small>
+                        {{form.description}}
+                    </label>
+                    <label class="select-wrap contry">
+                        <small>
+                            Страна
+                        </small>
+                        <select class="form-select" name="country" id="selectCountry" form="profile__confidInf">
+                            {% for country in form.country %}
+                                {{country}}
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label class="select-wrap city">
+                        <small>
+                            Город
+                        </small>
+                        {{form.city}}
+                    </label>
+                    <label for="emailOpen" class="select-wrap" id="emailOpen">
+                        <small>
+                            E-mail (виден на странице профиля)
+                        </small>
+                        {{form.public_email}}
+                    </label>
+                    <label class="select-wrap haier" id="selecHaier">
+                        <small>
+                            Тип волос
+                        </small>
+                        <select class="form-select" name="hair_type" form="profile__confidInf">
+                            {% for hair_type in form.hair_type %}
+                                {{hair_type}}
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label class="select-wrap derma">
+                        <small>
+                            Тип кожи
+                        </small>
+                        <select class="form-select" name="skin_type" id="skinProp" form="profile__confidInf">
+                            {% for skin_type in form.skin_type %}
+                                {{skin_type}}
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+            </form>
+            <div class="dls mb-2 container container--bc">
+                <button id="save" class="feed-button text-uppercase"><p>Сохранить</p></button>
+                <button id="del" class="feed-button " data-bs-toggle="modal" data-bs-target="#deleteProfile"><p>Удалить профиль</p></button>
+                <div class="check__wrap m-0">
+                    {{form.accept_news}}
+                    <label for="dehydration">
+                        Согласен получать новости сайта
+                    </label>
+                  </div>
+            </div>
+        
+        <section class="review container container--bc mt-4 mb-4">
+            <div class="shell shell__rev">
+                <button id="createRev" class="feed-button text-uppercase"><p>создать обзор</p></button>
+                <button
+                    id="drafRev"
+                    class="feed-button text-uppercase"
+                    onclick="location.href='{% url 'profile:author_drafts' %}'"
+                >
+                    <p>Черновики</p>
+                </button>
+                <button
+                    id="publRev"
+                    class="feed-button text-uppercase"
+                    onclick="location.href='{% url 'profile:author_publish' %}'"
+                >
+                    <p>Опубликованные</p>
+                </button>
+            </div>
+        </section>
+        
+        <section class="select container container--bc">
+        <p class="title--20-36 text-uppercase text-center">Подбор косметики</p>
+        <div class="shell shell__select">
+            <button
+                id="prog"
+                class="feed-button d-progMin text-uppercase"
+                onclick="location.href='{% url 'programs:program_create' %}'"
+            >          
+            <p>подбор программы</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            <button
+                id="testS"
+                class="feed-button text-uppercase"
+                onclick="location.href='{% url 'testing:answer_test' %}'"
+            >  
+            <p>тест</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            <button
+                id="prog"
+                class="feed-button d-progMax text-uppercase"
+                onclick="location.href='{% url 'selection:answer_selection' %}'"
+            >
+            <p>подбор программы</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            <button
+                id="save"
+                class="feed-button text-uppercase"
+                onclick="location.href='{% url 'programs:program_list' %}'"
+            >
+            <p>сохраненное</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+        </div>
+        </section>
+
+        <section class="select container container--bc">
+        <p class="title--20-36 text-uppercase text-center">Обратная связь</p>
+        <div class="shell shell__select">
+            <button
+                id="comment"
+                class="comment feed-button d-progMin text-uppercase"
+                onclick="location.href='{% url 'profile:profile_feedback_comments' %}'"
+            >
+                    <p>комментарии</p>
+                    <div class="notice">
+                        <p>999</p>
+                    </div>
+            </button>
+            
+            <button
+                id="feedback"
+                class="feed-button d-progMin text-uppercase"
+                onclick="location.href='{% url 'profile:profile_feedback_reviews' %}'"
+            >
+                <p>отзывы</p>
+                <div class="notice">
+                    <p>999</p>
+                </div>
+            </button>
+
+            <button
+                id="quest"
+                class="feed-button text-uppercase"
+                onclick="location.href='{% url 'profile:profile_feedback_questions' %}'"
+            >  
+                <p>вопросы</p>
+                <div class="notice">
+                    <p>999</p>
+                </div>
+            </button>
+
+            <button
+                id="feedback"
+                class="feed-button d-progMax text-uppercase"
+                onclick="location.href='{% url 'profile:profile_feedback_reviews' %}'"
+            >
+                <p>отзывы</p>
+                <div class="notice">
+                    <p>999</p>
+                </div>
+            </button>
+
+            <button
+                id="comment"
+                class="comment feed-button d-progMax text-uppercase"
+                onclick="location.href='{% url 'profile:profile_feedback_comments' %}'"
+            >
+                <p>комментарии</p>
+                <div class="notice">
+                    <p>999</p>
+                </div>
+            </button>
+
+            <button
+                id="review"
+                class="feed-button text-uppercase"
+                onclick="location.href='{% url 'profile:profile_comments' %}'"
+            >
+                <p>обзоры</p>
+                <div class="notice">
+                    <p>999</p>
+                </div>
+            </button>
+
+            <button id="monet" class="feed-button text-uppercase">
+                <p>монетизация</p>
+                <div class="notice">
+                    <p>999</p>
+                </div>
+            </button>
+
+            <button disabled id="dummy" class="feed-button text-uppercase"></button>
+        </div>
+        </section>
+        <section class="select container container--bc">
+        <p class="title--20-36 text-uppercase text-center">Избранное</p>
+        <div class="shell shell__select">
+            <button id="articl" class="d-progMax feed-button text-uppercase">  
+            <p>статьи/обзоры</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            <button id="brend" class="feed-button text-uppercase">          
+            <p>бренды</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            <button id="articl" class="feed-button d-progMin text-uppercase">  
+            <p>статьи</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            <button id="tool" class="feed-button text-uppercase">
+            <p>средства</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+        </div>
+        </section>
+        <section class="select chatsAll container container--bc">
+        <p class="title--20-36 text-uppercase text-center">Переписка</p>
+        <div class="shell shell__select">
+            <button
+                id="techChat"
+                class="feed-button text-uppercase"
+                onclick="location.href='{% url 'profile:profile_appeals' %}'"
+            >
+            <p>чат с ВС</p>
+            <div class="notice">
+                <p>999</p>
+            </div>
+            </button>
+            
+                <button
+                    id="chat"
+                    class="feed-button text-uppercase"
+                    onclick="location.href='{% url 'profile:profile_chats' %}'"
+                >
+                        <p>чаты</p>
+                        <div class="notice">
+                            <p>999</p>
+                        </div>
+                </button>
+            <button id="dummy" class="feed-button d-progMax text-uppercase">
+            </button>
+        </div>
+        </section>
+    </main>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/jq.js" %}"></script>
+    <script src="{% static "js/select2.js" %}" defer></script>
+    <script src="{% static "js/user-lk.js" %}"></script>
+
+    <div class="modal fade modal__del-profile" id="deleteProfile" tabindex="-1" aria-labelledby="deleteProfileLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h5 class="m-auto modal-title" id="deleteProfileLabel">Вы уверены?</h5>
+            </div>
+            <div class="modal-footer d-flex flex-column">
+              <button class="feed-button text-uppercase text--12-18" type="button" data-bs-dismiss="modal">отмена</button>
+              <button class="feed-button text--12-18" id="deleteProfileBtn" type="button">Удалить профиль</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Send Request Delete Profile -->
+      <script>
+        const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+        deleteProfileBtn.addEventListener('click', () => {
+            fetch('/delete-profile/', {
+                method: 'POST',
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data['status'] == 'complete') {
+                    window.location.href = '/'
+                } else {
+                    alert(`${data['status']}:  ${data['message']}`)
+                }
+            });
+        });
+      </script>
+
+      <script>
+        function form1_onsubmit()
+        {
+            console.log('11111111111111')
+            $('#profile__confidInf :input[isacopy]').remove();
+
+            $('#form_open_profile :input').not(':submit').clone().hide().attr('isacopy','y').appendTo('#profile__confidInf');
+
+            return true;
+        }
+      </script>
+{% endblock %}

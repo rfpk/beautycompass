@@ -1,0 +1,154 @@
+@import vars
+.check
+    &-right
+        display: flex
+        flex-direction: column
+        align-items: end
+
+    &__wrap
+        border-radius: $border-radius
+        box-shadow: $box-shadow-regular
+        padding: 15px
+        width: fit-content
+        margin-bottom: 20px
+        @media screen and (max-width: $second-breack-point) 
+            margin-bottom: 15px
+            padding: 11px
+
+        input
+            position: absolute
+            z-index: -1
+            opacity: 0
+
+            &:checked+label::before
+                background-image: url("../img/check.svg")
+            &:checked+label::after
+                background-image: url("../img/check.svg")
+
+        input+label
+            display: inline-flex
+            align-items: center
+            user-select: none
+            &::before
+                flex-shrink: 0
+                content: ''
+                display: inline-block
+                width: 34px
+                aspect-ratio: 1
+                border: 3px solid #292D32
+                border-radius: 10px
+                margin-right: 20px
+                background-repeat: no-repeat
+                background-position: center center
+                background-size: 68%
+
+                @media screen and (max-width: $second-breack-point) 
+                    width: 17px
+                    border-radius: 5px 
+                    border: 1px solid #292D32
+                    margin-right: 10px
+            &::after
+                flex-shrink: 0
+                content: ''
+                display: none
+                width: 34px
+                aspect-ratio: 1
+                border: 3px solid #292D32
+                border-radius: 10px
+                margin-right: 20px
+                background-repeat: no-repeat
+                background-position: center center
+                background-size: 68%
+
+                @media screen and (max-width: $second-breack-point) 
+                    width: 17px
+                    border-radius: 5px 
+                    border: 1px solid #292D32
+                    margin-right: 10px
+
+.radio
+    &__inpt
+        input[type=radio]
+            position: absolute
+            z-index: -1
+            opacity: 0
+
+            &:checked+label::before
+                border-color: $white-color
+                background-color: $main-color
+
+            &:checked+label::after
+                border-color: $white-color
+                background-color: $main-color
+
+            &:not(:disabled)
+                &:active+label:before
+                    border-color: $white-color
+                    background-color: $main-color
+
+            &:not(:disabled)
+                &:active+label:after
+                    border-color: $white-color
+                    background-color: $main-color
+
+        input[typy=radio]+label
+            display: inline-flex
+            align-items: center
+            user-select: none
+            
+        label
+            display: flex
+            align-items: center
+            text-transform: uppercase
+            margin-bottom: 15px
+
+            &::before
+                content: ''
+                display: inline-block
+                width: 1.3em
+                aspect-ratio: 1
+                border: 9px solid $white-color
+                background: $white-color
+                border-radius: 50%
+                margin-right: 0.5em
+                box-shadow: $box-shadow-sm
+                flex-shrink: 0
+                @media screen and (max-width: $second-breack-point) 
+                    border: 5px solid $white-color
+
+            &::after
+                content: ''
+                width: 1.3em
+                aspect-ratio: 1
+                border: 9px solid $white-color
+                background: $white-color
+                border-radius: 50%
+                margin-left: 0.5em
+                box-shadow: $box-shadow-sm
+                display: none
+                flex-shrink: 0
+                @media screen and (max-width: $second-breack-point) 
+                    border: 5px solid $white-color
+
+
+            @media screen and (max-width: $second-breack-point) 
+                &::after
+                    display: inline-block 
+                &::before
+                    display: none
+    &__option
+        margin-bottom: 15px
+
+        label
+            &::before
+                display: inline-block
+            &::after
+                display: none
+        p
+            text-transform: none
+            margin-left:1.8em 
+
+        @media screen  and (max-width: $second-breack-point)
+            img
+                width: 100%
+

@@ -1,0 +1,107 @@
+@import vars
+//Form
+.quest
+    margin-bottom: 15px
+
+    &__text
+        border-radius: $border-radius
+        background: $main-color
+        padding: 15px
+        width: fit-content
+        color: $white-color
+        min-width: 218px
+        margin-bottom: 15px
+
+        p   
+            font-weight: 600
+            font-size: 30px
+            line-height: 37px
+            margin: 0
+            @media screen and (max-width: $second-breack-point) 
+                font-size: 15px
+                line-height: 18px
+                letter-spacing: 0.5px
+
+        small
+            font-weight: 400
+            font-size: 14px
+            line-height: 16px
+            @media screen and (max-width: $second-breack-point) 
+                font-size: 12px
+                margin-top: -15px
+        &-invert
+            background: none
+            padding: 0
+            color: $dark-semi-light
+    &__resp
+        font-weight: 600
+        font-size: 24px
+        line-height: 29px
+        letter-spacing: 0.5px
+        color: $dark-semi-light
+        text-transform: uppercase
+        @media screen and (max-width: $first-breack-point)
+            width: 100%
+        @media screen and (max-width: $second-breack-point) 
+            font-size: 15px
+            line-height: 17.85px
+            font-weight: 500
+        &__inp_dls
+            flex-direction: row
+            display: flex
+            flex-wrap: wrap
+            justify-content: space-between
+            width: 100%
+            align-items: center
+            @media screen and (max-width: $second-breack-point) 
+                flex-direction: column
+            @media screen and (max-width: $first-breack-point)
+                display: block
+            @media screen and (max-width: $first-breack-point)
+                .select-wrap
+                    width: 100%          
+            .select-wrap
+                &:last-child
+                    width: 100%
+                display: flex
+                flex-direction: column
+                padding: 0
+                @media screen and (max-width: $second-breack-point) 
+                    width: 100%
+                .select2
+                    width: 100% !important
+                    margin-top: 15px !important
+                select
+                    margin-top: 15px !important
+    &__adapt
+        display: grid
+        grid-template-columns: repeat(4,25%)
+        @media screen and (max-width: $second-breack-point) 
+            grid-template-columns: repeat(2,50%)
+        label
+            width: 183px
+            margin-right: 20px
+            @media screen and (max-width: $second-breack-point) 
+                justify-content: end
+                width: auto
+        &__quest
+            width: fit-content
+            @media screen and (max-width: $first-breack-point) 
+                width: 100%
+            p
+                b
+                    font-weight: 600 !important
+        &-right
+            @media screen and (max-width: $second-breack-point) 
+                grid-template-columns: repeat(1,100%)
+    &__show_result
+        border-radius: $border-radius
+        color: $main-color
+        border: 3px solid $main-color
+        width: fit-content
+        margin: auto
+        background: $white-color
+        padding: 5px calc( 15px + 10px)
+        font-weight: 700
+        font-size: 18px
+        line-height: 22px

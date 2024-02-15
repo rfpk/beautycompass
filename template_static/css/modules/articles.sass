@@ -1,0 +1,66 @@
+@import "vars.sass"
+
+.articles
+    margin-bottom: 16px    
+    @media screen and (max-width: $first-breack-point)
+        margin-bottom: 11px    
+    &__sticker
+        position: relative
+        &:before
+            content: ""
+            position: absolute
+            top: 0
+            left: 30px
+            width: 53px
+            height: 749px
+            background: url(../img/articles-sticker.svg) no-repeat            
+            @media screen and (max-width: $first-breack-point)
+                display: none
+
+    &__item
+        height: 100%
+        display: block
+        padding: 20px 18px
+        background: #fff
+        text-decoration: none
+        font-weight: 600
+        font-size: 18px
+        line-height: 1.22
+        color: #210E22
+        border-radius: $border-radius
+        transition: opacity .5s
+        @media screen and (max-width: $first-breack-point)
+            padding: 15px 10px
+            font-size: 12px
+            line-height: 1.25
+        &:hover 
+            color: #210E22
+            opacity: .8
+    &__info 
+        margin-bottom: 24px
+        @media screen and (max-width: $first-breack-point)
+            margin-bottom: 10px
+
+    &__title 
+        font-weight: 600
+        font-size: 30px
+        line-height: 1.23
+        letter-spacing: 0.5px
+        @media screen and (max-width: $first-breack-point)
+            font-size: 14px
+            line-height: 1.2
+
+    &__date
+        font-weight: 600
+        font-size: 20px
+        line-height: 1.25
+        color: #494949        
+        @media screen and (max-width: $first-breack-point)
+            font-size: 13px
+            line-height: 1.23
+    &__img
+        max-width: 100%
+        margin-bottom: 24px
+        border-radius: $border-radius
+        @media screen and (max-width: $first-breack-point)
+            margin-bottom: 10px

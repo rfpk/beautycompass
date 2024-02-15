@@ -1,0 +1,31 @@
+.add-info a:hover {
+  color: inherit;
+}
+.add-info__wrapper {
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 20px 0 rgba(14, 14, 14, 0.07);
+}
+.add-info__content {
+  max-height: 0;
+  transition: all ease 0.3s;
+}
+.add-info__trigger svg {
+  transition: all ease 0.3s;
+}
+.add-info__schemes .left-inner__item {
+  margin-top: -8px;
+}
+.add-info__schemes .left__title .question {
+  position: relative;
+  margin-left: 8px;
+}
+.add-info__schemes .left__title .question__cloud {
+  position: absolute;
+  top: -100%;
+}
+.add-info__schemes .left .right__title {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}/*# sourceMappingURL=add-info.css.map */

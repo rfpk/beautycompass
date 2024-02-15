@@ -1,0 +1,1034 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if request.path == '/create-product/' %}
+        Создание Средства
+    {% else %}
+        Информация о средстве
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <main class="products-lk">
+
+        <section class="title">
+            <div class="container container--bc">
+                <div class="page-title page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+                    <div class="col-1 col-xxl-12 order-xxl-1">
+                        <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="vuesax/outline/arrow-left">
+                                    <g id="arrow-left">
+                                        <path id="Vector" d="M11.9633 23.5254C11.7258 23.5254 11.4883 23.4379 11.3008 23.2504L3.71328 15.6629C3.35078 15.3004 3.35078 14.7004 3.71328 14.3379L11.3008 6.75039C11.6633 6.38789 12.2633 6.38789 12.6258 6.75039C12.9883 7.11289 12.9883 7.71289 12.6258 8.07539L5.70078 15.0004L12.6258 21.9254C12.9883 22.2879 12.9883 22.8879 12.6258 23.2504C12.4508 23.4379 12.2008 23.5254 11.9633 23.5254Z" fill="#1560BD"></path>
+                                        <path id="Vector_2" d="M25.6234 15.9375H4.58594C4.07344 15.9375 3.64844 15.5125 3.64844 15C3.64844 14.4875 4.07344 14.0625 4.58594 14.0625H25.6234C26.1359 14.0625 26.5609 14.4875 26.5609 15C26.5609 15.5125 26.1359 15.9375 25.6234 15.9375Z" fill="#1560BD"></path>
+                                    </g>
+                                </g>
+                            </svg>
+                            <span class="text-decoration-none text-uppercase d-none d-xxl-block ms-2">Назад</span>
+                        </a>
+                    </div>
+                    <div class="col text-center col-xxl-12">
+                        <h1 class="title--20-36">Информация о средстве</h1>
+                    </div>
+                    <div class="col-1 d-xxl-none"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="products__details">
+            <div class="container container--bc">
+                <form
+                    class="profile profile__products products__profile col-12 offset-xxl-1 col-xxl-10"
+                    id="product__form"
+                    method="post"
+                    enctype="multipart/form-data"
+                    {% if '/create-product/' in request.path %}
+                        action="{% url 'products:create_product' brand_slug=brand.slug series_slug=series.slug %}"
+                    {% else %}
+                        action="{% url 'products:change_product' product.slug %}"
+                    {% endif %}
+                >
+                    {% csrf_token %}
+                    <div class="profile__images profile__products-images banners__row">
+                    {% if '/create-product/' in request.path %}
+                        {{product_image_formset.management_form}}
+                        {% for form in product_image_formset %}
+                            {{form.field.as_hidden}}
+                            {{form.id}}
+                            <div class="banners banners__pic position-relative m-0 banners_images_block" data-image-id="{{forloop.counter0}}">
+                                <div class="input image input--image profile__input profile__image products__image profile__products-image profile__products-input">
+                                    <label for="products__file-input" class="label--light label--profile ">Изображения</label>
+                                    {% if forloop.first %}
+                                        <svg class="question hover-blue" style="position: absolute;top: -40px;right: 0;" data-question="question__products-image" id="page-products-question" width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg" data-question-id="question__products-image0">
+                                            <path d="M14.9896 30.3171C6.72091 30.3171 0 23.5962 0 15.3275C0 7.0588 6.72091 0.337891 14.9896 0.337891C23.2583 0.337891 29.9792 7.0588 29.9792 15.3275C29.9792 23.5962 23.2583 30.3171 14.9896 30.3171ZM14.9896 2.42946C7.87825 2.42946 2.09157 8.21614 2.09157 15.3275C2.09157 22.4388 7.87825 28.2255 14.9896 28.2255C22.1009 28.2255 27.8876 22.4388 27.8876 15.3275C27.8876 8.21614 22.1009 2.42946 14.9896 2.42946Z" fill="#D9D9D9"></path>
+                                            <path d="M15.3892 19.4745C15.1104 19.4745 14.8733 19.3839 14.6781 19.2026C14.4968 19.0213 14.4062 18.7843 14.4062 18.4915C14.4062 17.9476 14.5456 17.355 14.8245 16.7136C15.1034 16.0583 15.5147 15.4866 16.0585 14.9985C16.4629 14.6499 16.8394 14.3013 17.188 13.9527C17.5505 13.6041 17.8364 13.2137 18.0455 12.7815C18.2686 12.3353 18.3802 11.7915 18.3802 11.15C18.3802 10.662 18.2617 10.2088 18.0246 9.79052C17.8015 9.3722 17.4808 9.03755 17.0625 8.78656C16.6442 8.53557 16.1352 8.41008 15.5356 8.41008C14.8524 8.41008 14.2737 8.54255 13.7996 8.80748C13.3395 9.07241 12.9909 9.44192 12.7539 9.91601C12.5168 10.3762 12.3983 10.92 12.3983 11.5474C12.3983 11.8263 12.3077 12.0564 12.1264 12.2377C11.9451 12.4189 11.715 12.5096 11.4362 12.5096C11.1573 12.5096 10.9202 12.4189 10.725 12.2377C10.5438 12.0564 10.4531 11.8263 10.4531 11.5474C10.4531 10.5714 10.6623 9.7208 11.0806 8.99572C11.5129 8.2567 12.1055 7.67803 12.8584 7.25972C13.6253 6.82746 14.5177 6.61133 15.5356 6.61133C16.4559 6.61133 17.2716 6.80654 17.9828 7.19697C18.6939 7.58739 19.2517 8.12423 19.656 8.80748C20.0744 9.49072 20.2835 10.2785 20.2835 11.171C20.2835 11.9518 20.151 12.6281 19.8861 13.1998C19.6351 13.7575 19.2865 14.2665 18.8403 14.7266C18.4081 15.1728 17.9131 15.626 17.3553 16.0861C16.9649 16.4208 16.6999 16.8252 16.5605 17.2993C16.4211 17.7733 16.3514 18.1707 16.3514 18.4915C16.3514 18.7843 16.2607 19.0213 16.0795 19.2026C15.8982 19.3839 15.6681 19.4745 15.3892 19.4745ZM15.3892 23.2811C15.0127 23.2811 14.692 23.1487 14.4271 22.8838C14.1622 22.6188 14.0297 22.2981 14.0297 21.9216C14.0297 21.5451 14.1622 21.2244 14.4271 20.9595C14.692 20.6806 15.0127 20.5412 15.3892 20.5412C15.7657 20.5412 16.0864 20.6806 16.3514 20.9595C16.6163 21.2244 16.7488 21.5451 16.7488 21.9216C16.7488 22.2981 16.6163 22.6188 16.3514 22.8838C16.0864 23.1487 15.7657 23.2811 15.3892 23.2811Z" fill="#D9D9D9"></path>
+                                        </svg>
+                                    {% endif %}
+                                    <img
+                                        src="{% if form.image.value %} {% get_media_prefix %}{{form.image.value}}{% else %}{% static 'img/gallery-add.svg' %}{% endif %}"
+                                        alt="logo"
+                                        class="position-absolute top-50 start-50 translate-middle"
+                                    />
+                                    <input
+                                        type="file"
+                                        name="product_images-{{forloop.counter0}}-image"
+                                        id="products__file-input"
+                                        class="file-input profile__file-input products__file-input"
+                                        onchange="handleFileSelected(this)"
+                                    />
+                                    <span class="question__cloud products__image-cloud profile__products-image_cloud"></span>
+                                    <i class="tag-close" data-image-id="{{forloop.counter0}}">
+                                        <svg data-image-id="{{forloop.counter0}}" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 20C4.48372 20 0 15.5163 0 10C0 4.48372 4.48372 0 10 0C15.5163 0 20 4.48372 20 10C20 15.5163 15.5163 20 10 20Z" fill="#E31E24"></path>
+                                            <path d="M13.1289 7.86591L7.86671 13.1281C7.59702 13.3978 7.14974 13.3978 6.88005 13.1281C6.61036 12.8584 6.61036 12.4111 6.88005 12.1414L12.1422 6.87925C12.4119 6.60956 12.8592 6.60956 13.1289 6.87925C13.3986 7.14893 13.3986 7.59622 13.1289 7.86591Z" fill="#FAFAFA"></path>
+                                            <path d="M13.1289 13.1247C12.8592 13.3943 12.4119 13.3943 12.1422 13.1247L6.88005 7.86247C6.61036 7.59278 6.61036 7.1455 6.88005 6.87581C7.14974 6.60612 7.59702 6.60612 7.86671 6.87581L13.1289 12.138C13.3986 12.4077 13.3986 12.855 13.1289 13.1247Z" fill="#FAFAFA"></path>
+                                        </svg>
+                                    </i>
+                                </div>
+
+                                <div class="input mt-4">
+                                    <label for="" class="label--light label--general">Порядковый номер</label>
+                                    <input
+                                            type="number"
+                                            id="number"
+                                            name="product_images-{{forloop.counter0}}-number"
+                                            class="js-banners-order"
+                                            value="{{forloop.counter}}"
+                                            min="1"
+                                            max="1"
+                                    >
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="banners banners__pic position-relative m-0 banners_images_block" data-image-id="{{forloop.counter0}}">
+                            <div class="input image input--image profile__input profile__image products__image profile__products-image profile__products-input">
+                                <label for="products__file-input" class="label--light label--profile ">Изображения</label>
+
+                                <svg class="question hover-blue" style="position: absolute;top: -40px;right: 0;" data-question="question__products-image" id="page-products-question" width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg" data-question-id="question__products-image0">
+                                    <path d="M14.9896 30.3171C6.72091 30.3171 0 23.5962 0 15.3275C0 7.0588 6.72091 0.337891 14.9896 0.337891C23.2583 0.337891 29.9792 7.0588 29.9792 15.3275C29.9792 23.5962 23.2583 30.3171 14.9896 30.3171ZM14.9896 2.42946C7.87825 2.42946 2.09157 8.21614 2.09157 15.3275C2.09157 22.4388 7.87825 28.2255 14.9896 28.2255C22.1009 28.2255 27.8876 22.4388 27.8876 15.3275C27.8876 8.21614 22.1009 2.42946 14.9896 2.42946Z" fill="#D9D9D9"></path>
+                                    <path d="M15.3892 19.4745C15.1104 19.4745 14.8733 19.3839 14.6781 19.2026C14.4968 19.0213 14.4062 18.7843 14.4062 18.4915C14.4062 17.9476 14.5456 17.355 14.8245 16.7136C15.1034 16.0583 15.5147 15.4866 16.0585 14.9985C16.4629 14.6499 16.8394 14.3013 17.188 13.9527C17.5505 13.6041 17.8364 13.2137 18.0455 12.7815C18.2686 12.3353 18.3802 11.7915 18.3802 11.15C18.3802 10.662 18.2617 10.2088 18.0246 9.79052C17.8015 9.3722 17.4808 9.03755 17.0625 8.78656C16.6442 8.53557 16.1352 8.41008 15.5356 8.41008C14.8524 8.41008 14.2737 8.54255 13.7996 8.80748C13.3395 9.07241 12.9909 9.44192 12.7539 9.91601C12.5168 10.3762 12.3983 10.92 12.3983 11.5474C12.3983 11.8263 12.3077 12.0564 12.1264 12.2377C11.9451 12.4189 11.715 12.5096 11.4362 12.5096C11.1573 12.5096 10.9202 12.4189 10.725 12.2377C10.5438 12.0564 10.4531 11.8263 10.4531 11.5474C10.4531 10.5714 10.6623 9.7208 11.0806 8.99572C11.5129 8.2567 12.1055 7.67803 12.8584 7.25972C13.6253 6.82746 14.5177 6.61133 15.5356 6.61133C16.4559 6.61133 17.2716 6.80654 17.9828 7.19697C18.6939 7.58739 19.2517 8.12423 19.656 8.80748C20.0744 9.49072 20.2835 10.2785 20.2835 11.171C20.2835 11.9518 20.151 12.6281 19.8861 13.1998C19.6351 13.7575 19.2865 14.2665 18.8403 14.7266C18.4081 15.1728 17.9131 15.626 17.3553 16.0861C16.9649 16.4208 16.6999 16.8252 16.5605 17.2993C16.4211 17.7733 16.3514 18.1707 16.3514 18.4915C16.3514 18.7843 16.2607 19.0213 16.0795 19.2026C15.8982 19.3839 15.6681 19.4745 15.3892 19.4745ZM15.3892 23.2811C15.0127 23.2811 14.692 23.1487 14.4271 22.8838C14.1622 22.6188 14.0297 22.2981 14.0297 21.9216C14.0297 21.5451 14.1622 21.2244 14.4271 20.9595C14.692 20.6806 15.0127 20.5412 15.3892 20.5412C15.7657 20.5412 16.0864 20.6806 16.3514 20.9595C16.6163 21.2244 16.7488 21.5451 16.7488 21.9216C16.7488 22.2981 16.6163 22.6188 16.3514 22.8838C16.0864 23.1487 15.7657 23.2811 15.3892 23.2811Z" fill="#D9D9D9"></path>
+                                </svg>
+                                <img src="{% if form.thumbnail.value %} {% get_media_prefix %}{{form.thumbnail.value}}{% else %}{% static 'img/gallery-add.svg' %}{% endif %}"
+                                     alt="logo"
+                                     class="position-absolute top-50 start-50 translate-middle"
+                                />
+                                <input type="file"
+                                       name="thumbnail"
+                                       id="products__file-input"
+                                       class="file-input profile__file-input products__file-input"
+                                       onchange="handleFileSelected(this)"
+                                />
+                                <span class="question__cloud products__image-cloud profile__products-image_cloud"></span>
+                            </div>
+
+                            <div class="input mt-4">
+                                <label for="" class="label--light label--general">Порядковый номер</label>
+                                <input
+                                        type="number"
+                                        id="number"
+                                        name="product_images-0-number"
+                                        class="js-banners-order"
+                                        value="1"
+                                        min="1"
+                                        max="1"
+                                >
+                            </div>
+                        </div>
+                        {{product_image_formset.management_form}}
+                        {% for form in product_image_formset %}
+                            {{form.field.as_hidden}}
+                            {{form.id}}
+                            <div class="banners banners__pic position-relative m-0 banners_images_block" data-image-id="{{forloop.counter0}}">
+                                <div class="input image input--image profile__input profile__image products__image profile__products-image profile__products-input">
+                                    <label for="products__file-input" class="label--light label--profile ">Изображения</label>
+                                    <img
+                                        src="{% if form.image.value %} {% get_media_prefix %}{{form.image.value}}{% else %}{% static 'img/gallery-add.svg' %}{% endif %}"
+                                        alt="logo"
+                                        class="position-absolute top-50 start-50 translate-middle"
+                                    />
+                                    <input
+                                        type="file"
+                                        name="product_images-{{forloop.counter0}}-image"
+                                        id="products__file-input"
+                                        class="file-input profile__file-input products__file-input"
+                                        onchange="handleFileSelected(this)"
+                                    />
+                                    <span class="question__cloud products__image-cloud profile__products-image_cloud"></span>
+                                    <i class="tag-close" data-image-id="{{forloop.counter0}}">
+                                        <svg data-image-id="{{forloop.counter0}}" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 20C4.48372 20 0 15.5163 0 10C0 4.48372 4.48372 0 10 0C15.5163 0 20 4.48372 20 10C20 15.5163 15.5163 20 10 20Z" fill="#E31E24"></path>
+                                            <path d="M13.1289 7.86591L7.86671 13.1281C7.59702 13.3978 7.14974 13.3978 6.88005 13.1281C6.61036 12.8584 6.61036 12.4111 6.88005 12.1414L12.1422 6.87925C12.4119 6.60956 12.8592 6.60956 13.1289 6.87925C13.3986 7.14893 13.3986 7.59622 13.1289 7.86591Z" fill="#FAFAFA"></path>
+                                            <path d="M13.1289 13.1247C12.8592 13.3943 12.4119 13.3943 12.1422 13.1247L6.88005 7.86247C6.61036 7.59278 6.61036 7.1455 6.88005 6.87581C7.14974 6.60612 7.59702 6.60612 7.86671 6.87581L13.1289 12.138C13.3986 12.4077 13.3986 12.855 13.1289 13.1247Z" fill="#FAFAFA"></path>
+                                        </svg>
+                                    </i>
+                                </div>
+
+                                <div class="input mt-4">
+                                    <label for="" class="label--light label--general">Порядковый номер</label>
+                                    <input
+                                            type="number"
+                                            id="number"
+                                            name="product_images-{{forloop.counter0}}-number"
+                                            class="js-banners-order"
+                                            value="{{forloop.counter|add:1}}"
+                                            min="1"
+                                            max="1"
+                                    >
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                        <div class="profile__products-plus banners__plus">
+                            <svg
+                                id="button-add-images"
+                                role="button"
+                                class="banners__plus-image hover-red"
+                                viewBox="0 0 26 26"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                        d="M12.9993 24.6452C6.57518 24.6452 1.35352 19.4235 1.35352 12.9993C1.35352 6.57518 6.57518 1.35352 12.9993 1.35352C19.4235 1.35352 24.6452 6.57518 24.6452 12.9993C24.6452 19.4235 19.4235 24.6452 12.9993 24.6452ZM12.9993 2.97852C7.47435 2.97852 2.97852 7.47435 2.97852 12.9993C2.97852 18.5243 7.47435 23.0202 12.9993 23.0202C18.5243 23.0202 23.0202 18.5243 23.0202 12.9993C23.0202 7.47435 18.5243 2.97852 12.9993 2.97852Z"
+                                        fill="#1560BD"
+                                />
+                                <path
+                                        d="M17.3327 13.8125H8.66602C8.22185 13.8125 7.85352 13.4442 7.85352 13C7.85352 12.5558 8.22185 12.1875 8.66602 12.1875H17.3327C17.7769 12.1875 18.1452 12.5558 18.1452 13C18.1452 13.4442 17.7769 13.8125 17.3327 13.8125Z"
+                                        fill="#1560BD"
+                                />
+                                <path
+                                        d="M13 18.1452C12.5558 18.1452 12.1875 17.7769 12.1875 17.3327V8.66602C12.1875 8.22185 12.5558 7.85352 13 7.85352C13.4442 7.85352 13.8125 8.22185 13.8125 8.66602V17.3327C13.8125 17.7769 13.4442 18.1452 13 18.1452Z"
+                                        fill="#1560BD"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+    <!--                    // formal-name-->
+                    <div class="input input--general formal-name profile__products-input products__input profile__products_formal-name ">
+                        <label for="products__formal-name" class="label--light label--profile">Название формальное</label>
+                        {{form.name}}
+                        <!-- <input class="products__input input--regular" id="products__formal-name" name="products__formal-name" value="" type="text" required/> -->
+                    </div>
+    <!--                    // explanatory-name-->
+                    <div class="input explanatory-name input--general profile__products-input products__input profile__products_explanatory-name ">
+                        <label for="products__explanatory-name" class="label--light label--profile">Название поясняющее</label>
+                        <input class="products__input input--regular" id="products__explanatory-name" name="products__explanatory-name" value="" type="text" required/>
+                    </div>
+    <!--                    // description-->
+                    <div class="input description input--textarea profile__input profile__textarea profile__description profile__products-description products__input products__description profile__products-input">
+                        <label for="products__description" class="label--light label--profile">Описание</label>
+                        <textarea class="textarea--regular" id="products__description" name="description" rows="3" required>{% if form.instance.description %}{{form.instance.description|safe|escape|striptags}}{% endif %}</textarea>
+                    </div>
+    <!--                    // INCI-->
+                    <div class="input INCI input--textarea profile__input profile__textarea profile__INCI profile__products-INCI products__input products__INCI profile__products-input">
+                        <label for="products__INCI" class="label--light label--profile">Состав в INCI</label>
+                        <textarea class="textarea--regular" id="products__INCI" name="composition" rows="3" required>{% if form.instance.composition %}{{form.instance.composition|safe|escape|striptags}}{% endif %}</textarea>
+                    </div>
+    <!--                    // usage-->
+                    <div class="input usage input--general profile__products-input products__input profile__products-usage">
+                        <label for="products__usage" class="label--light label--profile">Применение</label>
+                        <input class="products__input input--regular" id="products__usage" name="use_description" value="{% if form.instance.use_description %}{{form.instance.use_description|safe|escape|striptags}}{% endif %}" type="text" required/>
+                    </div>
+    <!--                    // catalog-section-->
+                    <div class="select__custom input input--general catalog-section tags__select tags__select--auto profile__products_catalog-section
+    " data-select-id="products__catalog-section" id="products__catalog-section">
+
+
+                        <label for="products__catalog-section" class="label--light label--profile">
+                            Раздел в каталоге
+                        </label>
+
+                        <div class="select__header input--select">
+                            <div class="tags__selected">
+                                {% if categories_user %}
+                                    <span class="text-default" style="display: none;">
+                                        Выбор из списка
+                                    </span>
+                                    {% for category in categories_user %}
+                                        <div class="tags__item" data-tag-id="option-13" data-tag-name="{{category}}">{{category}}</div>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-default">Выбор из списка</span>
+                                {% endif %}
+                            </div>
+                            <span class="arrow tags__arrow">
+                                <svg width="15" height="10" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                    <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="select__options tags__catalog-section_options">
+                            <div class="tags__row justify-content-between">
+                                {% for category in categories %}
+                                    {{forloop.counter1}}
+                                    <div class="tags__column">
+                                        <div class="tags__title">{{category.name}}</div>
+                                        {% for dop_category in category.children.all %}
+                                            <div class="tags__subcolumn">
+                                                <div class="tags__subtitle">{{dop_category.name}}</div>
+                                                {% for product in dop_category.children.all %}
+                                                    {% if product.name in categories_user %}
+                                                        <div class="tags__option active">{{product.name}}</div>
+                                                    {% else %}
+                                                        <div class="tags__option">{{product.name}}</div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input input--general select-custom-item">
+                        <button class="select__header input--select" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <span class="select__header-selected text--12-18">Назначение</span>
+                            <span class="arrow">
+                                <svg width="15" height="10" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                    <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu select__options flex-wrap flex-column flex-md-row gap-1">
+                            {% regroup form.prescription.field.queryset.all|dictsort:"name" by name|first|upper as prescription_list %}
+                            {% for prescription in prescription_list %}
+                                {% with outer_counter=forloop.counter %}
+                                    <li>
+                                        <div class="column">
+                                            <div class="select-custom-item__option fw-600 text--15-30 text-start">
+                                                <label>{{prescription.grouper}}</label>
+                                            </div>
+                                            {% for value in prescription.list %}
+                                                <div class="select-custom-item__option option-block">
+                                                    <input type="checkbox"
+                                                           data-slug="{{value.slug}}"
+                                                           name="name{{outer_counter}}_{{ forloop.counter }}"
+                                                           id="opt{{outer_counter}}_{{ forloop.counter }}"
+                                                    >
+                                                    {% if value.name in prescriptions_user %}
+                                                        <label for="opt{{outer_counter}}_{{ forloop.counter }}"
+                                                               class="active"
+                                                               style="background: #E8E8E8; border-radius: 15px;">{{value}}</label>
+                                                    {% else %}
+                                                        <label for="opt{{outer_counter}}_{{ forloop.counter }}">{{value}}</label>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endwith %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+    <!--                    // format-->
+                    <div class="input input--general select-custom-item">
+                        <button class="select__header input--select" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <span class="select__header-selected text--12-18">Формат</span>
+                            <span class="arrow">
+                                <svg width="15" height="10" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                    <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu select__options flex-wrap flex-column flex-md-row gap-1">
+                            {% regroup form.format.field.queryset.all|dictsort:"name" by name|first|upper as format_list %}
+                            {% for format in format_list %}
+                                {% with forloop.counter1 as outer_counter %}
+                                    <li>
+                                        <div class="column">
+                                            <div class="select-custom-item__option fw-600 text--15-30 text-start">
+                                                <label>{{format.grouper}}</label>
+                                            </div>
+                                            {% for value in format.list %}
+                                                <div class="select-custom-item__option option-block">
+                                                    <input type="checkbox" name="name{{outer_counter}}" data-slug="{{value.slug}}" id="opt{{outer_counter}}">
+                                                    {% if value.name == format_user %}
+                                                        <label for="opt{{outer_counter}}" class="active" style="background: #E8E8E8; border-radius: 15px;">{{value}}</label>
+                                                    {% else %}
+                                                        <label for="opt{{outer_counter}}">{{value}}</label>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endwith %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+    <!--                    // region -->
+                    <div class="input select-custom-item flex-shrink-0">
+                        <label class="label--light label--general">Регион</label>
+                        <select class="input--arrow" aria-label="Default select example">
+                            <option selected>Выбрать из списка</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+    <!--                    // assignment2-->
+                    <div class="input input--general select-custom-item">
+                        <button class="select__header input--select" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <span class="select__header-selected text--12-18">Ключевые активы</span>
+                            <span class="arrow">
+                                <svg width="15" height="10" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                    <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu select__options flex-wrap flex-column flex-md-row gap-1">
+                            {% regroup form.key_asset.field.queryset.all|dictsort:"name" by name|first|upper as key_asset_list %}
+                            {% for key_asset in key_asset_list %}
+                                {% with outer_counter=forloop.counter %}
+                                    <li>
+                                        <div class="column">
+                                            <div class="select-custom-item__option fw-600 text--15-30 text-start">
+                                                <label>{{key_asset.grouper}}</label>
+                                            </div>
+                                            {% for value in key_asset.list %}
+                                                <div class="select-custom-item__option option-block">
+                                                    <input type="checkbox"
+                                                           data-slug="{{value.slug}}"
+                                                           name="name{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}"
+                                                           id="opt{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}">
+                                                    {% if value.name in key_assets_user %}
+                                                        <label for="opt{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}"
+                                                               class="active"
+                                                               style="background: #E8E8E8; border-radius: 15px;">{{value}}</label>
+                                                    {% else %}
+                                                        <label for="opt{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}">{{value}}</label>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endwith %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+    <!--                    // price-category-->
+                    <div class="input select-custom-item flex-shrink-0">
+                        <label class="label--light label--general">Ценовая категория</label>
+                        {{form.price_category}}
+                    </div>
+    <!--                    // age-recommendations-->
+                    <div class="input select-custom-item flex-shrink-0">
+                        <label class="label--light label--general">Рекомедации по возрасту</label>
+                        {{form.age_recommendation}}
+                    </div>
+    <!--                    // key-action-->
+                    <div class="input input--general select-custom-item">
+                        <button class="select__header input--select" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <span class="select__header-selected text--12-18">Ключевое действие</span>
+                            <span class="arrow">
+                                <svg width="15" height="10" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                    <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu select__options flex-wrap flex-column flex-md-row gap-1">
+                            {% regroup form.key_action.field.queryset.all|dictsort:"name" by name|first|upper as key_action_list %}
+                            {% for key_action in key_action_list %}
+                                {% with outer_counter=forloop.counter %}
+                                    <li>
+                                        <div class="column">
+                                            <div class="select-custom-item__option fw-600 text--15-30 text-start">
+                                                <label>{{key_action.grouper}}</label>
+                                            </div>
+                                            {% for value in key_action.list %}
+                                                <div class="select-custom-item__option option-block">
+                                                    <input type="checkbox"
+                                                           name="name{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}"
+                                                           id="opt{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}"
+                                                           data-slug="{{value.slug}}">
+                                                    {% if value.name in key_actions_user %}
+                                                        <label for="opt{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}" class="active" style="background: #E8E8E8; border-radius: 15px;">{{value}}</label>
+                                                    {% else %}
+                                                        <label for="opt{{outer_counter}}_{{ value.slug }}_{{ forloop.counter }}">{{value}}</label>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endwith %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+
+    <!--                    // gender-->
+                    <div class="input select-custom-item flex-shrink-0">
+                        <label class="label--light label--general">Пол</label>
+                        <select class="input--arrow" aria-label="Default select example" name="sex">
+                            {% for sex in form.sex.field.queryset.all %}
+                                {% if sex.name in sex_user %}
+                                    <option data-sex-id="{{sex.id}}" data-slug="{{sex.slug}}" value="{{sex.pk}}" selected>{{sex.name}}</option>
+                                {% else %}
+                                    <option data-sex-id="{{sex.id}}" data-slug="{{sex.slug}}" value="{{sex.pk}}">{{sex.name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <section class="page__title">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+
+                    <div class="row my-3 my-xxl-4">
+                        <div class="col-12 text-center d-flex justify-content-center align-items-center">
+                            <h2 class="title--15-36">
+                                Интернет магазины
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="text--10-15 fw-600 dark-lighter text-decoration-none">
+                        Добавьте ссылки на интернет магизины. Вы можете добавить до 7
+                        ссылок на разные площадки. Название кнопки будет отображаться на
+                        странице для всех пользователей.
+                    </div>
+                </div>
+            </div>
+        </section>
+        <form id="form_open_product">
+            <section class="shops">
+                <div class="container container--bc">
+                    <div class="col-xxl-10 offset-xxl-1">
+                        <div class="shops__container" data-shops="shops-products-page">
+                            {{product_link_formset.management_form}}
+                            {% for form in product_link_formset %}
+                                {{form.field.as_hidden}}
+                                {{form.id}}
+                                <div class="shops__item" data-link-id="{{forloop.counter0}}">
+                                    <div class="input input--general shops__name">
+                                    <label for="shops__name-input" class="label label--primary">Название кнопки</label>
+                                    {{form.name}}
+                                    </div>
+                                    <div class="input input--general shops__url">
+                                        <label for="shops__url-input" class="label label--primary"> URL </label>
+                                        {{form.url}}
+                                    </div>
+                                    <i class="tag-close" data-link-id="{{forloop.counter0}}">
+                                        <svg data-link-id="{{forloop.counter0}}" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M10 20C4.48372 20 0 15.5163 0 10C0 4.48372 4.48372 0 10 0C15.5163 0 20 4.48372 20 10C20 15.5163 15.5163 20 10 20Z" fill="#E31E24"/>
+                                        <path d="M13.1289 7.86591L7.86671 13.1281C7.59702 13.3978 7.14974 13.3978 6.88005 13.1281C6.61036 12.8584 6.61036 12.4111 6.88005 12.1414L12.1422 6.87925C12.4119 6.60956 12.8592 6.60956 13.1289 6.87925C13.3986 7.14893 13.3986 7.59622 13.1289 7.86591Z" fill="#FAFAFA"/>
+                                        <path d="M13.1289 13.1247C12.8592 13.3943 12.4119 13.3943 12.1422 13.1247L6.88005 7.86247C6.61036 7.59278 6.61036 7.1455 6.88005 6.87581C7.14974 6.60612 7.59702 6.60612 7.86671 6.87581L13.1289 12.138C13.3986 12.4077 13.3986 12.855 13.1289 13.1247Z" fill="#FAFAFA"/>
+                                        </svg>
+                                    </i>
+                                </div>
+                            {% endfor %}
+                            <div class="shops__plus">
+                                <svg
+                                        role="button"
+                                        class="banners__plus-image hover-red"
+                                        viewBox="0 0 26 26"
+                                        fill="none"
+                                        id="button-add-btn"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                            d="M12.9993 24.6452C6.57518 24.6452 1.35352 19.4235 1.35352 12.9993C1.35352 6.57518 6.57518 1.35352 12.9993 1.35352C19.4235 1.35352 24.6452 6.57518 24.6452 12.9993C24.6452 19.4235 19.4235 24.6452 12.9993 24.6452ZM12.9993 2.97852C7.47435 2.97852 2.97852 7.47435 2.97852 12.9993C2.97852 18.5243 7.47435 23.0202 12.9993 23.0202C18.5243 23.0202 23.0202 18.5243 23.0202 12.9993C23.0202 7.47435 18.5243 2.97852 12.9993 2.97852Z"
+                                            fill="#1560BD"
+                                    />
+                                    <path
+                                            d="M17.3327 13.8125H8.66602C8.22185 13.8125 7.85352 13.4442 7.85352 13C7.85352 12.5558 8.22185 12.1875 8.66602 12.1875H17.3327C17.7769 12.1875 18.1452 12.5558 18.1452 13C18.1452 13.4442 17.7769 13.8125 17.3327 13.8125Z"
+                                            fill="#1560BD"
+                                    />
+                                    <path
+                                            d="M13 18.1452C12.5558 18.1452 12.1875 17.7769 12.1875 17.3327V8.66602C12.1875 8.22185 12.5558 7.85352 13 7.85352C13.4442 7.85352 13.8125 8.22185 13.8125 8.66602V17.3327C13.8125 17.7769 13.4442 18.1452 13 18.1452Z"
+                                            fill="#1560BD"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+
+        <section class="page__bottom my__15-30">
+            <div class="container container--bc">
+                <div class="col-12 col-xxl-10 offset-xxl-1 d-flex justify-content-around gx-0 gy-2 my-4">
+                    {% if '/create-product/' not in request.path %}
+                        <a data-bs-toggle="modal" href="#modal--confirm" class="btn btn--delete">Удалить</a>
+                    {% endif %}
+                    <div class="btn btn--base btn__products-confirm" onclick="form1_onsubmit(); submitForm();">Сохранить</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    {% if '/create-product/' not in request.path %}
+        <!--modal confirm-->
+        <form action="{% url 'products:delete_product' product.slug %}" method="post">
+            <div
+            class="modal__confirm modal fade"
+            id="modal--confirm"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+          {% csrf_token %}
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+              <div class="container">
+                <div class="modal__confirm-content modal-content px-2 py-2">
+                  <div
+                    class="modal__confirm-header modal-header d-flex justify-content-center"
+                  >
+                    <h5
+                      class="modal__confirm-title title--20-36_blue modal-title"
+                      id="exampleModalLabel"
+                    >
+                      Вы хотите удалить продукт?
+                    </h5>
+                  </div>
+
+                  <!-- <div class="modal__confirm-body modal-body py-0">
+                    <p class="title--10_18_dark-lighter text-center">
+                      При нажатии "Да", вам на почту придет счет на оплату нового
+                      тарифа
+                    </p>
+                  </div> -->
+
+                  <div
+                    class="modal__confirm-footer modal-footer d-flex justify-content-center align-items-center"
+                  >
+                    <a
+                      href="#"
+                      role="button"
+                      class="modal__confirm-close title--15-30_red d-flex align-items-center justify-content-between me-4"
+                      data-bs-dismiss="modal"
+                    >
+                      <img
+                        src="{% static 'img/close-square.svg' %}"
+                        alt="modal__confirm-close logo"
+                      />
+                      <span class="title--15-30_red ms-2">НЕТ</span>
+                    </a>
+                    <button
+                      role="button"
+                      class="modal__confirm-apply d-flex align-items-center justify-content-between"
+                      type="submit"
+                      style="background: none; border: none;"
+                    >
+                      <img
+                        src="{% static 'img/tick-circle.svg' %}"
+                        alt="modal__confirm-apply logo"
+                      />
+                      <span class="title--15-30_blue ms-2">ДА</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/select-custom.js" %}"></script>
+    <!-- <script src="{% static "js/shops.js" %}"></script> -->
+    <!-- <script src="{% static "js/page-product-info__add-pic.js" %}"></script> -->
+    <script src="{% static "js/tips.js" %}"></script>
+    <script src="{% static "js/select-tags-custom.js" %}"></script>
+    <script src="{% static "js/handleFileSelected.js" %}"></script>
+
+    <script>
+        // Категории
+        function addTagsCatalog() {
+            let categories = [];
+            const items = document.querySelector('.tags__selected').querySelectorAll('.tags__item');
+
+            items.forEach((el) => {
+                let category = el.textContent;
+                categories.push(category);
+            })
+
+            let selectList = document.createElement("select");
+            selectList.name = "categories";
+            selectList.multiple = true;
+            selectList.style.display = 'none';
+
+            for (var i = 0; i < categories.length; i++) {
+                var option = document.createElement("option");
+                option.value = categories[i];
+                option.text = categories[i];
+                option.selected = true;
+                selectList.appendChild(option);
+            }
+            return selectList;
+        }
+
+        function createInputElem(arr, name) {
+            let selectList = document.createElement("select");
+            selectList.name = name;
+            selectList.multiple = true;
+            selectList.style.display = 'none';
+
+            for (var i = 0; i < arr.length; i++) {
+                var option = document.createElement("option");
+                option.value = arr[i];
+                option.text = arr[i];
+                option.selected = true;
+                selectList.appendChild(option);
+            }
+            return selectList
+        }
+
+        // Назначения
+        function addOptions() {
+            let elements = [];
+            let format = [];
+            let key_asset = [];
+            let key_action = [];
+            let prescription = [];
+            selects.forEach((el, idx) => {
+                const optionBlock = el.querySelector('.select__options');
+                const options = optionBlock.querySelectorAll('.option-block');
+                const headerName = el.querySelector('.select__header-selected').textContent;
+
+                options.forEach((el, idx) => {
+                    let label = el.querySelector('label');
+                    if (label.classList.contains('active')) {
+                        if (headerName === 'Назначение') {
+                            prescription.push(label.textContent);
+                        } else if (headerName === 'Формат') {
+                            format.push(label.textContent);
+                        } else if (headerName === 'Ключевые активы') {
+                            key_asset.push(label.textContent);
+                        } else if (headerName === 'Ключевое действие') {
+                            key_action.push(label.textContent);
+                        }
+                    }
+                })
+            })
+
+            elements.push(createInputElem(key_asset, 'key_assets'))
+            elements.push(createInputElem(key_action, 'key_actions'))
+            elements.push(createInputElem(prescription, 'prescriptions'))
+            elements.push(createInputElem(format, 'formats'))
+
+            return elements;
+        }
+    </script>
+
+    <!-- Delete -->
+    {% if '/create-product/' not in request.path %}
+    <script>
+        function deleteProduct() {
+            $.ajax({
+                type: 'DELETE',
+                url: `{% url 'products:delete_product' product.slug %}`,
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                error: function (xhr, status, error) {
+                    alert('Произошла ошибка: ' + error);
+                },
+            })
+        }
+    </script>
+    {% endif %}
+
+    <script>
+        function validateForm(form) {
+            let errors = [];
+            // Name Product
+            const productName = form.querySelector('#id_name');
+            if (productName.value.length < 1) {
+                errors.push(productName);
+            }
+
+            // // Products Explanatory Name
+            // const explanatoryName = form.querySelector('#products__explanatory-name');
+            // if (explanatoryName.value.length < 1) {
+            //     errors.push(explanatoryName);
+            // }
+
+            // Description
+            const description = form.querySelector('#products__description');
+            if (description.value.length < 1) {
+                errors.push(description);
+            }
+
+            // INCI
+            const productsINCI = form.querySelector('#products__INCI');
+            if (productsINCI.value.length < 1) {
+                errors.push(productsINCI);
+            }
+
+            if (errors.length > 0) {
+                errors[0].focus();
+            } else {
+                return true;
+            }
+        }
+
+        function form1_onsubmit(e)
+        {
+            $('#product__form :input[isacopy]').remove();
+
+            $('#form_open_product :input').not(':submit').clone().hide().attr('isacopy','y').appendTo('#product__form');
+
+            return true;
+        }
+
+        function submitForm(e) {
+            let form = document.getElementById('product__form');
+            const isValid = validateForm(form);
+            if (isValid) {
+                let elements = addOptions();
+                let selectCategories = addTagsCatalog();
+
+                if (elements) {
+                    elements.forEach((el) => {
+                        form.appendChild(el);
+                    })
+                }
+                form.appendChild(selectCategories);
+
+                // Check Exist Series Number First
+                let numbers = form.querySelectorAll('.js-banners-order');
+                let valNumbers = [];
+                numbers.forEach((el) => {
+                    valNumbers.push(el.value)
+                })
+                if (!valNumbers.includes('1')) {
+                    numbers[0].value = '1';
+                }
+                form.submit();
+            }
+        }
+    </script>
+
+    <!-- Close Button -->
+    <script>
+        function createInput(name, id) {
+            let inputDelete = document.createElement("input");
+            inputDelete.name = `${name}-${id}-DELETE`;
+            inputDelete.value = "Delete";
+            inputDelete.style.display = 'none';
+            return inputDelete;
+        }
+
+        function closeBtnEvent(el, type) {
+            el.addEventListener('click', (event) => {
+                let form = document.getElementById('product__form');
+                if (type === 'product_links') {
+                    const linkId = el.dataset.linkId;
+                    let linksItems = document.querySelector('.shops__container').querySelectorAll('.shops__item');
+                    linksItems.forEach((el) => {
+                        if (el.dataset.linkId === linkId) {
+                            const inputDelete = createInput('product_links', linkId);
+                            form.appendChild(inputDelete);
+
+                            // Удаление Элемента
+                            el.style.display = 'none';
+                        }
+                    })
+                } else if (type === 'product_images') {
+                    const imageId = el.dataset.imageId;
+                    let linksItems = document.querySelector('.profile__products-images').querySelectorAll('.banners');
+                    linksItems.forEach((el) => {
+                        if (el.dataset.imageId === imageId) {
+                            const inputDelete = createInput('product_images', imageId);
+                            form.appendChild(inputDelete)
+
+                            // Удаление Элемента
+                            el.style.display = 'none';
+                        }
+                    })
+                }
+            })
+        }
+
+        let linksItems = document.querySelector('.shops__container');
+        let imagesItems = document.querySelector('.profile__products-images');
+        const closeBtnsLinks = linksItems.querySelectorAll('.tag-close');
+        const closeBtnsImages = imagesItems.querySelectorAll('.tag-close');
+        closeBtnsLinks.forEach((el) => {
+            closeBtnEvent(el, 'product_links');
+        })
+        closeBtnsImages.forEach((el) => {
+            closeBtnEvent(el, 'product_images');
+        })
+
+    </script>
+
+    <!-- Add Links -->
+    <script>
+        function cloneMore(selector, type) {
+            var newElement = $(selector).clone(true);
+            var total = $('#id_' + type + '-TOTAL_FORMS').val();
+            newElement.find(':input').each(function() {
+                var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            });
+            newElement.find('label').each(function() {
+                var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+                $(this).attr('for', newFor);
+            });
+            // Tag Close
+            let tagClose = newElement.find('.tag-close')
+            let svgClose = tagClose.find('svg');
+            if (type === 'product_links') {
+                tagClose.attr('data-link-id', total);
+                newElement.attr('data-link-id', total);
+                svgClose.attr('data-link-id', total);
+            } else if (type === 'product_images') {
+                tagClose.attr('data-image-id', total);
+                newElement.attr('data-image-id', total);
+                svgClose.attr('data-image-id', total);
+            }
+
+            // Style
+            if (type === 'product_links') {
+                newElement.show();
+            } else if (type === 'product_images') {
+                newElement.show();
+            }
+
+            // Delete Preloader
+            if (type === 'product_images') {
+                let preloader = newElement.find('.preload-wrap');
+                console.log('preloader: ', preloader);
+                preloader.remove();
+            }
+
+            // Image
+            if (type === 'product_images') {
+                let imgElem = newElement.find('img');
+                imgElem.attr('src', '{% static 'img/gallery-add.svg' %}')
+            }
+
+            // Info Icon
+            let infoIconImg = newElement.find('#page-products-question');
+            infoIconImg.css('display', 'none');
+
+            total++;
+            // Add Seriel Number
+            if (type === 'product_images') {
+                let inputNum = newElement.find('.js-banners-order');
+                inputNum.val(total)
+            }
+            $('#id_' + type + '-TOTAL_FORMS').val(total);
+            $(selector).after(newElement);
+
+            closeBtnEvent(tagClose[0], type);
+        }
+
+        $('#button-add-btn').click(function() {
+            cloneMore('div.shops__item:last', 'product_links');
+        });
+    </script>
+
+    <!-- Add Images -->
+    <script>
+        $('#button-add-images').click(function() {
+            cloneMore('div.banners:last', 'product_images');
+        });
+    </script>
+
+    <script>
+        const selects = document.querySelectorAll('.input--general.select-custom-item');
+
+        function clearActiveClass(name) {
+            selects.forEach((el, idx) => {
+                const optionBlock = el.querySelector('.select__options');
+                const options = optionBlock.querySelectorAll('.option-block');
+                const headerName = el.querySelector('.select__header-selected').textContent;
+
+                if (name === headerName) {
+                    options.forEach((el, idx) => {
+                        let label = el.querySelector('label');
+                        label.style.background = 'none';
+                        label.style.borderRadius = '0px';
+                        label.classList.remove('active');
+                    })
+                }
+            })
+        }
+
+        function getData(name) {
+            let data = null;
+            if (name === 'prescription') {
+                data = "{{ prescriptions_user|safe }}";
+            } else if (name === 'key_asset') {
+                data = "{{ key_assets_user|safe }}";
+            } else if (name === 'key_action') {
+                data = "{{ key_actions_user|safe }}";
+            }
+            data = data.replace(/'/g, '"');
+            data = JSON.parse(data);
+            return data;
+        }
+
+        function addIdOptions() {
+            selects.forEach((el, idx) => {
+                const optionBlock = el.querySelector('.select__options');
+                const options = optionBlock.querySelectorAll('.option-block');
+                const headerName = el.querySelector('.select__header-selected').textContent;
+                options.forEach((el, idx) => {
+                    let inputOption = el.querySelector('input');
+                    let labelOption = el.querySelector('label');
+                    const slug = inputOption.dataset.slug;
+                    let data = [];
+
+                    {% if '/create-product/' not in request.path %}
+                    if (headerName === 'Назначение') {
+                        data = getData('prescription');
+                    } else if (headerName === 'Ключевые активы') {
+                        data = getData('key_asset');
+                    } else if (headerName === 'Ключевое действие') {
+                        data = getData('key_action');
+                    } else if (headerName === 'Формат') {
+                        data = ['{{format_user}}']
+                    }
+                    {% endif %}
+
+                    if (data.length < 1 || !labelOption.textContent.includes(data)) {
+                        inputOption.name = `name${idx + 1}`;
+                        inputOption.id = `opt_${slug}_${idx + 1}`;
+                        labelOption.setAttribute('for', `opt${idx + 1}`);
+
+                        labelOption.addEventListener('click', () => {
+                            if (headerName === 'Формат') {
+                                if (!labelOption.style.background || labelOption.style.background === 'none') {
+                                    clearActiveClass(headerName);
+                                    labelOption.style.background = '#E8E8E8';
+                                    labelOption.style.borderRadius = '15px';
+                                    labelOption.classList.add('active');
+                                } else {
+                                    labelOption.style.background = 'none';
+                                    labelOption.style.borderRadius = '0px';
+                                    labelOption.classList.remove('active');
+                                }
+                            } else {
+                                if (!labelOption.style.background || labelOption.style.background === 'none') {
+                                    labelOption.style.background = '#E8E8E8';
+                                    labelOption.style.borderRadius = '15px';
+                                    labelOption.classList.add('active');
+                                } else {
+                                    labelOption.style.background = 'none';
+                                    labelOption.style.borderRadius = '0px';
+                                    labelOption.classList.remove('active');
+                                }
+                            }
+                        })
+                    }
+                })
+            })
+        }
+
+        addIdOptions()
+    </script>
+{% endblock %}

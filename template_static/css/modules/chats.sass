@@ -1,0 +1,313 @@
+@import "vars.sass"
+
+.chat
+    margin-bottom: 0
+    h5
+        font-weight: 600
+        font-size: 30px
+        line-height: 37px
+        color: $pre-color
+    button
+        margin-right: 0
+        p
+            font-size: 24px
+            @media screen and ( max-width: $first-breack-point)
+                font-size: 15px
+                line-height: 18px
+        @media screen and (max-width: $first-breack-point)
+            display: flex
+    .feed
+        &__avatar
+            &-chats
+                display: block 
+                flex-shrink: 0
+                padding: 0
+                margin-right: 10px
+                @media screen and ( max-width: $first-breack-point)   
+                    display: none    
+        &__info  .feed__avatar-chats 
+            display: none 
+            @media screen and ( max-width: $first-breack-point)   
+                display: block 
+        &__text
+            &-chats
+                font-weight: 600
+                font-size: 18px
+                line-height: 22px
+                @media screen and (max-width: $first-breack-point)
+                    line-height: 18px
+                    font-size: 15px
+
+    a.unlock-icon
+        &:after
+            background-image: none
+    .unlock-icon
+        &:after
+            border: 0px
+            background-size: 100%
+            border-radius: 0
+            flex-shrink: 0
+            content: ""
+            display: inline-block
+            width: 36px
+            aspect-ratio: 1
+            background-repeat: no-repeat
+            background-position: center center
+            margin-left: 15px
+            margin-top: -2px
+
+            @media screen and (max-width: $first-breack-point)
+                width: 20px !important
+            background-image: url('../img/unlockGrey.svg')
+    .bing
+        &::after
+            border: 0px
+            background-size: 100%
+            border-radius: 0
+            flex-shrink: 0
+            content: ""
+            display: inline-block
+            width: 36px
+            aspect-ratio: 1
+            background-repeat: no-repeat
+            background-position: center center
+            margin-left: 15px
+            margin-top: -2px
+
+            @media screen and (max-width: $first-breack-point)
+                width: 20px !important
+            background-image: url('../img/notification-bing.svg')
+        
+#createRev
+    .notice
+        left: 38.7%
+    @media screen and ( max-width: $first-breack-point )
+        .notice
+            left: 41.6%
+    @media screen and ( max-width: $second-breack-point )
+        .notice
+            left: 38.5%
+    &::before
+        background-image: url('../img/edit.svg')
+        border-radius: 0     
+
+.send-mess-tech
+    .select-wrap
+        width: 100%
+    #textApeal
+        border-radius: $border-radius
+    #ava
+        width: 100% !important
+        .previewImage
+            display: flex
+            justify-content: space-between
+            @media screen and (max-width: $first-breack-point)
+                flex-direction: column
+                justify-content: center
+                align-items: center
+                &_text
+                    display: block !important
+                    text-align: center
+                    width: 100% !important
+                    p
+                        margin: 10px 0 
+            *
+                margin: 0 0.5%
+
+            #avatar
+                margin: 0
+                background-size:60%
+            .addImage
+                width: calc( 100% / 7 )
+                padding: 5px
+                background-size:80%
+                background-repeat: no-repeat
+                background-position: center
+                background-image: url(/static/img/gallery-add.svg)
+                box-shadow: 0px 10px 20px rgba(14, 14, 14, 0.1)
+                border-radius: $border-radius
+                width: 181px
+                aspect-ratio: 1
+                input
+                    width: 1px
+                    height: 1px
+            &_text 
+                margin: auto
+                width: fit-content
+                font-weight: 600
+                font-size: 18px
+                line-height: 22px
+                color: $dark-lighter
+                width: 50%
+                p
+                    font-weight: 600
+                    font-size: 18px
+                    line-height: 22px
+                small
+                    font-weight: 600
+                    font-size: 18px
+                    line-height: 22px
+    #adrese
+        button   
+            margin: 0     
+            border: 0px
+            background-size: 100%
+            border-radius: 0
+            -ms-flex-negative: 0
+            flex-shrink: 0
+            content: ""
+            display: inline-block
+            width: 22px
+            aspect-ratio: 1
+            background-repeat: no-repeat
+            background-position: center center
+            background-image: url("../img/search.svg")
+            position: absolute
+            top: 52px
+            left: 23px
+            &::before
+                display: none
+        #adrese.form-control
+            padding-left: 43px
+
+.modal__adrese__ansver
+    display: none
+    min-height: 31px
+    position: absolute
+    top: 25%
+    background-color: $white-color
+    padding-top: 7px
+    width: 96%
+    transition: 0.3s
+    border-radius: 0 0 $border-radius $border-radius
+    .modal__adrese
+        background-color: $white-color
+        &:last-child
+            border-radius: 0 0 $border-radius $border-radius
+        &:hover
+            background-color: $gray-light
+        &__text
+            padding: 5px 15px 
+
+.modal
+    &-dialog
+        max-width: 829px
+    &-content
+        padding: 10px 20px
+        height: fit-content
+        border-radius: $border-radius
+    &-body
+        .select-wrap
+            width: 100%
+            margin: 5px 0
+        .select2
+            height: auto !important
+    &-open
+        #sendMess
+            .btn-close
+                opacity: 1
+                background-image: url('../img/cross-bg-red.svg')
+                background-position: center
+                background-size: 100%
+                @media screen and (min-width: $first-breack-point)
+                    display: none
+            .modal-footer 
+                button
+                    margin-right: 0
+                &-tech
+                    justify-content: space-around
+                    @media screen and (max-width: $first-breack-point)
+                        flex-direction: column-reverse
+                        justify-content: center
+                        align-items: center
+                    button 
+                        display: flex
+                        border-radius: 0
+                        box-shadow: none
+                        border: 1px #00000000
+                        align-items: center
+                        &::before
+                            @media screen and (max-width: $first-breack-point)
+                                width: 34px !important
+                                margin-right: 10px !important
+                        &:first-child
+                            color: $pre-color
+                            background: #00000000
+                            
+                            &::before
+                                border: 0px
+                                background-size: 100%
+                                border-radius: 0
+                                flex-shrink: 0
+                                content: ""
+                                display: inline-block
+                                width: 34px
+                                aspect-ratio: 1
+                                margin-right: 20px
+                                background-repeat: no-repeat
+                                background-position: center center
+                                background-image: url('../img/close-square.svg')
+                        &:last-child
+                            @media screen and (min-width: $first-breack-point)
+                                background: #00000000
+
+                            color: $main-color
+                            @media screen and (max-width: $first-breack-point)
+                                background-color: $main-color
+                                color: $sub-color
+                                border-radius: $border-radius 
+                                padding: 5px 10px
+                            &::before
+                                @media screen and (max-width: $first-breack-point)
+                                    display: none
+                                border: 0px
+                                background-size: 100%
+                                border-radius: 0
+                                flex-shrink: 0
+                                content: ""
+                                display: inline-block
+                                width: 34px
+                                aspect-ratio: 1
+                                margin-right: 20px
+                                background-repeat: no-repeat
+                                background-position: center center
+                                background-image: url('../img/edit.svg')
+    &__del-profile
+        .modal
+            &-footer
+                button
+                    margin: 5px
+                    &::before
+                        display: none
+                    &:first-child
+                        color: $sub-color
+                        background-color: $main-color
+                        border-radius: $border-radius
+                        padding: 10px 15px
+                    &:last-child
+                        color: $pre-color
+
+    &-footer
+        border-top: none
+    &__create-rev
+        .modal
+            &-footer
+                button
+                    @media screen and (max-width: $first-breack-point)
+                        display: flex
+                    &::before
+                        display: none
+                    &:first-child
+                        border-radius: $border-radius
+                        background-color: $main-color
+                        color: $sub-color
+                        font-weight: 700
+                        font-size: 18px
+                        line-height: 22px
+
+                    &:last-child
+                        font-weight: 700
+                        font-size: 18px
+                        line-height: 29px
+                        color: $pre-color
+        

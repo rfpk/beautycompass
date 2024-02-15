@@ -1,0 +1,434 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if '/create-series/' in request.path %}
+        {{ block.super }} - Создание серии
+    {% else %}
+        {{ block.super }} - Информация о серии {{series.slug}}
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <main class="series">
+
+        <section class="title">
+            <div class="container container--bc">
+                <div class="page-title page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+                    <div class="col-1 col-xxl-12 order-xxl-1">
+                        <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="vuesax/outline/arrow-left">
+                                    <g id="arrow-left">
+                                        <path id="Vector" d="M11.9633 23.5254C11.7258 23.5254 11.4883 23.4379 11.3008 23.2504L3.71328 15.6629C3.35078 15.3004 3.35078 14.7004 3.71328 14.3379L11.3008 6.75039C11.6633 6.38789 12.2633 6.38789 12.6258 6.75039C12.9883 7.11289 12.9883 7.71289 12.6258 8.07539L5.70078 15.0004L12.6258 21.9254C12.9883 22.2879 12.9883 22.8879 12.6258 23.2504C12.4508 23.4379 12.2008 23.5254 11.9633 23.5254Z" fill="#1560BD"></path>
+                                        <path id="Vector_2" d="M25.6234 15.9375H4.58594C4.07344 15.9375 3.64844 15.5125 3.64844 15C3.64844 14.4875 4.07344 14.0625 4.58594 14.0625H25.6234C26.1359 14.0625 26.5609 14.4875 26.5609 15C26.5609 15.5125 26.1359 15.9375 25.6234 15.9375Z" fill="#1560BD"></path>
+                                    </g>
+                                </g>
+                            </svg>
+                            <span class="text-decoration-none text-uppercase d-none d-xxl-block ms-2">Назад</span>
+                        </a>
+                    </div>
+                    <div class="col text-center col-xxl-12">
+                        <h1 class="title--20-36">Информация о серии</h1>
+                    </div>
+                    <div class="col-1 d-xxl-none"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="series__details">
+            <div class="container container--bc">
+                <form
+                    method="post"
+                    id="series__form"
+                    enctype="multipart/form-data"
+                    {% if '/create-series/' in request.path %}
+                        action="{% url 'products:create_series' brand.slug %}"
+                    {% else %}
+                        action="{% url 'products:change_series' series.slug %}"
+                    {% endif %}
+                    class="profile profile__brand brand__profile col-12 offset-xxl-1 col-xxl-10"
+                >
+                    {% csrf_token %}
+                    <div class="input image input--image profile__input profile__image brand__image profile__brand-image profile__brand-input" type="button" onclick="triggerFileInputProfile()">
+                        <label for="brand__file-input" class="label--light label--profile ">Логотип серии</label>
+                        <img src="{% if form.logo.value %}{% get_media_prefix %}{{form.logo.value}}{% else %}{% static 'img/gallery-add.svg' %}{% endif %}" id="image-series" alt="logo" class="position-absolute top-50 start-50 translate-middle"/>
+
+                        <input type="file" name="{{form.logo.name}}" id="brand__file-input" class="file-input profile__file-input brand__file-input" onchange="handleFileSelected(event)"/>
+                    </div>
+                    {% if '/create-series/' in request.path %}
+                        <div class="input name input--general profile__brand-input brand__input brand__name">
+                            <label class="label--light label--profile">Название серии</label>
+                            {{form.name}}
+                        </div>
+                    {% else %}
+                        <div class="input name input--general profile__brand-input brand__input brand__name ">
+                            <label for="brand__name" class="label--light label--profile">Название бренда</label>
+                            {{form.brand}}
+                        </div>
+                    {% endif %}
+
+
+                    <div class="input description input--textarea profile__input profile__textarea profile__description profile__brand-description brand__input brand__description profile__brand-input">
+                        <label for="brand__description" class="label--light label--profile">Краткое описание серии</label>
+                        {{form.description}}
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <form id="form_open_series">
+            <section class="tags">
+                <div class="container container--bc">
+                    <div class="col-xxl-10 offset-xxl-1">
+    
+                        <div class="input input--select select--regular tags__select brand__tags-select" id="brand__tags-select">
+    
+                            <label for="brand__tags-select" class="label--light label--profile">Теги</label>
+    
+                            <div class="select__header input--select">
+                                <span class="tags__selected text--10_18">Выберите значение</span>
+                                <span class="tags__arrow">
+                                    <svg width="15" height="7" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                        <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                    </svg>
+                                </span>
+                            </div>
+    
+                            <div class="select__options">
+                                <div class="tags__column">
+                                    {% for tag in form.tag.field.queryset.all %}
+                                        {% if tag.name in tags_name %}
+                                            <div
+                                                class="tags__option active"
+                                                data-tag-id="{{tag.id}}"
+                                                data-slug="{{tag.slug}}"
+                                            >{{tag.name}}</div>
+                                        {% else %}
+                                            <div
+                                                class="tags__option"
+                                                data-tag-id="{{tag.id}}"
+                                                data-slug="{{tag.slug}}"
+                                            >{{tag.name}}</div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+    
+                        </div>
+    
+                        <div class="tags__content filled">
+                            {% for name in tags_name %}
+                                <div class="tags__item" data-tag-id="{{name}}">
+                                    <span>{{name}}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+            <section class="banners">
+                <div class="container container--bc">
+                  <div class="banners__container col-xxl-10 offset-xxl-1 gx-0 ">
+                    {{series_banner_formset.management_form}}
+                    {% for form in series_banner_formset %}
+                        {{form.field.as_hidden}}
+                        {{form.id}}
+                        <div class="banners__item" name="form-image" data-banner-id="{{forloop.counter0}}">
+                            <div type="button" class="banners__image input--image">
+                                <label for="banners__image" class="label label--light label--profile">Баннер</label>
+                                    <img
+                                        src="{% if form.banner.value %}{% get_media_prefix %}{{ form.banner.value }}{% else %}{% static 'img/gallery-add.svg' %}{% endif %}"
+                                        alt="gallery-add logo"
+                                        class="position-absolute top-50 start-50 translate-middle"
+                                    />
+                                    
+                                    <input
+                                        type="file"
+                                        class="file-input"
+                                        name="series_banners-{{forloop.counter0}}-banner"
+                                        onchange="handleFileSelected(event)"
+                                    />
+                                    <i class="tag-close" data-banner-id="{{forloop.counter0}}" name="series_banners-{{forloop.counter0}}-DELETE">
+                                        <svg data-banner-id="{{forloop.counter0}}" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 20C4.48372 20 0 15.5163 0 10C0 4.48372 4.48372 0 10 0C15.5163 0 20 4.48372 20 10C20 15.5163 15.5163 20 10 20Z" fill="#E31E24"/>
+                                            <path d="M13.1289 7.86591L7.86671 13.1281C7.59702 13.3978 7.14974 13.3978 6.88005 13.1281C6.61036 12.8584 6.61036 12.4111 6.88005 12.1414L12.1422 6.87925C12.4119 6.60956 12.8592 6.60956 13.1289 6.87925C13.3986 7.14893 13.3986 7.59622 13.1289 7.86591Z" fill="#FAFAFA"/>
+                                            <path d="M13.1289 13.1247C12.8592 13.3943 12.4119 13.3943 12.1422 13.1247L6.88005 7.86247C6.61036 7.59278 6.61036 7.1455 6.88005 6.87581C7.14974 6.60612 7.59702 6.60612 7.86671 6.87581L13.1289 12.138C13.3986 12.4077 13.3986 12.855 13.1289 13.1247Z" fill="#FAFAFA"/>
+                                        </svg>
+                                    </i>
+                            </div>
+                            <div class="input input--general banners__input">
+                                <label for="shops__name" class="label label--light label--profile">Ссылка к баннеру</label>
+                                {{form.url}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="banners__plus">
+                      <svg
+                              role="button"
+                              class="banners__plus-image hover-red"
+                              viewBox="0 0 26 26"
+                              fill="none"
+                              id="button-add-btn"
+                              xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                                d="M12.9993 24.6452C6.57518 24.6452 1.35352 19.4235 1.35352 12.9993C1.35352 6.57518 6.57518 1.35352 12.9993 1.35352C19.4235 1.35352 24.6452 6.57518 24.6452 12.9993C24.6452 19.4235 19.4235 24.6452 12.9993 24.6452ZM12.9993 2.97852C7.47435 2.97852 2.97852 7.47435 2.97852 12.9993C2.97852 18.5243 7.47435 23.0202 12.9993 23.0202C18.5243 23.0202 23.0202 18.5243 23.0202 12.9993C23.0202 7.47435 18.5243 2.97852 12.9993 2.97852Z"
+                                fill="#1560BD"
+                        />
+                        <path
+                                d="M17.3327 13.8125H8.66602C8.22185 13.8125 7.85352 13.4442 7.85352 13C7.85352 12.5558 8.22185 12.1875 8.66602 12.1875H17.3327C17.7769 12.1875 18.1452 12.5558 18.1452 13C18.1452 13.4442 17.7769 13.8125 17.3327 13.8125Z"
+                                fill="#1560BD"
+                        />
+                        <path
+                                d="M13 18.1452C12.5558 18.1452 12.1875 17.7769 12.1875 17.3327V8.66602C12.1875 8.22185 12.5558 7.85352 13 7.85352C13.4442 7.85352 13.8125 8.22185 13.8125 8.66602V17.3327C13.8125 17.7769 13.4442 18.1452 13 18.1452Z"
+                                fill="#1560BD"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+            </section>
+        </form>
+
+        <section class="page__buttons my__15-30">
+            <div class="container container--bc">
+                <div class="col-12 col-xxl-10 offset-xxl-1 d-flex justify-content-around gx-0 gy-2 my-4">
+                    {% if '/create-series/' not in request.path %}
+                        <a data-bs-toggle="modal" href="#modal--confirm" class="btn btn--delete">Удалить</a>
+                    {% endif %}
+                    <div class="btn btn--base" onclick="form1_onsubmit(); submitForm();">Сохранить</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    {% if '/create-series/' not in request.path %}
+        <!--modal confirm-->
+        <form action="{% url 'products:delete_series' series.slug %}" method="post">
+            <div
+            class="modal__confirm modal fade"
+            id="modal--confirm"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+          {% csrf_token %}
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+              <div class="container">
+                <div class="modal__confirm-content modal-content px-2 py-2">
+                  <div
+                    class="modal__confirm-header modal-header d-flex justify-content-center"
+                  >
+                    <h5
+                      class="modal__confirm-title title--20-36_blue modal-title"
+                      id="exampleModalLabel"
+                    >
+                      Вы хотите удалить бренд?
+                    </h5>
+                  </div>
+
+                  <div
+                    class="modal__confirm-footer modal-footer d-flex justify-content-center align-items-center"
+                  >
+                    <a
+                      href="#"
+                      role="button"
+                      class="modal__confirm-close title--15-30_red d-flex align-items-center justify-content-between me-4"
+                      data-bs-dismiss="modal"
+                    >
+                      <img
+                        src="{% static 'img/close-square.svg' %}"
+                        alt="modal__confirm-close logo"
+                      />
+                      <span class="title--15-30_red ms-2">НЕТ</span>
+                    </a>
+                    <button
+                      role="button"
+                      class="modal__confirm-apply d-flex align-items-center justify-content-between"
+                      type="submit"
+                      style="background: none; border: none;"
+                    >
+                      <img
+                        src="{% static 'img/tick-circle.svg' %}"
+                        alt="modal__confirm-apply logo"
+                      />
+                      <span class="title--15-30_blue ms-2">ДА</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/manufacturer/page-series.js" %}"></script>
+    <script src="{% static "js/tags.js" %}"></script>
+
+    <script>
+        function form1_onsubmit(e)
+        {
+            $('#series__form :input[isacopy]').remove();
+
+            $('#form_open_series :input').not(':submit').clone().hide().attr('isacopy','y').appendTo('#series__form');
+
+            return true;
+        }
+
+        function validateForm(form) {
+            let errors = [];
+            let seriesName
+            // Name Company
+            {% if '/create-series/' in request.path %}
+                seriesName = form.querySelector('#id_name');
+                if (seriesName.value < 1) {
+                    errors.push(seriesName);
+                }
+            {% else %}
+                seriesName = form.querySelector('#id_brand');
+                if (!seriesName.value) {
+                    errors.push(seriesName);
+                }
+            {% endif %}
+
+            // Description
+            const description = form.querySelector('#id_description');
+            if (description.value.length < 1) {
+                errors.push(description);
+            }
+
+            if (errors.length > 0) {
+                errors[0].focus();
+            } else {
+                return true;
+            }
+        }
+
+        function submitForm(e) {
+            let form = document.getElementById('series__form');
+            const isValid = validateForm(form);
+            if (isValid) {
+                const items = document.querySelector('.tags__column').querySelectorAll('.tags__option');
+                let tags = [];
+                items.forEach((el) => {
+                    let className = el.className;
+                    if (className.includes('active')) {
+                        let value = el.dataset.tagId;
+                        tags.push(value);
+                    }
+                })
+
+                let selectList = document.createElement("select");
+                selectList.name = "tag";
+                selectList.multiple = true;
+                selectList.style.display = 'none';
+
+                for (var i = 0; i < tags.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = tags[i];
+                    option.text = tags[i];
+                    option.selected = true;
+                    selectList.appendChild(option);
+                }
+                form.appendChild(selectList);
+
+                {% if '/create-series/' in request.path %}
+                // Add Brand Name
+                let inputField = document.createElement('input');
+                inputField.name = 'brand';
+                inputField.value = '{{ brand.id }}';
+                inputField.style.display = 'none';
+                form.appendChild(inputField);
+                {% endif %}
+
+                form.submit();
+            }
+        }
+
+        // Close Button
+        function createInput(name, id) {
+            let inputDelete = document.createElement("input");
+            inputDelete.name = `${name}-${id}-DELETE`;
+            inputDelete.value = "Delete";
+            inputDelete.style.display = 'none';
+            return inputDelete;
+        }
+
+        function closeBtnEvent(el, type) {
+            el.addEventListener('click', (event) => {
+                let form = document.getElementById('series__form');
+                if (type === 'series_banners') {
+                    const bannerId = el.dataset.bannerId;
+                    let bannersItems = document.querySelector('.banners__container').querySelectorAll('.banners__item');
+
+                    bannersItems.forEach((el) => {
+                        if (el.dataset.bannerId === bannerId) {
+                            const inputDelete = createInput('series_banners', bannerId);
+                            form.appendChild(inputDelete);
+
+                            // Удаление Элемента
+                            el.style.display = 'none';
+                        }
+                    })
+                }
+            })
+        }
+
+        let bannersItems = document.querySelector('.banners__container');
+        const closeBtnsBanners = bannersItems.querySelectorAll('.tag-close');
+        closeBtnsBanners.forEach((el) => {
+            closeBtnEvent(el, 'series_banners');
+        })
+
+        // Add Banners
+        function cloneMore(selector, type) {
+            var newElement = $(selector).clone(true);
+            var total = $('#id_' + type + '-TOTAL_FORMS').val();
+            newElement.find(':input').each(function() {
+                var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            });
+            newElement.find('label').each(function() {
+                var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+                $(this).attr('for', newFor);
+            });
+            
+            // Tag Close
+            let tagClose = newElement.find('.tag-close')
+            let svgClose = tagClose.find('svg');
+            if (type === 'series_banners') {
+                tagClose.attr('data-banner-id', total);
+                newElement.attr('data-banner-id', total);
+                svgClose.attr('data-banner-id', total);
+            }
+
+            // Image
+            if (type === 'series_banners') {
+                let imgElem = newElement.find('img');
+                imgElem.attr('src', '{% static 'img/gallery-add.svg' %}');
+            }
+
+            // Style
+            if (type === 'series_banners') {
+                newElement.css('display', 'flex');
+            }
+
+            total++;
+            $('#id_' + type + '-TOTAL_FORMS').val(total);
+            $(selector).after(newElement);
+
+            closeBtnEvent(tagClose[0], type);
+        }
+
+        $('#button-add-btn').click(function() {
+            cloneMore('div.banners__item:last', 'series_banners');
+        });
+    </script>
+{% endblock %}

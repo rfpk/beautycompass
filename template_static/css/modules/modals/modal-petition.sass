@@ -1,0 +1,24 @@
+@import "../vars.sass"
+
+.modal-petition
+  min-width: 650px
+  padding: 40px 50px
+  border: none
+  border-radius: $border-radius
+  box-shadow: $box-shadow-regular
+  @media screen and (max-width: $first-breack-point)
+    min-width: auto
+    padding: 20px
+
+  &__header
+    @media screen and (max-width: $first-breack-point)
+      svg
+        width: 30px
+
+  &__form
+    button
+      width: fit-content
+      align-self: center
+      padding: 10px 25px
+      border-width: 3px
+      border-radius: $border-radius

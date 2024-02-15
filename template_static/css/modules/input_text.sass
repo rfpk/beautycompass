@@ -1,0 +1,30 @@
+// <label for="nameFile" class="select-wrap">
+//     <small>
+//         Пример текста
+//     </small>
+//     <input class="form-control" type="text" name="nameFile" id="nameFile">
+// </label>
+.select-wrap
+    &-choseSave
+        width: 100% !important
+    width: calc( (100% / 3) - 5% )
+    margin: 15px 0
+    @media screen and (max-width: $second-breack-point) 
+        width: calc( (100% / 2) - 5% )
+        
+    small
+        text-transform: none
+        color: $gray-light
+        font-size: 18px
+        line-height: 16px
+        @media screen and (max-width: $second-breack-point) 
+            font-size: 10px
+            margin-top: -15px
+    select
+        box-shadow: $box-shadow-sm
+        border-radius: $border-radius
+        appearance: none
+        height: 42px    
+        &:focus
+            border: 1px solid #ced4da00
+            box-shadow: $box-shadow-regular

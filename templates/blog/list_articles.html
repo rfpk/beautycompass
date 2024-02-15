@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Статьи{% endblock %}
+
+{% load catalog_tags %}
+{% block content %}
+
+    <main class="articles-brand">
+        <section class="articles-filter mt-5 mb-4">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+
+                    <div class="articles-filter__row d-flex flex-column flex-lg-row gap-4 mb-3">
+
+                        <div class="articles-filter__item input flex-shrink-0">
+                            <label class="label--light label--general">Рубрика</label>
+                            <select class="input--select" aria-label="Default select example">
+                                <option selected>Сначала новые</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+
+                        <div class="input input--select select--regular tags__select brand__tags-select order-last order-lg-0" id="brand__tags-select">
+
+                            <label for="brand__tags-select" class="label--light label--general">Теги</label>
+
+                            <div class="select__header input--select">
+                                <span class="tags__selected text--10_18">Выберите значение</span>
+                                <span class="tags__arrow">
+                                    <svg width="15" height="7" viewBox="0 0 15 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg);">
+                                        <path d="M14.1304 0.80744C14.1304 0.957419 14.0734 1.1074 13.9511 1.2258L8.63719 6.37246C7.77327 7.20918 6.35513 7.20918 5.49121 6.37246L0.177267 1.2258C-0.059089 0.996887 -0.059089 0.617993 0.177267 0.389077C0.413623 0.160161 0.804834 0.160161 1.04119 0.389077L6.35513 5.53573C6.74634 5.91462 7.38206 5.91462 7.77327 5.53573L13.0872 0.389077C13.3236 0.160161 13.7148 0.160161 13.9511 0.389077C14.0652 0.507482 14.1304 0.657461 14.1304 0.80744Z" fill="#210E22"></path>
+                                    </svg>
+                                </span>
+                            </div>
+
+                            <div class="select__options">
+                                <div class="tags__column">
+                                    {% for tag in tags %}
+                                        <div
+                                            class="tags__option {% if tag.tag__slug in request.GET|get_list:'tag' %} active {% endif %}"
+                                            onclick="addQueryParam('tag={{tag.tag__slug}}', 'tags')"
+                                        >{{tag.tag__name}}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="articles-filter__item input flex-shrink-0">
+                            <label class="label--light label--general">Сортировать по</label>
+                            <select class="input--select" id="sortedBy" aria-label="Default select example">
+                                {% for option in sortings_by %}
+                                    <option
+                                        value="{{option.value}}"
+                                        {% if request.GET.sort_by == option.value %} selected {% endif %}
+                                    >
+                                        {{option.text}}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                    </div>
+                    <div class="tags__content">
+                        {% for tag in tags %}
+                            {% if tag.tag__slug in request.GET|get_list:'tag' %}
+                                <div
+                                    class="tags__item"
+                                    style="cursor: pointer;"
+                                    data-tag-id="{{tag.tag__name}}"
+                                    onclick="addQueryParam('tag={{tag.tag__slug}}', 'tags')"
+                                >
+                                    <span>{{tag.tag__name}}</span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="articles-filter__row mt-4">
+
+                        <div class="input input--select select--regular">
+                            <label class="label--light label--general">Актуальные обсуждения</label>
+                            <button class="button-reset d-flex justify-content-between align-items-center gap-3 w-100 text--12-18 fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#articles-filter__collapse" aria-expanded="false" aria-controls="user-profile__details">
+                                <span>Последние обсуждения</span>
+                                <svg class="ease3" width="15" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.75 0.878653C18.75 1.07766 18.6743 1.27667 18.5121 1.43379L11.4609 8.263C10.3145 9.37327 8.43277 9.37327 7.28641 8.263L0.23522 1.43379C-0.0784066 1.13003 -0.0784066 0.627271 0.23522 0.323518C0.548846 0.0197639 1.06795 0.0197639 1.38158 0.323518L8.43277 7.15273C8.95187 7.65549 9.79542 7.65549 10.3145 7.15273L17.3657 0.323518C17.6793 0.0197639 18.1985 0.0197639 18.5121 0.323518C18.6635 0.480631 18.75 0.679642 18.75 0.878653Z" fill="#210E22"/>
+                                </svg>
+                            </button>
+                            <div class="collapse" id="articles-filter__collapse">
+                                <ul class="d-flex flex-column gap-3 mt-3 list-unstyled">
+                                    {% for discussion in discussions %}
+                                        <li>
+                                            <a href="{% url 'blog:article_detail' discussion.article__slug %}" class="text--12-18 fw-600 dark-semi hover hover--red">
+                                                {{discussion.article__title}}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="articles-preview">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+                    <div class="articles-preview__list d-flex flex-column gap-3">
+                        {% for article in articles %}
+                            <div class="articles-preview-item white-box white-box--px-10">
+                                <div class="articles-preview-item__header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                    <a href="#" class="articles-preview-item__owner"><img src="../img/logo-blue.svg" alt=""></a>
+                                    <span class="dark-semi fw-600 text--12-18">{{article.created_at|date:'d.m.Y'}}</span>
+                                </div>
+                                <div class="articles-preview-item__body">
+                                    <a href="{% url 'blog:article_detail' article.slug %}" class="articles-preview-item__pic">
+                                        {% if article.thumbnail %}
+                                            <img src="{{article.thumbnail.url}}" alt="article">
+                                        {% endif %}
+                                    </a>
+                                    <div class="social-count text--15-30 dark-semi my-3">
+                                        <div class="social-count__group">
+
+                                            <div class="social-count__item">
+                                                <div class="social-count__icon social-count__icon--fav" onclick="onClickActive(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="38px" height="38px" viewBox="0 0 9.69506 8.58706">
+                                                        <path fill="#E31E24" d="M4.84758 8.58706c-0.139836,0 -0.275091,-0.0177795 -0.387876,-0.0579197 -1.72254,-0.582796 -4.45971,-2.65165 -4.45971,-5.70831 0,-1.55729 1.27609,-2.82083 2.84537,-2.82083 0.762118,0 1.47461,0.293634 2.00221,0.81862 0.527495,-0.524986 1.23998,-0.81862 2.0021,-0.81862 1.56929,0 2.84537,1.26802 2.84537,2.82083 0,3.06102 -2.73717,5.12551 -4.45971,5.70831 -0.112785,0.0401402 -0.24804,0.0579197 -0.387767,0.0579197zm-2.00221 -7.91962c-1.19493,0 -2.16899,0.965437 -2.16899,2.15339 0,3.03877 2.96263,4.72956 4.00431,5.08101 0.081153,0.0267238 0.256985,0.0267238 0.338247,0 1.0371,-0.351445 4.00431,-2.03777 4.00431,-5.08101 0,-1.18795 -0.974054,-2.15339 -2.1691,-2.15339 -0.685438,0 -1.32125,0.315886 -1.73159,0.863123 -0.126202,0.169069 -0.414818,0.169069 -0.541129,0 -0.419291,-0.55171 -1.05063,-0.863123 -1.73606,-0.863123z"/>
+                                                        <path class="icon-inner" fill="none" d="M2.78625 0.583124c-1.22297,0 -2.21982,0.983217 -2.21982,2.19309 0,3.09472 3.03211,4.81671 4.09823,5.1747 0.0831164,0.0271601 0.262984,0.0271601 0.346209,0 1.06142,-0.357989 4.09823,-2.0754 4.09823,-5.1747 0,-1.20988 -0.996851,-2.19309 -2.21993,-2.19309 -0.701581,0 -1.35233,0.321667 -1.77228,0.879049 -0.129147,0.172123 -0.424526,0.172123 -0.553782,0 -0.429107,-0.561854 -1.07528,-0.879049 -1.77686,-0.879049z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="social-count__count">{{article.favorite_count}}</div>
+                                            </div>
+
+                                            <div class="social-count__item">
+                                                <div class="social-count__icon">
+                                                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M28.4219 34.346C27.9375 34.346 27.4531 34.2227 27.0156 33.9606L20.75 30.2914C20.0938 30.276 19.4375 30.2298 18.8125 30.1373C18.3906 30.0756 18.0312 29.798 17.875 29.3972C17.7187 28.9964 17.7969 28.5647 18.0781 28.241C19.1094 27.0539 19.6406 25.6356 19.6406 24.1247C19.6406 20.3939 16.3125 17.3568 12.2187 17.3568C10.6875 17.3568 9.21874 17.7731 7.98436 18.5748C7.64061 18.7906 7.21874 18.8214 6.84374 18.6518C6.48437 18.4823 6.21875 18.143 6.17188 17.7422C6.125 17.3105 6.09375 16.8789 6.09375 16.4318C6.09375 8.78517 12.8125 2.57227 21.0625 2.57227C29.3125 2.57227 36.0313 8.78517 36.0313 16.4318C36.0313 20.6252 34.0625 24.4793 30.5937 27.1156L31.125 31.309C31.25 32.3573 30.7812 33.344 29.8906 33.9144C29.4531 34.1919 28.9375 34.346 28.4219 34.346ZM21.0469 27.9635C21.2656 27.9481 21.4844 28.0098 21.6719 28.1331L28.2188 31.9719C28.3906 32.0798 28.5312 32.0335 28.625 31.9719C28.7031 31.9256 28.8281 31.8023 28.7969 31.5864L28.1875 26.7147C28.1406 26.2831 28.3281 25.8669 28.6719 25.6202C31.8594 23.4156 33.6875 20.0547 33.6875 16.401C33.6875 10.0339 28.0313 4.8539 21.0625 4.8539C14.3594 4.8539 8.85937 9.66396 8.45312 15.7073C9.62499 15.2602 10.8906 15.0135 12.2031 15.0135C17.5938 15.0135 21.9688 19.0835 21.9688 24.0939C21.9844 25.4505 21.6562 26.761 21.0469 27.9635Z" fill="#1560BD"/>
+                                                        <path d="M7.65626 35.701C7.25001 35.701 6.85938 35.5932 6.5 35.3619C5.79688 34.9148 5.42189 34.144 5.51564 33.3269L5.82814 30.9527C3.71876 29.2569 2.46875 26.7439 2.46875 24.1077C2.46875 21.1014 4.06252 18.2956 6.73439 16.6152C8.34377 15.5823 10.25 15.0273 12.2344 15.0273C17.625 15.0273 22 19.0973 22 24.1077C22 26.1427 21.25 28.1469 19.875 29.7348C18.1094 31.8469 15.4688 33.0802 12.5625 33.1727L8.75001 35.4081C8.40626 35.6085 8.03126 35.701 7.65626 35.701ZM12.2188 17.3398C10.6875 17.3398 9.21875 17.7561 7.98437 18.5577C5.98437 19.8219 4.79688 21.8877 4.79688 24.1077C4.79688 26.2506 5.85939 28.2086 7.73439 29.4728C8.09377 29.7194 8.28125 30.1356 8.23438 30.5673L7.89063 33.2036L11.625 31.0144C11.8125 30.9065 12.0156 30.8448 12.2188 30.8448C14.5156 30.8448 16.6875 29.8736 18.0625 28.224C19.0938 27.0215 19.6406 25.6031 19.6406 24.0923C19.6406 20.3768 16.3125 17.3398 12.2188 17.3398Z" fill="#1560BD"/>
+                                                    </svg>
+                                                    <span class="social-count__label">999</span>
+                                                </div>
+                                                <div class="social-count__count">{{article.comments__count}}</div>
+                                            </div>
+
+                                            <div class="social-count__item">
+                                                <div class="social-count__icon social-count__icon--like" onclick="onClickActive(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="38px" height="39px" viewBox="0 0 22.2825 21.6998">
+                                                        <path fill="#1560BD" d="M15.736 21.6998l-4.08184 0c-0.601234,0 -1.91179,-0.182397 -2.60994,-0.880805l-2.29113 -1.76914c-0.392855,0.984735 -1.29445,1.46905 -2.72504,1.46905l-1.07411 0c-1.9874,0 -2.95394,-0.934589 -2.95394,-2.84664l0 -10.5263c0,-1.91205 0.966547,-2.84638 2.95394,-2.84638l1.07411 0c1.52595,0 2.44988,0.551347 2.79675,1.67301l3.19688 -4.75635c0.676843,-1.00968 2.15888,-1.49321 3.31874,-1.05281 1.34277,0.440402 2.20201,1.9227 1.9014,3.29769l-0.526404 3.38369c-0.0106528,0.0750893 -0.0106528,0.182397 0.0644365,0.268399 0.0537837,0.0537837 0.128873,0.0860019 0.214875,0.0860019l4.29672 0c1.05255,0 1.96557,0.440402 2.50263,1.20299 0.526404,0.741019 0.633712,1.71874 0.289964,2.66398l-2.56707 7.81942c-0.397531,1.55739 -2.05183,2.81416 -3.78097,2.81416zm-8.75427 -4.51445l3.12595 2.42c0.268399,0.257746 0.945241,0.472621 1.54648,0.472621l4.08184 0c0.966547,0 2.00844,-0.773497 2.22332,-1.64339l2.59954 -7.89477c0.171744,-0.472621 0.139526,-0.90237 -0.0860019,-1.2139 -0.23618,-0.332835 -0.66593,-0.526145 -1.19233,-0.526145l-4.29646 0c-0.558623,0 -1.07437,-0.23644 -1.42877,-0.644624 -0.365053,-0.418837 -0.526145,-0.97746 -0.440402,-1.55739l0.537057 -3.44813c0.129133,-0.601494 -0.279051,-1.27808 -0.859239,-1.47139 -0.526404,-0.193569 -1.20299,0.0857421 -1.43943,0.42949l-4.37155 6.50471 0 8.57291zm-4.0278 -11.2746c-1.17103,0 -1.34277,0.279311 -1.34277,1.23521l0 10.5263c0,0.956154 0.171744,1.23547 1.34277,1.23547l1.07411 0c1.17077,0 1.34251,-0.279311 1.34251,-1.23547l0 -10.5263c0,-0.955894 -0.171744,-1.23521 -1.34251,-1.23521l-1.07411 0z"/>
+                                                        <path class="icon-inner" fill="none" d="M2.77908 5.68106c-1.31289,0 -1.50542,0.289185 -1.50542,1.2786l0 10.8963c0,0.989671 0.19253,1.27886 1.50542,1.27886l1.20455 0c1.31263,0 1.50516,-0.289185 1.50516,-1.27886l0 -10.8963c0,-0.989412 -0.19253,-1.2786 -1.50516,-1.2786l-1.20455 0z"/>
+                                                        <path class="icon-inner" fill="none" d="M6.98174 17.1853l3.23378 2.56083c0.270477,0.261124 0.953036,0.479116 1.55921,0.479116l4.11536 -0.000259824c0.974342,0.000259824 2.02481,-0.78415 2.24177,-1.66625l2.62085 -8.00623c0.173043,-0.479376 0.140825,-0.915102 -0.0865215,-1.23105 -0.238259,-0.337252 -0.671646,-0.533679 -1.20221,-0.533679l-4.33205 0c-0.563299,0 -1.08321,-0.239818 -1.44047,-0.653718 -0.368171,-0.424553 -0.530302,-0.99123 -0.44404,-1.57921l0.541474 -3.49698c0.130172,-0.609808 -0.28139,-1.296 -0.866255,-1.49217 -0.530821,-0.196167 -1.29964,0.151737 -1.53816,0.500162l-3.5188 5.23053 -0.883923 1.31601c0,2.08379 0,3.2899 0,1.50724l0 4.21903c0,0.782591 0,1.33758 0,2.84664z"/>
+                                                    </svg>                                                  
+                                                </div>
+                                                <div class="social-count__count">{{article.likes_count}}</div>
+                                            </div>
+
+                                        </div>
+                                        
+                                        <div class="social-count__item">
+                                            <div class="social-count__icon">
+                                                <svg width="38" height="37" viewBox="0 0 38 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M19 25.1751C15.2656 25.1751 12.2344 22.1842 12.2344 18.4996C12.2344 14.8151 15.2656 11.8242 19 11.8242C22.7344 11.8242 25.7656 14.8151 25.7656 18.4996C25.7656 22.1842 22.7344 25.1751 19 25.1751ZM19 14.1367C16.5625 14.1367 14.5781 16.0946 14.5781 18.4996C14.5781 20.9046 16.5625 22.8626 19 22.8626C21.4375 22.8626 23.4219 20.9046 23.4219 18.4996C23.4219 16.0946 21.4375 14.1367 19 14.1367Z" fill="#494949"/>
+                                                    <path d="M19 32.4054C13.125 32.4054 7.57812 29.0138 3.76562 23.1246C2.10938 20.5808 2.10938 16.4337 3.76562 13.8746C7.59375 7.98542 13.1406 4.59375 19 4.59375C24.8594 4.59375 30.4062 7.98542 34.2188 13.8746C35.875 16.4183 35.875 20.5654 34.2188 23.1246C30.4062 29.0138 24.8594 32.4054 19 32.4054ZM19 6.90625C13.9531 6.90625 9.125 9.89708 5.75 15.1233C4.57812 16.9271 4.57812 20.0721 5.75 21.8758C9.125 27.1021 13.9531 30.0929 19 30.0929C24.0469 30.0929 28.875 27.1021 32.25 21.8758C33.4219 20.0721 33.4219 16.9271 32.25 15.1233C28.875 9.89708 24.0469 6.90625 19 6.90625Z" fill="#494949"/>
+                                                </svg>
+                                            </div>
+                                            <div class="social-count__count">{{article.views_count}}</div>
+                                        </div>
+                                    </div>
+                                    <a href="{% url 'blog:article_detail' article.slug %}" class="articles-preview-item__text text--hover-gray d-flex flex-column align-items-start gap-2 gap-xxl-3 dark-semi">
+                                        <span class="text--15-30 lh-1">
+                                            {{article.title}}
+                                        </span>
+                                        <span class="text--12-18 fw-600">
+                                            {{article.text}}
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% if page_obj.has_other_pages %}
+                            <div class="d-flex justify-content-center mt-4 mt-md-5">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        {% if page_obj.has_previous %}
+                                            <a class="page-link" style="cursor: pointer;" onclick="addQueryParam('page={{ page_obj.previous_page_number }}', 'pagination')"
+                                            aria-label="Previous">
+                                                <span aria-hidden="true">〈</span>
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                    {% for num in page_obj.paginator.page_range %}
+                                        {% if num == page_obj.number %}
+                                            <li class="page-item active">
+                                                <a class="page-link" style="cursor: pointer;" onclick="addQueryParam('page={{ num }}', 'pagination')">{{ num }}</a>
+                                            </li>
+                                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                            <li class="page-item">
+                                                <a class="page-link" style="cursor: pointer;" onclick="addQueryParam('page={{ num }}', 'pagination')">{{ num }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <li class="page-item">
+                                        {% if page_obj.has_next %}
+                                            <a class="page-link" style="cursor: pointer;" onclick="addQueryParam('page={{ page_obj.next_page_number }}', 'pagination')"
+                                            aria-label="Previous">
+                                                <span aria-hidden="true">〉</span>
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/onClickActive.js" %}"></script>
+    <script src="{% static "js/tags.js" %}"></script>
+
+    <script src="{% static "js/filter-query.js" %}"></script>
+{% endblock %}

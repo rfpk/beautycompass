@@ -1,0 +1,61 @@
+@import "vars.sass"
+.profile
+  &__brand
+    display: grid
+    grid-auto-columns: 114px auto auto
+    grid-column-gap: 11px
+    grid-row-gap: 27px
+    grid-template-areas: 'image . .' 'image . .' 'image . .' 'name name name' 'description description description'
+    margin-top: 27px
+    margin-bottom: 27px
+    @media screen and (min-width: $first-breack-point)
+      grid-template-areas: 'image name name' 'image description description' 'image description description'
+      grid-auto-columns: 187px auto auto
+      grid-column-gap: 38px
+      grid-row-gap: 38px
+      margin-top: 58px
+      margin-bottom: 37px
+
+  &__image
+    position: relative
+    width: 114px
+    height: 114px
+
+    img
+      width: 54px
+      height: auto
+    @media screen and (min-width: $first-breack-point)
+      width: 187px
+      height: 187px
+    &.input--modal    
+      width: 56px
+      height: 56px
+      img
+        width: 26px
+        height: auto
+      @media screen and (min-width: $first-breack-point)
+        width: 187px
+        height: 187px
+        img
+          width: 54px
+          height: auto
+
+
+
+  &__input
+    &.profile__image
+      grid-area: image
+    &.brand__name
+      grid-area: name
+    &.brand__description
+      grid-area: description
+
+  &__description
+    height: 52px
+    resize: none
+    @media all and (min-width: $first-breack-point)
+      height: 108px
+
+
+
+

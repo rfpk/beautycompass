@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Заказать Подбор{% endblock %}
+
+
+{% block extra_head %}
+<link href="{% static "css/select2.min.css" %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<main>
+  <section class="brand__title">
+    <div class="container container--bc">
+        <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+            <div class="col-1 col-xxl-12 order-xxl-1">
+                <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                    <img src="{% static 'img/arrow-left.svg' %}" alt="Стрелка налево">
+                    <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                </a>
+            </div>
+            <div class="col text-center col-xxl-12">
+                <h1 class="title--20-36 text-uppercase"><P>ЗАКАЗАТЬ ПОДБОР</P></h1>
+            </div>
+        </div>
+    </div>
+  </section>
+  <section class="container container--bc">
+    <form action="{% url 'programs:program_create' %}" method="get" id="form-selection">
+      <div class="quest">
+        <div class="quest__text-invert quest__text">
+          <p class="text-uppercase">{{nickname}}, для какого сезона вы хотите подобрать программу ухода?</p>
+        </div>
+        <div class="quest__resp radio__inpt quest__adapt quest__adapt-right adaptOrder">
+          {% for pk, text in form.question_1.field.widget.choices %}
+            <input
+              required=""
+              type="radio"
+              value="{{pk}}"
+              name="{{form.question_1.name}}"
+              id="id_{{form.question_1.name}}_{{forloop.counter}}"
+              {% if forloop.first %}checked{% endif %}
+            />
+            <label for="id_{{form.question_1.name}}_{{forloop.counter}}">{{text}}</label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="quest">
+        <div class="quest__text-invert quest__text">
+          <p class="text-uppercase">Взять результаты теста для подбора программы?</p>
+        </div>
+        <div class="quest__resp radio__inpt quest__adapt quest__adapt-right adaptOrder">
+          <div class="choseSave">
+            <div class="inputAnswer">
+              <!-- <input type="radio" name="resultTest" id="yes" value="yes"> -->
+              <input type="radio" name="{{form.question_2.name}}" id="yes" value="yes">
+              <label for="yes">да</label>
+            </div>
+          </div>
+          <input type="radio" name="{{form.question_2.name}}" id="no" value="no" checked>
+          <label for="no">нет</label>
+        </div>
+        <div class="select-wrap select-wrap-choseSave">
+          <small>Результаты теста</small>
+          <select class="form-select"  name="test_name" id="test_name">
+            <option selected value="">Выберите из списка</option>
+            {% for test in test_results %}
+              <option
+                id="test_{{forloop.counter}}"
+                value="{{test.name}}"
+              >
+                {{test.name}}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="quest selectSave">
+        <div class="quest__text-invert quest__text">
+          <p class="text-uppercase">Установить параметры самостоятельно</p>
+        </div>
+        <div class="quest__resp  Order">
+          <div class="selectInp d-flex justify-content-between flex-wrap">
+            <div class="select-wrap">
+              <small>Пол</small>
+              <select
+                class="form-select"
+                id="gender"
+                name="{{form.question_3.name}}"
+              >
+                <option selected value="">Выберите из списка</option>
+                {% for pk, text in form.question_3.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Возраст</small>
+              <select class="form-select" name="{{form.question_4.name}}" id="age">
+                <option selected value="">Выберите из списка</option>
+                {% for pk, text in form.question_4.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Тип кожи</small>
+              <select class="form-select" name="{{form.question_5.name}}" id="typeSens">
+                <option selected value="">Выберите из списка</option>
+                {% for pk, text in form.question_5.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Тип старения</small>
+              <select class="form-select" name="{{form.question_6.name}}" id="typeAging">
+                <option selected value="">Выберите из списка</option>
+                {% for pk, text in form.question_6.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Состояние кожи</small>
+              <select class="form-select" name="{{form.question_7.name}}" id="skinProp" multiple>
+                {% for pk, text in form.question_7.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Гормональный статус</small>
+              <select class="form-select" name="{{form.question_8.name}}" id="oftenPreg">
+                <option selected value="">Выберите из списка</option>
+                {% for pk, text in form.question_8.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="check__wrap">
+            <input type="checkbox" name="{{form.question_9.name}}" value="Чувствительная" id="dehydration">
+            <label for="dehydration">Чувствительная кожа</label>
+          </div>
+          {% for pk, text in form.question_10.field.widget.choices %}
+            <div class="check__wrap">
+              <input
+                {% if forloop.first %}checked{% endif %}
+                type="radio"
+                value="{{text}}"
+                name="{{form.question_10.name}}"
+                id="id_{{form.question_10.name}}_{{forloop.counter}}"
+              >
+              <label for="id_{{form.question_10.name}}_{{forloop.counter}}">{{text}}</label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="quest selectSave">
+        <div class="quest__text-invert quest__text">
+          <p class="text-uppercase">Дополнительно</p>
+        </div>
+        <div class="quest__resp">
+          <label for="nameFile" class="alerg select-wrap">
+            <small>
+              Аллергия на ингредиенты (название в INCI)
+            </small>
+            <input class="form-control" type="text" name="{{form.question_11.name}}" id="nameFile">
+          </label>
+          <div class="selectInp quest__resp__inp_dls">
+            <div class="select-wrap">
+              <small>Ценовая категория</small>
+              <select class="form-select" name="{{form.question_12.name}}" id="price" multiple>
+                {% for pk, text in form.question_12.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Категория косметики</small>
+              <select class="form-select" name="{{form.question_13.name}}" id="category" multiple>
+                {% for pk, text in form.question_13.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Страна производства</small>
+              <select class="form-select" name="{{form.question_14.name}}" id="selectCountry" multiple>
+                {% for pk, text in form.question_14.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select-wrap">
+              <small>Исключить активы</small>
+              <select class="form-select" name="{{form.question_15.name}}" id="activeIgnore" multiple>
+                {% for pk, text in form.question_15.field.widget.choices %}
+                  <option value="{{text}}">
+                    {{text}}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>            
+      </div>
+    </form>
+  </section>
+  <section class="download_rezult container container--bc">
+    <form class="order">
+      <button id="paySelect" class="text-uppercase"><p>оплатить подбор</p></button>
+      <button id="selectProgram" class="text-uppercase"><p>подобрать программу</p></button>
+    </form>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/jq.js" %}"></script>
+    <script src="{% static "js/select2.js" %}" defer></script>
+    <!-- <script src="{% static "js/order-select.js" %}"></script> -->
+    <script>
+      $(document).ready(function() {
+      $('.select-wrap-choseSave').css('display','none')
+
+      if($(window).width()>=768) $('.choseSave').css('justify-content','start')
+      else $('.choseSave').css('justify-content','end')
+
+
+      $(window).resize(function() {
+          if($(window).width()>=768) $('.choseSave').css('justify-content','start')
+          else $('.choseSave').css('justify-content','end')
+      });
+
+      $('#activeIgnore').select2({
+          closeOnSelect: false,
+          placeholder:"Выберите из списка",
+      }
+      );
+      $('#selectCountry').select2({
+          closeOnSelect: false,
+          placeholder:"Выберите из списка",
+      }
+      );
+      
+      $('#skinProp').select2({
+          closeOnSelect: false,
+          placeholder:"Выберите из списка" 
+      }
+      );
+      $('#price').select2({
+          closeOnSelect: false,
+          placeholder:"Выберите из списка" 
+      }
+      );
+      $('#category').select2(
+          {
+              closeOnSelect: false,
+              placeholder:"Выберите из списка" 
+          }
+      )
+
+      $('#selectProgram').on('click',function(event){
+          event.preventDefault();
+          let form = document.getElementById('form-selection');
+          form.submit();
+      });
+
+      $('#yes').on('click', function(){
+          if(this.checked){
+              $('.select-wrap-choseSave').css('display','block')
+              $('.choseSave').css('justify-content','space-between')
+              $('.select-wrapchoseSave').css('display','block')
+              $('.selectSave').css('display', 'none')
+          }
+      })
+      $('#no').on('click', function(){
+          if(this.checked){
+              $('.select-wrap-choseSave').css('display','none')
+              $('.select-wrapchoseSave').css('display','none')
+              if($(window).width()>=768) $('.choseSave').css('justify-content','start')
+              else $('.choseSave').css('justify-content','end')
+              $('.selectSave').css('display', 'block')
+          }
+      })
+
+      $('#simple').on('click', ()=>{
+          $('#hard')[0].checked=false
+      })
+      $('#hard').on('click', ()=>{
+          $('#simple')[0].checked=false
+      })
+      
+      $('select2-results__option').on('click', ()=>{
+          $('select2-search').css('display','none')
+      }) 
+  })
+
+    </script>
+{% endblock %}

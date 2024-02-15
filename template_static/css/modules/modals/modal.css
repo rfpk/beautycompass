@@ -1,0 +1,128 @@
+.modal__confirm {
+  border-radius: 20px;
+}
+.modal__confirm-content {
+  max-width: 768px;
+  margin: auto;
+  border-radius: 20px;
+}
+.modal__confirm-footer {
+  border-top: none;
+}
+.modal__confirm-close, .modal__confirm-apply {
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+@media screen and (min-width: 1400px) {
+  .modal__confirm-close, .modal__confirm-apply {
+    font-size: 30px;
+  }
+}
+.modal__confirm-close img, .modal__confirm-apply img {
+  width: 24px;
+  height: 24px;
+}
+@media screen and (min-width: 1400px) {
+  .modal__confirm-close img, .modal__confirm-apply img {
+    width: 48px;
+    height: 48px;
+  }
+}
+.modal__confirm-close {
+  color: #E31E24;
+}
+.modal__confirm-apply {
+  color: #1560BD;
+}
+
+.modal__prices-content {
+  border-radius: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+@media screen and (max-width: 1400px) {
+  .modal__prices-content {
+    max-width: 774px;
+  }
+}
+.modal__prices-header {
+  padding-bottom: 0;
+}
+.modal__prices-close {
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+}
+@media screen and (min-width: 768px) {
+  .modal__prices-close {
+    width: 44px;
+    height: 44px;
+    top: -22px;
+    right: -22px;
+  }
+}
+@media screen and (min-width: 1400px) {
+  .modal__prices-body {
+    padding: 74px 40px 54px 54px;
+  }
+}
+.modal__prices-body tbody, .modal__prices-body td, .modal__prices-body tfoot, .modal__prices-body th, .modal__prices-body thead, .modal__prices-body tr {
+  border-color: inherit;
+  border-style: none;
+  border-width: 0;
+}
+.modal__prices-body th, .modal__prices-body td {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  padding: 7px 12px;
+}
+@media screen and (min-width: 1400px) {
+  .modal__prices-body th, .modal__prices-body td {
+    padding: 12px 26px;
+  }
+}
+.modal__prices-body th:not(:last-child), .modal__prices-body td:not(:last-child) {
+  border-right: 1px solid #000000;
+}
+.modal__prices-body tr:not(:last-child) {
+  border-bottom: 1px solid #000000;
+}
+.modal__prices-body td {
+  cursor: pointer;
+}
+.modal__prices-body td:hover {
+  color: #E31E24;
+}
+
+.modal-petition {
+  min-width: 650px;
+  padding: 40px 50px;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 4px 20px 0 rgba(14, 14, 14, 0.07);
+}
+@media screen and (max-width: 1400px) {
+  .modal-petition {
+    min-width: auto;
+    padding: 20px;
+  }
+}
+@media screen and (max-width: 1400px) {
+  .modal-petition__header svg {
+    width: 30px;
+  }
+}
+.modal-petition__form button {
+  width: -moz-fit-content;
+  width: fit-content;
+  align-self: center;
+  padding: 10px 25px;
+  border-width: 3px;
+  border-radius: 15px;
+}/*# sourceMappingURL=modal.css.map */

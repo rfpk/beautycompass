@@ -1,0 +1,74 @@
+@import "vars.sass"
+
+.social-count
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-wrap: wrap
+    gap: 10px
+
+    &__group
+        display: flex
+        align-items: center
+        flex-wrap: wrap
+        gap: 30px
+        @media screen and (max-width: $first-breack-point)
+            gap: 20px
+        @media screen and (max-width: $second-breack-point)
+            gap: 12px
+
+    &__item
+        display: flex
+        align-items: center
+        gap: 10px
+        @media screen and (max-width: $second-breack-point)
+            gap: 5px
+    
+    &__icon
+        position: relative
+        cursor: pointer
+        &--like 
+            color: $main-color
+        &--fav
+            color: $pre-color
+        &--small
+            svg
+                max-width: 18px
+                max-height: 18px
+        &.active
+            .icon-inner
+                fill: currentColor
+        @media screen and (max-width: $first-breack-point)
+            svg 
+                width: 25px
+                height: 25px
+        @media screen and (max-width: $second-breack-point)
+            svg 
+                width: 20px
+                height: 20px
+
+    &__label
+        position: absolute
+        top: -8px
+        right: -8px
+
+        display: flex
+        align-items: center
+        justify-content: center
+        width: 25px
+        height: 25px
+
+        color: #fff
+        font-size: 10px
+        background: $pre-color
+        border-radius: 50% 
+        @media screen and (max-width: $first-breack-point)
+            width: 18px
+            height: 18px
+            font-size: 6px
+        @media screen and (max-width: $second-breack-point)
+            top: -5px
+            right: -5px
+            width: 15px
+            height: 15px
+        

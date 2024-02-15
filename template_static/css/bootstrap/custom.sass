@@ -1,0 +1,242 @@
+@import "../modules/vars.sass"
+    
+// Nav
+.navbar-nav
+    justify-content: space-between
+
+.navbar-expand-xxl .navbar-nav .nav-link 
+    padding: 10px 25px
+    background: $main-color
+    border-radius: 60px 
+    color: $sub-color
+    font-weight: 600
+    font-size: 18px
+    line-height: 1.22222
+    text-transform: uppercase 
+    transition: background .3s
+    &:hover
+        background: $pre-color  
+        @media screen and (max-width: $first-breack-point) 
+            background: none
+    &.active
+        background: $pre-color  
+    @media screen and (max-width: $first-breack-point) 
+        background: none
+        &:hover
+            background: none
+
+
+.navbar-toggler
+    padding: 0
+    
+.navbar-toggler-icon  
+    display: block
+    width: 23px
+    height: 23px
+    background: url(../img/burger.svg) no-repeat
+    transition: .3s
+    [aria-expanded="true"] &
+        transform: rotate(90deg)
+
+.navbar-toggler:focus 
+    box-shadow: none
+
+
+// Carousel
+.carousel
+    &--base
+        .carousel-indicators 
+            align-items: center
+            bottom: -60px
+            [data-bs-target]
+                width: 8px
+                height: 8px
+                margin-left: 11px
+                margin-right: 11px
+                border-radius: 50%
+                transition: .5s
+                background-color: #D9D9D9
+            .active 
+                width: 15px
+                height: 15px
+                background-color: $main-color
+            .near-active
+                width: 11px
+                height: 11px
+                
+
+        .carousel-item
+            border-radius: $border-radius
+            overflow: hidden    
+            @media screen and (max-width: $first-breack-point) 
+                border-radius: $border-radius-mobile
+
+        @media screen and (max-width: $first-breack-point) 
+            .carousel-indicators 
+                bottom: -45px
+                [data-bs-target]
+                    width: 3.7px
+                    height: 3.7px
+                    background-color: #494949
+                    margin-right: 6px
+                    margin-left: 6px
+                .active 
+                    width: 7.5px
+                    height: 7.5px
+                    background-color: $main-color
+                .near-active
+                    width: 6px
+                    height: 6px
+    &--product
+        height: 568px
+        @media screen and (max-width: $first-breack-point) 
+            height: 324px
+        .carousel-indicators
+            height: 100%
+            img                
+                border-radius: $border-radius
+                overflow: hidden
+        .carousel-inner
+            width: min-content
+            overflow: initial
+        .carousel-indicators [data-bs-target]
+            width: auto
+            background-color: $sub-color
+            img
+                height: 100%
+                border-radius: $border-radius
+                box-shadow: 0px 5px 10px rgba(14, 14, 14, 0.1)
+                overflow: hidden
+        .carousel-item
+                width: 420px 
+                height: 568px
+                justify-content: center
+                display: flex
+                align-items: center
+                @media screen and (max-width: $first-breack-point) 
+                    width: 240px
+                    height: 324px
+                img
+                    box-shadow: $box-shadow-sm
+                    border-radius: $border-radius
+// modal
+
+.modal-header 
+    border-bottom: 0
+
+.modal-backdrop
+    background: linear-gradient(180deg, rgba(26, 65, 114, 0.5) 0%, rgba(21, 96, 189, 0.5) 100%)
+    backdrop-filter: blur(4px)
+
+.modal-dialog
+    &--img
+        max-width: max-content !important
+        padding: 0 !important
+        margin: 0 auto
+
+        .modal-body 
+            display: flex
+            img 
+                width: auto
+                height: auto
+                max-width: 100%
+                max-height: 90vh 
+
+
+// form
+
+.form-control
+    box-shadow: 0px 4px 20px rgba(14, 14, 14, 0.07)
+    border-width: 0
+    border-radius: 60px
+    &:focus
+        box-shadow: 0px 4px 20px rgba(14, 14, 14, 0.07)
+
+.form-control.is-invalid, .was-validated .form-control:invalid
+    border: 2px solid $pre-color
+    background: none
+
+.form-control.is-invalid:focus, .was-validated .form-control:invalid:focus
+    border-color: $pre-color
+    box-shadow: none
+
+.form-control.is-valid, .was-validated .form-control:valid
+    background: none
+    box-shadow: 0px 4px 20px rgba(14, 14, 14, 0.07)
+
+.form-control.is-valid:focus, .was-validated .form-control:valid:focus
+    box-shadow: 0px 4px 20px rgba(14, 14, 14, 0.07)
+
+.btn-check:focus+.btn, .btn:focus
+    box-shadow: none
+
+.form-check-input:focus
+    box-shadow: none
+
+.form-check-input:checked
+    background-color: $main-color
+    border-color: $main-color
+
+.form-check-input.is-valid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label 
+    color: #212529
+    border: none
+    box-shadow: none
+
+.form-check-input.is-invalid, .was-validated .form-check-input:invalid
+    box-shadow: none
+    border: 2px solid $pre-color    
+
+.form-check-input.is-invalid:focus, .was-validated .form-check-input:invalid:focus 
+    box-shadow: none
+
+.form-check-input.is-valid:checked, .was-validated .form-check-input:valid:checked
+    background-color: $main-color
+
+.form-check-input.is-valid, .was-validated .form-check-input:valid
+    background-color: $main-color
+
+// Pagination
+.page-item
+    padding: 0 15px 
+    @media screen and (max-width: $first-breack-point) 
+        padding: 0 9px 
+
+.page-link
+    width: 60px
+    height: 60px
+    border-radius: 50%
+    background-color: #D9D9D9
+    color: $sub-color
+    text-align: center
+    text-edge: cap
+    font-weight: 600
+    font-size: 30px
+    transition: opacity .3s
+    @media screen and (max-width: $first-breack-point) 
+        width: 30px
+        height: 30px
+        padding: 4px
+        font-size: 15px
+    &:hover
+        box-shadow: none
+        background-color: #D9D9D9
+        color: $sub-color
+        opacity: .7
+    &:focus
+        box-shadow: none
+    .page-item.active &
+        background-color: $main-color
+
+.page-item:first-child .page-link, .page-item:last-child .page-link 
+    color: $main-color
+    background: none
+    border: none
+    font-size: 30px
+    font-weight: 900
+    padding-left: 0
+    padding-right: 0
+    @media screen and (max-width: $first-breack-point) 
+        font-size: 18px
+
+.page-item.disabled .page-link
+    color: #D9D9D9

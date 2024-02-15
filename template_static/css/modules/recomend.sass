@@ -1,0 +1,79 @@
+@import vars
+
+$margin-botom-block: 27px
+
+.recomend
+    font-weight: 600
+    font-style: normal
+    margin-bottom: $margin-botom-block
+    p
+        font-size: 18px
+        line-height: 22px
+        color: $dark-lighter
+        @media screen and (max-width: $second-breack-point)
+            font-size: 12px
+            line-height: 15px
+
+    &__heading
+        font-size: 30px !important
+        line-height: 37px !important
+        color: $dark-semi-light !important
+        margin-bottom: $margin-botom-block
+        @media screen and (max-width: $second-breack-point)
+            font-size: 15px !important
+            line-height: 18px !important
+            letter-spacing: 0.5px !important
+
+    &:first-child
+        margin-top: 40px
+    
+    &__prog
+        margin-top: 20px !important
+        margin-bottom: 40px !important
+        @media screen and (max-width: $first-breack-point)
+            margin-top: 10px !important
+            margin-bottom: 20px !important
+    &__product
+        position: relative
+        height: auto
+
+        @media screen and (max-width: $first-breack-point)
+            overflow-y: scroll
+            -ms-overflow-style: none
+            scrollbar-width: none
+            &::-webkit-scrollbar
+                display: none
+        &__item
+            a
+                text-decoration: none
+            margin-right: calc( 27.5% / 4 )
+            &:last-child
+                margin-right:0
+            width: 190px
+            @media screen and (max-width: $second-breack-point)
+                width: 140px
+            
+            &__wrap-img
+                img
+                    height: 100%
+                    width: 100%
+                    position: relative
+                    top: 50%
+                border-radius: $border-radius
+                
+                width: 100%
+                overflow: hidden
+                box-shadow: $box-shadow-sm
+            &__rating
+                margin: 10px
+            p   
+                margin: 0 10px
+                letter-spacing: 0.5px
+                @media screen and (max-width: $first-breack-point)
+                    font-size: 10px
+                    line-height: 12px
+                    letter-spacing: 0.5px
+                    color: $main-color
+    &__wrap
+        box-shadow: $box-shadow-regular
+        padding: 10px 0

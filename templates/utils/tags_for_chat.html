@@ -1,0 +1,7 @@
+{% for author in data %}
+    <div class="modal__adrese nickname-block" style="cursor: pointer" data-nickname="{{ author.profile.nickname }}" data-user="{{ author.profile.id }}">
+        <p class="modal__adrese__text">
+            {{author.profile.nickname}}
+        </p>
+    </div>
+{% endfor %}

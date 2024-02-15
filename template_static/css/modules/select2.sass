@@ -1,0 +1,130 @@
+.select2-dropdown
+    min-width: 180px
+
+.select2
+    height: 42px !important
+    border: 0 solid #000
+    position: unset
+    box-shadow: $box-shadow-sm
+    border-radius: $border-radius
+    overflow-y: scroll
+    overflow-x: hidden
+    -ms-overflow-style: none
+    scrollbar-width: none
+    &::-webkit-scrollbar
+        display: none
+
+    max-height: 80px
+    width: 100% !important
+    @media screen and (max-width: $xs-breack-point) 
+        max-width: 100%
+
+    &:-webkit-scrollbar-track 
+        background: $gray-light
+    
+    &:-webkit-scrollbar-thumb 
+        background-color: $main-color
+        border: 3px solid $dark-semi-light
+        
+    *
+        border: 0 solid $white-color !important
+        font-size: 15px !important
+
+    .select2-search__field
+        margin-left: 15px !important
+        margin-top: 5px !important
+        font-size: 18px !important
+        color: #000 !important
+        height: 30px !important
+        width: auto !important
+        @media screen and (max-width: $second-breack-point) 
+            font-size: 16px !important
+
+    ul
+        li
+            background-color: $main-color !important
+            color: $white-color
+            border-radius: 10px !important
+            margin-top: 3px !important
+            overflow: hidden
+            @media screen and (max-width: $second-breack-point) 
+                height: 32px
+                padding: 8px 20px !important
+            button
+                opacity: 1
+                color: $white-color !important
+                transition: 0.3s
+                height: 100%
+                margin: 0
+                @media screen and (max-width: $second-breack-point) 
+                    padding: 5px 4px !important
+                &:hover
+                    background-color: $pre-color !important
+                    background-size: 200%
+                    color: $white-color !important
+                    opacity: 0.7
+
+.select2-results__option
+    display: flex
+    align-items: center
+    background-color: #00000000 !important
+    color: $dark-lighter !important
+
+.select2-results__option--highlighted
+    background-color: #00000000 !important
+    border-bottom: 1px solid $main-color
+    color: $dark-lighter !important
+
+.select2-results__option--selected
+    &::before
+        background-image: url("../img/check.svg")
+    
+.select2-results__option 
+    padding-right: 20px
+    vertical-align: middle
+
+.select2-results__option::before 
+    flex-shrink: 0
+    content: ''
+    display: inline-block
+    width: 20px
+    aspect-ratio: 1
+    border: 2px solid #292D32
+    border-radius: 30%
+    margin-right: 20px
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: 68%
+
+    @media screen and (max-width: $second-breack-point) 
+        width: 17px
+        border-radius: 5px 
+        border: 1px solid #292D32
+        margin-right: 10px
+
+    .quest__adapt__quest
+        width: fit-content
+        @media screen and (max-width: $first-breack-point) 
+        width: 100%
+        p
+            b
+                font-weight: 600 !important
+    .select2-selection__choice
+        background: $main-color !important
+        color: $white-color !important
+        button
+            width: 23px
+            span
+                color: $white-color
+                transition: opacity 0.3s
+            &:hover
+                opacity: 0.7
+                background-color: #f1f1f100
+                outline: none
+
+.select2-selection__choice
+    min-height: 25px
+    padding: calc( 5px / 2  ) 0 !important
+    padding-left: 20px !important
+    *
+        margin: calc( 5px / 2  )

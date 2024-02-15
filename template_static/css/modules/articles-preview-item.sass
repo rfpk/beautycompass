@@ -1,0 +1,25 @@
+@import "vars.sass"
+
+.articles-preview-item
+    display: flex
+    flex-direction: column
+    gap: 20px
+    @media screen and (max-width: $second-breack-point)
+        gap: 10px
+        
+    &__pic 
+        display: block
+        img
+            width: 100%
+            min-height: 180px
+            border-radius: $border-radius
+    &__owner
+        display: flex
+        align-items: center
+        gap: 15px
+
+        img
+            max-width: 200px
+            max-height: 40px
+            @media screen and (max-width: $second-breack-point)
+                max-width: 150px

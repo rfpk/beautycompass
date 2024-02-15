@@ -1,0 +1,102 @@
+@import "vars.sass"
+.banners
+  margin-top: 28px
+  margin-bottom: 15px
+  @media screen and (min-width: $first-breack-point)
+    margin-top: 56px
+    margin-bottom: 31px
+
+  &__container
+    display: flex
+    flex-direction: column
+    @media screen and (min-width: $second-breack-point)
+      flex-direction: row
+      flex-wrap: wrap
+      column-gap: 15px
+    @media screen and (min-width: $first-breack-point)
+      justify-content: flex-start
+      column-gap: 46px
+
+
+  &__item
+    display: flex
+    justify-content: space-between
+    row-gap: 11px
+    width: 100%
+    max-width: 320px
+    margin-bottom: 24px
+    &.last
+      margin-bottom: 0
+      @media screen and (min-width: $second-breack-point)
+        margin-bottom: 24px
+
+    @media screen and (min-width: $first-breack-point)
+      flex-direction: column
+      row-gap: 32px
+      max-width: 336px
+
+  &__image
+    position: relative
+    width: 114px
+    height: 114px
+    border-radius: 10px
+    background: #FFF
+    box-shadow: $box-shadow-regular
+    @media screen and (min-width: $first-breack-point)
+      width: 336px
+      height: 228px
+    img
+      width: 54px
+      height: 54px
+  &__input
+    position: relative
+    width: 194px
+    @media screen and (min-width: $first-breack-point)
+      width: 336px
+  i.tag-close
+    position: absolute
+    top: -6px
+    right: -6px
+    z-index: 10
+    width: 22px
+    height: 22px
+    background-color: $pre-color
+    -webkit-border-radius: 50px
+    -moz-border-radius: 50px
+    border-radius: 50px
+    display: flex
+    align-items: center
+    justify-content: center
+    color: $sub-color
+    font-size: 10px
+    font-style: normal
+    font-weight: 700
+    line-height: normal
+    text-transform: uppercase
+    cursor: pointer
+    &:hover
+      opacity: 0.8
+
+  &__plus
+    display: flex
+    align-items: center
+    justify-content: center
+    &.center
+      @media screen and (min-width: $first-breack-point)
+        width: 100%
+    svg
+      width: 50px
+      height: 50px
+
+  &__series
+    .banners
+      &__item
+        @media screen and (min-width: $first-breack-point)
+          max-width: 300px
+      &__image
+        @media screen and (min-width: $first-breack-point)
+          width: 300px
+          height: 188px
+      &__input
+        @media screen and (min-width: $first-breack-point)
+          width: 300px

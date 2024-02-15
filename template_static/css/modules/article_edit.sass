@@ -1,0 +1,434 @@
+@import vars
+.ck-editor__main
+    * 
+        width: auto
+.article
+    &__edit-form
+        .select-wrap
+            margin: 0
+        &__header
+            display: grid !important
+            grid-template: repeat(4,60px) / repeat(16, 1fr) !important
+            gap: 20px 
+            justify-content: stretch
+            @media screen and (max-width: $first-breack-point)
+                row-gap: 0 !important
+        &__body
+            .ck.ck-content.ck-editor__editable, .ck.editor__editable[role="textbox"] 
+                border-radius: 15px !important
+            .ck.ck-reset
+                margin-top: 40px
+        &__footer
+            margin-top: 40px
+            &-link-wrap
+                margin-top: 30px
+                @media screen and (max-width: $second-breack-point)
+                    margin-top: 10px
+
+                label
+                    margin-bottom: 30px !important
+                    width: 30% !important
+                    @media screen and (max-width: $second-breack-point)
+                        width: 100% !important
+                        margin-bottom: 10px !important
+
+            &-fnc-btn
+                display: grid
+                grid-template: repeat(2,50px)/repeat(2, auto)
+                @media screen and (max-width: $second-breack-point)
+                    grid-template: repeat(3,50px)/repeat(1, auto)
+                color: $gray-light
+                align-items: center
+                justify-content: stretch
+                margin-bottom: 20px
+
+                *.active
+                    p
+                        cursor: pointer
+                #publish
+                    opacity: 1
+                    &:hover
+                        opacity: 0.7
+                        transition: opacity 0.3s
+                    cursor: pointer
+                    grid-area: 1/2/2/3
+                    justify-self: end
+                    display: flex
+                    width: 100% !important
+                    justify-content: end
+                    @media screen and (max-width: $second-breack-point)
+                        grid-area: 1/1/2/2
+                        justify-content: start
+                    p
+                        align-items: center
+                        display: flex
+                        width: 42.9% !important
+                        white-space: nowrap
+                        @media screen and (max-width: $first-breack-point)
+                            width: 46% !important
+                        &::before
+                            content: ''
+                            height: 100%
+                            aspect-ratio: 1
+                            background-image: url('../img/tick-circle-grey.svg')
+                            background-position: center
+                            background-repeat: no-repeat
+                            background-size: 100%
+                            margin-right: 20px
+                    .active
+                        color: $main-color
+                        &::before
+                            background-image: url('../img/tick-circle.svg')
+
+                #draft
+                    opacity: 1
+                    &:hover
+                        opacity: 0.7
+                        transition: opacity 0.3s
+                    cursor: pointer
+                    grid-area: 2/2/3/3
+                    @media screen and (max-width: $second-breack-point)
+                        grid-area: 2/1/2/2
+                        justify-content: start
+
+                    display: flex
+                    width: 100% !important
+                    justify-content: end
+                    p
+                        align-items: center
+                        display: flex
+                        width: 59% !important
+                        white-space: nowrap
+                        @media screen and (max-width: $first-breack-point)
+                            width: 62% !important
+                        &::before
+                            content: ''
+                            height: 100%
+                            aspect-ratio: 1
+                            background-image: url('../img/btn_paper-grey.svg')
+                            background-position: center
+                            background-repeat: no-repeat
+                            background-size: 100%
+                            margin-right: 20px
+                    .active
+                        color: $main-color
+                        &::before
+                            background-image: url('../img/btn_paper.svg')
+                #timer
+                    opacity: 1
+                    cursor: pointer
+                    grid-area: 1/1/2/2
+                    height: 100%
+                    @media screen and (max-width: $second-breack-point)
+                        grid-area: 3/1/4/2
+
+                    display: flex
+                    width: 100% !important
+                    align-items: center
+                    p.main
+                        width: 55% !important
+                        display: flex
+                        align-items: center
+                        @media screen and (max-width: $second-breack-point)
+                            width: 80% !important
+                        &::before
+                            content: ''
+                            width: 40px
+                            aspect-ratio: 1
+                            background-image: url('../img/calendar.svg')
+                            background-position: center
+                            background-repeat: no-repeat
+                            background-size: 100%
+                            margin-right: 20px
+                            @media screen and (max-width: $first-breack-point)
+                                width: 20px
+                    .active.main
+                        color: $main-color
+                        &::before
+                            background-image: url('../img/calendar active.svg')
+                    abbr.active
+                        color: $main-color
+                    &-res
+                        display: flex
+                        color: $main-color
+                        &::before
+                            content: ''
+                            width: 40px
+                            aspect-ratio: 1
+                            margin-right: 20px
+                            display: block
+                            @media screen and (max-width: $second-breack-point)
+                                width: 0
+                #timer-res-wrap
+                    width: 55%
+                    @media screen and (max-width: $second-breack-point)
+                        width: 70%
+                    #btn-cansel
+                        border-radius: 50%
+                        background-color: $pre-color
+                        width: 25px
+                        text-align: center
+                        color: $white-color
+                        aspect-ratio: 1/1
+                        padding: 2px
+                        cursor: pointer
+                        opacity: 1
+                        flex-shrink: 0
+                        @media screen and (max-width: $second-breack-point)
+                            p
+                                font-size: .9rem
+                        &:hover
+                            opacity: 0.7
+                            transition: opacity 0.3s
+    
+            &-quest
+                border: 2px solid $gray-light
+                border-radius: 50%
+                aspect-ratio: 1 
+                width: 28px !important
+                flex-shrink: 0
+                text-align: center
+            &-quest.active
+                border: 2px solid $main-color
+            &-wrap-title
+                align-items: center
+                justify-content: center
+                p
+                    width: fit-content !important
+                abbr
+                    @media screen and (max-width: $second-breack-point)
+                        display: none
+                    color: $gray-light
+                    margin-left: 20px
+                    margin-right: -58px
+                    @media screen and (max-width: $second-breack-point)
+                        margin-right: -28px
+                
+    &__img
+        &_cover
+            width: 100% !important
+            grid-area: 1/1/5/5
+            @media screen and (max-width: $first-breack-point)
+                grid-area: 1/1/5/6
+            @media screen and (max-width: $second-breack-point)
+                grid-area: 2/1/5/9
+            
+            #avatar
+                cursor: pointer
+                border-radius: 15px
+                width: 88%
+                aspect-ratio: 1
+                background-image: url("../img/gallery-add.svg")
+                overflow: hidden
+                box-shadow: $box-shadow-sm
+                background-position: center
+                background-repeat: no-repeat
+                background-size: 60%
+
+        &-add
+            padding: 20px 0
+            height: fit-content
+            background-color: $white-color
+            border-radius: 0 0 30px 30px
+            &.active
+                border: 2px dashed $main-color
+                border-radius: 0 0 30px 30px
+    &__title
+        width: 100% !important
+        grid-area: 1/5/2/17
+        @media screen and (max-width: $first-breack-point)
+            grid-area: 1/6/2/17
+        @media screen and (max-width: $second-breack-point)
+            grid-area: 1/1/2/17
+        @media screen and (max-width: $xs-breack-point)
+            grid-area: 1/1/2/15
+
+        &-descript
+            grid-area: 2/5/4/17
+            @media screen and (max-width: $first-breack-point)
+                grid-area: 2/6/4/17
+            @media screen and (max-width: $second-breack-point)
+                grid-area: 6/1/7/17
+            @media screen and (max-width: $xs-breack-point)
+                grid-area: 6/1/7/15
+            
+            text-overflow: ellipsis
+            overflow: hidden
+            padding-top: 10px
+
+    &__multisel
+        grid-area: 4/5/5/17
+        @media screen and (max-width: $first-breack-point)
+            grid-area: 4/6/5/17
+        @media screen and (max-width: $second-breack-point)
+            grid-area: 2/8/5/17
+            flex-wrap: wrap
+        @media screen and (max-width: $xs-breack-point)
+            grid-area: 2/8/5/15
+        .select2-selection__rendered
+            *
+                width: auto !important
+        .select-wrap
+            width: 30%
+            @media screen and (max-width: $second-breack-point)
+                width: 100%
+                height: 60px
+
+    &__url
+        @media screen and (max-width: $second-breack-point)
+            width: 100% !important
+    &__copyrate
+        box-shadow: none
+        padding: 0
+        padding-top: 8px
+        display: inline-flex
+        width: 100%
+        @media screen and (max-width: $first-breack-point)
+            width: 45% !important
+        @media screen and (max-width: $second-breack-point)
+            width: 100% !important
+        input
+            width: auto !important
+        label
+            width: 100%
+
+            &::before
+                border: 2px solid $dark-lighter !important
+                width: 24px !important
+        &-quest
+            border: 2px solid $main-color
+            border-radius: 50%
+            color: $main-color
+            aspect-ratio: 1 
+            width: 28px !important
+            flex-shrink: 0
+            text-align: center
+        &-wrap
+            grid-area: 5/1/7/5
+            @media screen and (max-width: $first-breack-point)
+                margin-top: 20px
+                grid-area: 6/1/7/17
+                display: flex
+                justify-content: space-between
+            @media screen and (max-width: $second-breack-point)
+                grid-area: 7/1/8/17
+                flex-wrap: wrap
+            @media screen and (max-width: $xs-breack-point)
+                grid-area: 7/1/8/15
+            
+    &__add-tag
+        grid-area: 5/5/7/17
+        width: 100% !important
+        @media screen and (max-width: $first-breack-point)
+            grid-area: 5/1/6/17
+        @media screen and (max-width: $second-breack-point)
+            grid-area: 5/1/6/15
+        #add_tag_article-error
+            color: $pre-color
+            margin: 5px
+            font-weight: bold
+
+    &__editor-text
+        height: 400px
+    &__rem-edit-photo
+        position: relative
+        left: 57%
+        width: 45px !important
+        margin: 0 !important
+        margin-top: -91px !important
+        background-color: $sub-color
+        padding: 5px 5px 5px 0
+        box-shadow: $box-shadow-sm
+        border-radius: 0 $border-radius $border-radius 0
+        display: block !important
+        hr
+            margin-top: 5px
+            margin-bottom: 5px
+        span
+            height: 40px
+            display: block
+            img
+                height: 100%
+        &.carousel
+            left: 100%
+
+abbr
+    text-decoration: none !important
+    width: fit-content !important
+
+#upload
+    &-image
+        &-label
+            position: relative
+            background-color: $main-color
+            color: $white-color
+            text-align: center
+            width: fit-content
+            padding: 10px
+            border-radius: 0.3em
+            margin: 0 auto
+            cursor: pointer
+            transition: .3s ease-out
+            &:hover
+                transform: scale(1.1)
+                @media screen and (max-width: $second-breack-point)
+                    transform: scale(1)
+    &-error
+        color: $pre-color
+        font-weight: bold
+        margin: 20px auto
+        width: fit-content
+    &-preview
+        max-width: 80%
+        margin: auto
+        justify-content: left
+        @media screen and (max-width: $second-breack-point)
+            justify-content: center
+            max-width: 100%
+        &.carousel
+            @media screen and ( max-width: $second-breack-point )
+                .item
+                    margin-bottom: 40px
+        &.calage
+            .item
+                overflow: visible
+                margin: 0 5px 50px 0
+
+    &-func-btn
+        margin-left: 20px
+        margin-right: 20px
+        @media screen and (max-width: $second-breack-point)
+            flex-direction: column  
+            *
+                width: 100%
+        .btn
+            color: $white-color
+            background-color: $main-color
+            transition: .3s all
+            @media screen and (max-width: $second-breack-point)
+                height: 40px
+                margin-top: 20px
+            &:hover
+                background-color: $pre-color
+
+.error-form .modal-dialog .modal-content
+    border-radius: 15px 
+
+.timer
+    &-hide
+        display: none !important
+    &-visibl
+        display: block !important
+
+#wallDatePicer
+    position: fixed
+    width: 100vw
+    height: 100vh
+    left: 0
+    top: 0
+.ck
+    &-color-selector
+        &__remove-color
+            display: none !important
+        &__color-picker
+            display: none !important

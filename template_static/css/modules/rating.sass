@@ -1,0 +1,96 @@
+@import "vars.sass"
+.rating
+    display: flex
+    align-items: center
+    font-size: 30px
+    font-weight: 600
+    line-height: 1.25
+    @media screen and (max-width: $first-breack-point)
+        font-size: 15px
+    &__body
+        width: fit-content
+        position: relative
+        &::before
+            content: ''
+            width: 104px
+            height: 18px
+            background: url(../img/raiting-stars-empty.svg) no-repeat
+            background-size: contain
+            display: block
+            @media screen and (max-width: $first-breack-point)
+                width: 100px
+
+    &__items
+        display: flex
+        position: absolute
+        width: 100%
+        height: 100%
+        top: 0
+        left: 0
+    &__item
+        flex: 0 0 20%
+        height: 100%
+        opacity: 0
+    &__active
+        position: absolute
+        width: 0%
+        height: 100%
+        left: 0
+        top: 0
+        overflow: hidden
+        &::before
+            content: ''
+            width: 104px
+            height: 18px
+            background: url(../img/raiting-stars-full.svg) no-repeat
+            background-size: contain
+            position: absolute
+            left: 0
+            top: 0 
+            @media screen and (max-width: $first-breack-point)
+                width: 100px
+    &--lage
+        .rating__active
+            &::before
+                width: 158px
+                height: 28px
+                @media screen and (max-width: $first-breack-point)
+                    width: 110px
+                    height: 19px
+        .rating__body
+            &::before
+                width: 158px
+                height: 28px
+                @media screen and (max-width: $first-breack-point)
+                    width: 110px
+                    height: 19px
+    &--sm
+        .rating__active
+            &::before
+                width: 93px
+                height: 15px
+        .rating__body
+            &::before
+                width: 93px
+                height: 15px
+    &--xl
+        .rating__active
+            &::before
+                width: 235px
+                height: 41px
+                @media screen and (max-width: $first-breack-point)
+                    width: 104px
+                    height: 18px
+                @media screen and (max-width: $second-breack-point)
+                    width: 74px
+                    height: 13px
+        .rating__body
+            &::before
+                width: 235px
+                height: 41px
+                @media screen and (max-width: $first-breack-point)
+                    width: 104px
+                    height: 18px
+                @media screen and (max-width: $second-breack-point)
+                    width: 74px
+                    height: 13px

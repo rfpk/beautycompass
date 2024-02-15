@@ -1,0 +1,94 @@
+@import "vars.sass"
+
+.user-profile
+    &__head
+        position: relative
+        display: grid
+        grid-template-columns: 160px 1fr
+        gap: 25px
+        @media screen and (max-width: $second-breack-point)
+            display: flex
+            flex-direction: column
+            align-items: center
+            text-align: center
+
+    &__nickname
+        display: flex
+        align-items: center
+        gap: 15px
+        @media screen and (max-width: $second-breack-point)
+            flex-direction: column
+            gap: 0.25rem
+
+    &__label
+        position: relative
+        display: flex
+        align-items: center
+        gap: 10px
+        &--star
+            width: 26px
+            height: 26px
+            background: url(../img/user-label-star-empty.svg) no-repeat
+            background-size: contain 
+            cursor: pointer
+            &.active
+                background: url(../img/user-label-star.svg) no-repeat
+                background-size: contain 
+            @media screen and (max-width: $first-breack-point)
+                    width: 22px
+                    height: 22px
+        @media screen and (max-width: $second-breack-point)
+            &--star
+                position: absolute
+                top: 0
+                right: calc( 50% - 90px )
+
+    &__thanks
+        position: absolute
+        bottom: -50px
+        left: 0
+        display: none
+        width: max-content
+        padding: 10px
+        background: #fff
+        box-shadow: $box-shadow-regular
+        @media screen and (max-width: $second-breack-point)
+            left: auto
+            right: 0
+        &.show
+            display: block
+    
+    &__stat
+        @media screen and (max-width: $second-breack-point)
+            justify-content: center
+
+    &__name
+        @media screen and (max-width: $second-breack-point)
+            display: none
+
+    &__avatar img
+        width: 160px
+        height: 160px
+        border-radius: 50%
+        object-fit: cover
+
+    &__details
+        padding: 10px 30px
+        background: #fff
+        border-radius: $border-radius
+        box-shadow: $box-shadow-regular
+        &__btn
+            background: none
+            border: none
+            padding: 0
+            margin: 0
+            &[aria-expanded="true"]
+                > svg
+                    transform: rotate(180deg)
+            @media screen and (max-width: $second-breack-point)
+                justify-content: space-between
+                > svg
+                    width: 14px
+                    height: 7px
+        &__body
+            padding: 20px 0

@@ -1,0 +1,34 @@
+@import "vars.sass"
+.add-info
+  a
+    &:hover
+      color: inherit
+  &__wrapper
+    border-radius: 10px
+    background: $white-color
+    box-shadow: $box-shadow-regular
+  &__content
+    max-height: 0
+    transition: all ease .3s
+  &__trigger
+    svg
+      transition: all ease .3s
+  &__schemes
+    .left
+      &-inner
+        &__item
+          margin-top: -8px
+      &__title
+        .question
+          position: relative
+          margin-left: 8px
+          &__cloud
+            position: absolute
+            top: -100%
+
+      .right
+        &__title
+          display: flex
+          flex-wrap: nowrap
+          align-items: center
+

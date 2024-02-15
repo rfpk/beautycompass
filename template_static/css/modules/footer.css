@@ -1,0 +1,104 @@
+.footer {
+  min-height: 441px;
+  background: linear-gradient(180deg, #194071 28.44%, #1560BD 100%);
+  color: #FAFAFA;
+}
+@media screen and (max-width: 1400px) {
+  .footer__container {
+    max-width: 720px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .footer__container {
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+  }
+}
+.footer__nav {
+  margin-bottom: 99px;
+}
+@media screen and (max-width: 1400px) {
+  .footer__nav {
+    margin-bottom: 54px;
+    order: 2;
+  }
+}
+.footer__title {
+  margin-bottom: 39px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+@media screen and (max-width: 1400px) {
+  .footer__title {
+    margin-bottom: 16px;
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+.footer__list {
+  list-style: none;
+  padding-left: 0;
+}
+.footer__list a {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+  color: #FAFAFA;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer__list a:hover {
+  color: #E31E24;
+}
+@media screen and (max-width: 768px) {
+  .footer__list a {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+}
+.footer__logo {
+  margin-bottom: 23px;
+}
+.footer__logo img {
+  max-width: 100%;
+}
+@media screen and (max-width: 1400px) {
+  .footer__logo {
+    margin-bottom: 40px;
+    order: 1;
+  }
+}
+.footer__social {
+  display: block;
+  width: 47px;
+  height: 47px;
+  margin: 0 auto;
+  transition: opacity 0.3s;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.footer__social:hover {
+  opacity: 0.7;
+}
+.footer__social--email {
+  background-image: url("../img/email.svg");
+}
+.footer__social--telegram {
+  background-image: url("../img/telegram.svg");
+}
+.footer__social--vk {
+  background-image: url("../img/vk.svg");
+}
+@media screen and (max-width: 768px) {
+  .footer__social {
+    width: 29px;
+    height: 29px;
+  }
+}/*# sourceMappingURL=footer.css.map */

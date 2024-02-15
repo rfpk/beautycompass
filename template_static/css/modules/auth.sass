@@ -1,0 +1,118 @@
+@import "vars.sass"
+
+.auth
+    &__content
+        max-width: 674px
+        margin: 0 auto
+        padding: 36px 56px 50px    
+        border-radius: $border-radius    
+        @media screen and (max-width: $first-breack-point) 
+            padding: 28px 20px 30px       
+        &--authorized
+            max-width: 511px
+            padding: 30px 20px
+    &__title
+        font-weight: 700
+        font-size: 36px
+        line-height: 1.25
+        letter-spacing: 0.5px
+        text-transform: uppercase
+        color: $main-color
+        @media screen and (max-width: $first-breack-point) 
+            font-weight: 700
+            font-size: 20px
+            line-height: 1.25
+    &__sub-title
+        margin-bottom: 19px
+        font-weight: 600
+        font-size: 24px
+        line-height: 1.2
+        text-transform: uppercase
+        color: $main-color
+        text-align: center
+        @media screen and (max-width: $first-breack-point) 
+            font-size: 16px
+            line-height: 1.1875
+            margin-bottom: 9px
+    &__group
+        flex-wrap: wrap
+    &__invalid
+        display: none
+        width: fit-content
+        font-weight: 600
+        font-size: 18px
+        line-height: 1.22222
+        color: $pre-color
+        @media screen and (max-width: $first-breack-point) 
+            font-size: 10px
+            line-height: 12px
+        &--unchecked
+            display: block
+
+    &__label
+        display: flex
+        width: fit-content
+        font-weight: 600
+        font-size: 18px
+        line-height: 1.22222
+        color: #D9D9D9        
+        @media screen and (max-width: $first-breack-point) 
+            font-size: 10px
+            line-height: 12px
+    &__btn
+        border: 3px solid $main-color
+        border-radius: 15px
+        font-weight: 700
+        font-size: 18px
+        line-height: 1.22222
+        text-align: center
+        text-transform: uppercase
+        color: $main-color
+        @media screen and (max-width: $first-breack-point) 
+            order: 2
+        &:hover
+            background-color: $pre-color
+            border-color: $pre-color
+            color: $sub-color
+        &--primary
+            color: $sub-color
+            background: $main-color
+            @media screen and (max-width: $first-breack-point) 
+                order: 1
+                margin-bottom: 10px
+    &__avatar
+        width: 96px
+        height: 96px
+        padding: 0
+        margin-right: 27px
+        border-radius: 50%
+        overflow: hidden        
+        @media screen and (max-width: $first-breack-point) 
+            width: 76px
+            height: 76px
+        img
+            max-width: 100% 
+    &__user
+        width: fit-content
+        padding: 0
+    &__name
+        font-weight: 700
+        font-size: 36px
+        line-height: 1.25 
+        @media screen and (max-width: $first-breack-point) 
+            font-weight: 700
+            font-size: 20px
+            line-height: 1.25
+    &__conf
+        color: $main-color
+        text-decoration: none
+    &__link
+        font-weight: 700
+        font-size: 20px
+        line-height: 1.25 
+        color: #494949
+        text-decoration: none 
+        text-transform: uppercase
+        transition: color .3s
+        &:hover
+            color: $pre-color 

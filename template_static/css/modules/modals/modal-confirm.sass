@@ -1,0 +1,29 @@
+@import "../vars.sass"
+.modal
+  &__confirm
+    border-radius: 20px
+    &-content
+      max-width: 768px
+      margin: auto
+      border-radius: 20px
+    &-footer
+      border-top: none
+    &-close, &-apply
+      font-size: 15px
+      font-style: normal
+      font-weight: 600
+      line-height: normal
+      text-transform: uppercase
+      text-decoration: none
+      @media screen and (min-width: $first-breack-point)
+        font-size: 30px
+      img
+        width: 24px
+        height: 24px
+        @media screen and (min-width: $first-breack-point)
+          width: 48px
+          height: 48px
+    &-close
+      color: $pre-color
+    &-apply
+      color: $main-color

@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ block.super }} - Рейтинг Авторов{% endblock %}
+
+{% block content %}
+    <main class="user-rating">
+
+        <section class="user-rating__tabs">
+            <div class="container container--bc">
+                <div class="col-xxl-10 offset-xxl-1">
+                    <div class="text-center title--h2 my-4">Рейтинг авторов</div>
+
+                    <nav>
+                        <div class="nav user-links d-flex flex-wrap justify-content-md-between gap-3" id="user-tab"
+                             role="tablist">
+                            {% for key, values in types.items %}
+                                {% if key == type_period %}
+                                    <a href="?period={{ type_period }}">
+                                        <button class="btn btn--base btn--xs-full active" data-bs-toggle="tab"
+                                                data-bs-target="#user-rating-{{ type_period }}" type="button" role="tab"
+                                                aria-selected="true">
+                                            {{ values }}
+                                        </button>
+                                    </a>
+                                {% else %}
+                                    <a href="?period={{ key }}">
+                                        <button class="btn btn--base btn--xs-full" data-bs-toggle="tab"
+                                                data-bs-target="#user-rating-{{ key }}" type="button" role="tab"
+                                                aria-selected="false">
+                                            {{ values }}
+                                        </button>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </nav>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="user-rating__list my-5">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="user-rating-{{ type_period }}" role="tabpanel" tabindex="0">
+                    <div class="user-rating__filter mb-4">
+                        <div class="container container--bc">
+                            <div class="col-xxl-10 offset-xxl-1">
+                                <div class="d-flex align-items-center flex-column flex-md-row gap-3 gap-md-4">
+                                    <div class="select--wrapper position-relative flex-shrink-0">
+                                        <label for="profile__country"
+                                               class="label label--general label--light">Город</label>
+                                        <select class="profile__select profile__country select--regular px-3 w-100 fw-600">
+                                            <option value="">Выбор из списка</option>
+                                            <option value="">Выбор из списка</option>
+                                        </select>
+                                    </div>
+
+                                    <form class="w-100 position-relative inner-search" action="">
+                                        <input class="input--regular w-100 fw-600 dark-semi" id="search-input" type="text"
+                                               placeholder="Поиск по нику"/>
+                                        <button>
+                                            <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19.0482 19.7124C19.4417 20.1 20.0748 20.0952 20.4624 19.7018C20.85 19.3083 20.8452 18.6752 20.4518 18.2876L19.0482 19.7124ZM17.4911 9.24576C17.4911 13.2334 14.2054 16.4915 10.1205 16.4915V18.4915C15.2815 18.4915 19.4911 14.3662 19.4911 9.24576H17.4911ZM10.1205 16.4915C6.03569 16.4915 2.75 13.2334 2.75 9.24576H0.75C0.75 14.3662 4.95955 18.4915 10.1205 18.4915V16.4915ZM2.75 9.24576C2.75 5.25815 6.03569 2 10.1205 2V0C4.95955 0 0.75 4.12536 0.75 9.24576H2.75ZM10.1205 2C14.2054 2 17.4911 5.25815 17.4911 9.24576H19.4911C19.4911 4.12536 15.2815 0 10.1205 0V2ZM15.1999 15.9214L19.0482 19.7124L20.4518 18.2876L16.6034 14.4966L15.1999 15.9214Z"
+                                                      fill="#494949"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="search-results">
+                        {% for author in page_authors %}
+                            <div class="white-box white-box--line">
+                                <div class="container container--bc">
+                                    <div class="col-xxl-10 offset-xxl-1">
+                                        <div class="user-rating-item">
+                                            <div class="user-rating-item__pos title--20-50 lh-125 dark-semi">{{ author.position }}</div>
+                                            <div class="user-rating-item__avatar">
+                                                {% if type_period == 'total' %}
+                                                    {% if author.profile.avatar %}
+                                                        <img src="{{ author.profile.avatar.url }}" alt="">
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if author.author.profile.avatar %}
+                                                        <img src="{{ author.author.profile.avatar.url }}" alt="">
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="d-flex flex-column gap-2">
+                                                {% if type_period == 'total' %}
+                                                    <div
+                                                        style="cursor: pointer;"
+                                                        onclick="location.href='{% url 'profile:author-profile' author.profile.pk %}'"
+                                                        class="user-rating-item__nickname title--20-36 lh-125 dark-semi">
+                                                        {{ author.profile.nickname }}
+                                                    </div>
+                                                {% else %}
+                                                    <div
+                                                        style="cursor: pointer;"
+                                                        class="user-rating-item__nickname title--20-36 lh-125 dark-semi"
+                                                        onclick="location.href='{% url 'profile:author-profile' author.author.profile.pk %}'"
+                                                    >{{ author.author.profile.nickname }}</div>
+                                                {% endif %}
+                                                <div class="d-flex gap-3">
+                                                    <div class="user-rating-item__rate text--10_18 dark-lighter text-uppercase">
+                                                        Рейтинг:
+                                                        <span>{{ author.rating }}</span>
+                                                    </div>
+
+                                                    {% if type_period == 'total' %}
+                                                        {% if author.profile.city %}
+                                                            <div class="user-rating-item__city text--10_18 dark-lighter">
+                                                                г. {{ author.profile.city }}</div>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if author.author.profile.city %}
+                                                            <div class="user-rating-item__city text--10_18 dark-lighter">
+                                                                г. {{ author.author.profile.city }}</div>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if page_authors.has_other_pages %}
+                        <div class="d-flex justify-content-center mt-4 mt-md-5">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    {% if page_authors.has_previous %}
+                                        <a class="page-link"
+                                           href="?period={{ type_period }}&page={{ page_authors.previous_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">〈</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                {% for num in page_authors.paginator.page_range %}
+                                    {% if num == page_authors.number %}
+                                        <li class="page-item active">
+                                            <a class="page-link"
+                                               href="?period={{ type_period }}&page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% elif num > page_authors.number|add:'-3' and num < page_authors.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="?period={{ type_period }}&page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <li class="page-item">
+                                    {% if page_authors.has_next %}
+                                        <a class="page-link"
+                                           href="?period={{ type_period }}&page={{ page_authors.next_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">〉</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+
+        function getAuthors(value) {
+            $.ajax({
+                url: `{% url "profile:search_author" %}?nickname=${value}&period={{type_period}}`,
+                type: 'get',
+                dataType: 'html',
+                success: function(response) {
+                    $('#search-results').html(response);
+                }
+            })
+        }
+
+        searchInput.addEventListener('input', () => {
+            const value = searchInput.value;
+            getAuthors(value);
+        })
+    </script>
+{% endblock %}

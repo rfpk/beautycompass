@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Результат Теста{% endblock %}
+
+
+{% block content %}
+    <main>
+      <section class="brand__title">
+        <div class="container container--bc">
+            <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+                <div class="col-1 col-xxl-12 order-xxl-1">
+                    <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                        <img src="{% static 'img/arrow-left.svg' %}" alt="Стрелка налево">
+                        <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                    </a>
+                </div>
+                <div class="col text-center col-xxl-12">
+                    <h1 class="title--20-36">РЕЗУЛЬТАТЫ ТЕСТА</h1>
+                </div>
+            </div>
+        </div>
+      </section>
+      <section class="container container--bc">
+        {% for option in options %}
+          {% if option.recomendation %}
+            <div class="recomend recСombin">
+                {% if option.question.text == 'Часто ли уходовая косметика вызывает раздражение, покраснение, жжение?' %}
+                    <p class="recomend__heading text-uppercase">Чувствительная кожа</p>
+                {% else %}
+                    <p class="recomend__heading text-uppercase">{{option.text}}</p>
+                {% endif %}
+                <p>Рекомендации по базовому уходу: {{option.recomendation}}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+        <div class="recomend recPreg">
+          <p class="recomend__heading text-uppercase">
+            Если вы планируете беременность, беременны или кормите грудью, избегайте средств с ретиноидами.
+          </p>
+        </div>
+      </section>
+      <section class="download_rezult container container--bc">
+        <form id="form-save-test">
+          {% csrf_token %}
+          <label for="nameFile">Название
+            <input class="form-control" type="text" placeholder="«{{nickname}},тест от {% now "d.m.y" %}»" name="nameFile" id="nameTest">
+          </label>
+          <button id="butSave" class="text-uppercase"><p>Сохранить результаты</p></button>
+          <button id="butChoice" class="text-uppercase"><p>подобрать косметику</p></button>
+        </form>
+      </section>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+      function getTestName() {
+        const nameTest = document.getElementById('nameTest').value;
+        return nameTest ? nameTest : '{{nickname}},тест от {% now "d.m.y g:i" %}' 
+      }
+
+      function getQueryData() {
+        let url = new URL(location.href);
+        let queryString = url.search;
+        let searchParams = new URLSearchParams(queryString);
+        let keys = Array.from(searchParams.keys());
+
+        let form_data = new FormData();
+        keys.forEach((el) => {
+          if (!form_data.has(el)) {
+            let elements = searchParams.getAll(el);
+            elements.forEach((value) => {
+              form_data.append(el, value)
+            })
+          }
+        })
+        return form_data;
+      }
+      let form_data = getQueryData()
+
+
+      $('#butSave').click(function(event) {
+        form_data.append('test_name', getTestName())
+        event.preventDefault();
+        $('#butSave').attr("disabled", true);
+        $.ajax({
+          type: 'POST',
+          headers: { "X-CSRFToken": '{{ csrf_token }}' },
+          url: '{% url "testing:answer_test" %}',
+          data: form_data,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            if (response['status'] === 'success') {
+              window.location.href = '{% url "profile:profile_detail" %}'
+            }
+          },
+        })
+      })
+
+      $('#butChoice').click(function(event) {
+          event.preventDefault();
+          location.href = '{% url "selection:answer_selection" %}'
+      })
+    </script>
+{% endblock %}

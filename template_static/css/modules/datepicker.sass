@@ -1,0 +1,22 @@
+@import "vars.sass"
+.datepicker
+    width: 250px !important
+    margin-right: -250px 
+    right: 270px
+    top: 180px
+    *
+        width: auto !important
+    &__cal
+        width: 100% !important
+    &__header
+        width: 90% !important
+        margin: 0 auto
+    &__time
+        @media screen and (max-width: $second-breack-point)
+            font-size: 0.9rem
+    &__prev, &__next
+        @media screen and (max-width: $second-breack-point)
+            font-size: 2rem
+    @media screen and (max-width: $second-breack-point)
+        left: -70.5vw
+        width: 100vw !important

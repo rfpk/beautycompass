@@ -1,0 +1,121 @@
+@import "vars.sass"
+
+.recomend
+    font-weight: 600
+    font-style: normal
+
+    p
+        font-size: 18px
+        line-height: 22px
+        color: $dark-lighter
+        @media screen and (max-width: $second-breack-point)
+            font-size: 12px
+            line-height: 15px
+
+    .heading
+        font-size: 30px
+        line-height: 37px
+        color: $dark-semi-light
+        @media screen and (max-width: $second-breack-point)
+            font-size: 15px
+            line-height: 18px
+            letter-spacing: 0.5px
+
+    &:first-child
+        margin-top: 40px
+
+.downloadRezult
+    margin-bottom: 30px
+
+    form
+        width: 100%
+        display: flex
+        flex-wrap: wrap
+        align-items: center
+        justify-content: space-around
+        @media screen and (max-width: $second-breack-point)
+            width: 100%
+
+        label
+            font-weight: 600
+            font-size: 18px
+            line-height: 22px
+            color: $gray-light
+            width: 100%
+
+            @media screen and (max-width: $second-breack-point)
+                width: 100%
+                font-size: 10px
+                line-height: 12px
+
+            input
+                border-radius: $border-radius
+                background: $white-color
+                border: 0 solid $main-color
+                width: 100%
+
+                padding: 10px
+                box-shadow: $box-shadow-sm
+                @media screen and (max-width: $second-breack-point)
+                    width: 100%
+                &:focus
+                    box-shadow: none
+                &:focus-visible
+                    box-shadow: none
+        button
+            background: #00000000
+            border: 0
+            display: flex
+            align-items: center
+            margin-top: 15px
+            color: $main-color
+            transition: opacity 0.3s
+            @media screen and (max-width: $second-breack-point)
+                width: 100%
+                margin-top: 25px
+
+
+            &:before
+                flex-shrink: 0
+                content: ''
+                display: inline-block
+                width: 34px
+                aspect-ratio: 1
+                border: 3px solid $main-color
+                border-radius: 50%
+                margin-right: 20px
+                background-repeat: no-repeat
+                background-position: center center
+                background-size: 68%
+                background-image: url("../img/checkBlue.svg")
+
+                @media screen and (max-width: $first-breack-point)
+                    width: 20px !important
+                    border: 1px solid $main-color
+
+            &:hover
+                opacity: 0.7
+            p
+                margin: 0
+                font-weight: 600
+                font-size: 30px
+                line-height: 37px
+                @media screen and (max-width: $first-breack-point)
+                    font-size: 15px
+                    line-height: 18px
+
+        #butChoice
+            display: flex
+            &:before
+                flex-shrink: 0
+                content: ''
+                display: inline-block
+                width: 34px
+                aspect-ratio: 1
+                border: 0px
+                border-radius: 50%
+                margin-right: 20px
+                background-repeat: no-repeat
+                background-position: center center
+                background-size: 100%
+                background-image: url("../img/settingDidg.svg")

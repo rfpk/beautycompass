@@ -1,0 +1,147 @@
+@import vars.sass
+
+.feed-button
+    background: #00000000
+    border: 0
+    display: flex
+    align-items: center
+    color: $main-color
+    transition: color 0.3s
+    margin-right: 90px
+    p
+        margin: 0
+        font-weight: 600
+        font-size: 30px
+        line-height: 37px
+    @media screen and (max-width: $first-breack-point)
+        display: none
+
+    &:before
+        border: 0px
+        background-size: 100%
+        border-radius: 0
+        flex-shrink: 0
+        content: ""
+        display: inline-block
+        width: 34px
+        aspect-ratio: 1
+        border-radius: 50%
+        margin-right: 20px
+        background-repeat: no-repeat
+        background-position: center center
+
+        @media screen and (max-width: $first-breack-point)
+            width: 20px !important
+    &:hover
+        color: $pre-color
+
+    &__settng
+        p
+            @media screen and (max-width: $first-breack-point)
+                margin: 0
+                font-weight: 600
+                font-size: 12px
+                line-height: 0
+            @media screen and (max-width: $second-breack-point)
+                display: none
+        
+        margin-bottom: 16px
+        margin-right: 0
+        &:before
+            background-image: url("../img/setting.svg") !important
+            @media screen and (max-width: $second-breack-point)
+                margin-right: 0 !important
+        @media screen and (max-width: $first-breack-point)
+            margin-bottom: 0
+.dls
+    display: flex
+    width: 100% 
+    justify-content: space-between
+    flex-direction: row-reverse
+    @media screen and (max-width: $second-breack-point)
+        flex-direction: row
+        flex-wrap: wrap 
+    button
+        margin: 0
+    .check__wrap
+        box-shadow: none
+        padding: 0
+        margin: 0
+        margin-top: 20px
+        font-size: 10px
+        line-height: 12px
+        color: $dark-lighter
+
+        @media screen and (max-width: $second-breack-point)
+            width: 100%
+        label
+            font-size: 24px
+            line-height: 28px
+            color: $dark-lighter
+
+            &::before
+                display: none
+            &::after
+                display: block
+                margin-left: 10px
+                margin-right: 0
+                width: 29px
+                @media screen and (max-width: $first-breack-point) 
+                    width: 19px
+                    border-radius: 5px 
+                    border: 1px solid #292D32
+                    margin-right: 10px
+            @media screen and (max-width: $first-breack-point)
+                font-weight: 700
+                font-size: 10px
+                line-height: 12px  
+    #save
+        background-color: $main-color
+        border-radius: $border-radius
+        color: $sub-color
+        display: none
+        width: 98px
+        height: 24px
+        margin: auto 0
+        p
+            font-size: 10px
+            line-height: 12px
+            color: $sub-color
+
+        &::before
+            display: none
+    #del
+        color: $pre-color
+        p
+            font-size: 24px
+            line-height: 29px
+            @media screen and ( max-width: $first-breack-point)
+                font-weight: 600
+                font-size: 15px
+                line-height: 18px
+
+        &::before
+            background-image: url('../img/info-circle.svg') !important
+            width: 27px
+    #saveProfile
+        display: none
+        margin-right: -115px
+        &:before
+            background-image: url("../img/tick-circle.svg")
+        @media screen and ( max-width: $first-breack-point)
+            margin-right: -4px
+        @media screen and ( max-width: $second-breack-point)
+            display: none !important
+    #changeProfile
+        margin-right: -115px
+        &:before
+            background-image: url("../img/setting.svg")
+        @media screen and ( max-width: $first-breack-point)
+            margin-right: 0
+
+        @media screen and ( max-width: $second-breack-point)
+            p
+                display: none
+            
+            &:before
+                margin-right: 0

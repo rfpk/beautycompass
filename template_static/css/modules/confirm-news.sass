@@ -1,0 +1,44 @@
+@import "vars.sass"
+.confirm-news
+  &__checkbox
+    position: relative
+    display: inline-flex
+    align-items: center
+    cursor: pointer
+  &__input
+    display: none
+    &:checked + .confirm-news__checkmark
+      background-color: $white-color
+      &:after
+        content: ""
+        position: absolute
+        font-size: 14px
+        width: 14px
+        height: 14px
+        background-image: url(../img/cross-black.svg)
+        background-repeat: no-repeat
+        background-position: center
+        background-size: cover
+        color: $dark-lighter
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        @media screen and (min-width: $first-breack-point)
+          width: 20px
+          height: 20px
+  &__checkmark
+    width: 17px
+    height: 17px
+    border: 1px solid $dark-lighter
+    border-radius: 5px
+    margin-left: 16px
+    position: relative
+    @media screen and (min-width: $first-breack-point)
+      width: 30px
+      height: 30px
+
+
+
+
+
+

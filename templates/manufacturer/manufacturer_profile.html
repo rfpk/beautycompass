@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bleach_tags %}
+
+{% block title %}{{ block.super }} - Производитель {{ manufacturer.name }}{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="producer">
+            <div class="container container--bc producer__sticker">
+                <div class="row justify-content-center mb-4">
+                    <h1 href="" class="col-12 col-xxl-10 mb-2 mb-md-4 text-center title--h1 text-uppercase">
+                        Производитель
+                    </h1>
+                    <div class="col-12 col-xxl-10 d-flex justify-content-center producer__logo">
+                        {% if manufacturer.logo %}
+                            <img src="{{ manufacturer.logo.url }}" alt="">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-2  mb-md-4">
+                    <div class="col-12 col-xxl-10 title--sub mb-2 mb-md-3">
+                        {{ manufacturer.name }}
+                    </div>
+                    <div class="col-12 col-xxl-10 catalog__contacts mb-2 mb-md-3">
+                        <img src="{% static manufacturer.country.flag_css %}" alt=""
+                             class="catalog__icon catalog__icon--flag shadow-sm me-1 me-mb-3">
+                        {{ manufacturer.country }}
+                    </div>
+                    <div class="col-12 col-xxl-10 catalog__contacts mb-2 mb-md-3">
+                        <img src="{% static 'img/call-empty.svg' %}" alt="" class="catalog__icon me-1 me-mb-3">
+                        {{ manufacturer.phone }}
+                    </div>
+                    <div class="col-12 col-xxl-10 catalog__contacts mb-3 mb-md-3">
+                        <img src="{% static '/img/mail-empty.svg' %}" alt="" class="catalog__icon me-1 me-mb-3">
+                        {{ manufacturer.email }}
+                    </div>
+                    <div class="col-12 col-xxl-6 mb-3 catalog__contacts">
+                        <a class="btn btn--base">Написать производителю</a>
+                    </div>
+                    <div class="col-12 col-xxl-4 catalog__contacts">
+                        <div class="row justify-content-center justify-content-xxl-end">
+                            {% for social_link in manufacturer_social_links %}
+                                <div class="col-2 text-center">
+                                    <a href="{{ social_link.url }}">
+                                        {% if social_link.social_web.logo %}
+                                            <img src="{{ social_link.social_web.logo.url }}" class="catalog__social" alt="">
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10 information">
+                        <p>{{ manufacturer.description|bleach }}</p>
+                        <br />
+                        <p>{{ manufacturer.history|bleach }}</p>
+                        <br />
+                        <ul class="information__list">
+                            <p>{{ manufacturer.principle|bleach }}</p>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-2 mb-md-3">
+                    <div class="col-12 col-xxl-10 information">
+                        {% for link_shop in manufacturer.manufacturer_links.all %}
+                            <a href="{{ link_shop.url }}"
+                               class="btn btn--base me-3 mb-2 mb-md-3">{{ link_shop.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slider">
+            <div class="container container--bc">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <div id="carouselProducer" class="carousel  carousel--base slide b-carousel carousel-fade"
+                             data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                {% for _ in manufacturer_banners %}
+                                    <button type="button" data-bs-target="#carouselProducer"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            aria-label="Slide {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for banner in manufacturer_banners %}
+                                    <div class="carousel-item">
+                                        <a href="{{ banner.url }}">
+                                            {% if banner.banner %}
+                                                <img src="{{ banner.banner.url }}" class="d-block w-100" alt="...">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="preview-list">
+            <div class="container container--bc mb-3">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <a href="#" class="text-center mb-3 mb-md-4 title--h2">Бренды</a>
+                    </div>
+                </div>
+                {% for brand in manufacturer.manufacturer_brands.all %}
+                    {% if forloop.first %}
+                        <a href="{{ brand.get_absolute_url }}"
+                           class="row justify-content-center d-flex preview-list__link preview-list__link--brands-sticker">
+                    {% else %}
+                        <a href="{{ brand.get_absolute_url }}" class="row justify-content-center preview-list__link">
+                    {% endif %}
+                <div class="d-flex justify-content-center align-items-center mb-2 mb-md-0 preview-list__logo">
+                    {% if brand.image %}
+                        <img src="{{ brand.image.url }}" alt="">
+                    {% endif %}
+                </div>
+                <div class="w-auto">
+                    <h3 class="preview-list__title text-center text-md-start text-uppercase">{{ brand.name }}</h3>
+                    <p class="preview-list__discription">
+                        {{ brand.short_description|bleach }}
+                    </p>
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        <section class="articles">
+            <div class="container container--bc">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-xxl-4 mb-3 mb-md-2 mb-xxl-0">
+                        <a href="" class="text-center title--h2">Статьи</a>
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-3 articles__sticker">
+                    {% for article in manufacturer_articles %}
+                        <div class="col-12 col-md-6 col-xxl-5 py-1 py-md-3">
+                            <a href="{% url 'blog:article_detail' article.slug %}" class="shadow articles__item">
+                                <div class="row articles__info">
+                                    <div class="col-6">
+                                        <img src="{% static '/img/logo-min.png' %}" alt="">
+                                    </div>
+                                    <div class="col-6 text-end articles__date">
+                                        {{ article.date|date:'d-m-Y' }}
+                                    </div>
+                                </div>
+                                {% if article.thumbnail %}
+                                    <img src="{{ article.thumbnail.url }}" class="articles__img" alt="{{ article.title }}">
+                                {% endif %}
+                                <h5 class="articles__title">
+                                    {{ article.title }}
+                                </h5>
+                                <p>{{ article.text|safe|truncatewords_html:20 }}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if manufacturer_articles.has_other_pages %}
+                  <div class="d-flex justify-content-center mt-4 mt-md-5">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            {% if manufacturer_articles.has_previous %}
+                                <a class="page-link" href="?page={{ manufacturer_articles.previous_page_number }}"
+                                aria-label="Previous">
+                                    <span aria-hidden="true">〈</span>
+                                </a>
+                            {% endif %}
+                        </li>
+                        {% for num in manufacturer_articles.paginator.page_range %}
+                            {% if num == manufacturer_articles.number %}
+                                <li class="page-item active">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% elif num > manufacturer_articles.number|add:'-3' and num < manufacturer_articles.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        <li class="page-item">
+                            {% if manufacturer_articles.has_next %}
+                                <a class="page-link" href="?page={{ manufacturer_articles.next_page_number }}"
+                                aria-label="Previous">
+                                    <span aria-hidden="true">〉</span>
+                                </a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                  </div>
+                {% endif %}
+
+                {% comment %}
+                  {% if page_obj.has_other_pages %}
+                    <div class="d-flex justify-content-center mt-4 mt-md-5">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                {% if page_obj.has_previous %}
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                      aria-label="Previous">
+                                        <span aria-hidden="true">〈</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="page-item">
+                                {% if page_obj.has_next %}
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                      aria-label="Previous">
+                                        <span aria-hidden="true">〉</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                  {% endif %}
+                {% endcomment %}
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/jq.js' %}"></script>
+    <script src="{% static 'js/pogination.js' %}"></script>
+    <script src="{% static 'js/pagination-init.js' %}"></script>
+    <script src="{% static 'js/articles.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,563 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bleach_tags %}
+
+{% block title %}Продукт{% endblock %}
+
+{% load profile_tags %}
+{% block content %}
+    <main>
+        <section class="product-header">
+            <div class="container container--bc product-header--sticker">
+                <div class="row justify-content-center mb-2 mb-xxl-4">
+                    <h1 class="col-12 col-xxl-10 mb-2 mb-md-4 text-center text-capitalize title title--h1">
+                        {{ product.brand.name }}
+                        <div class="title__under mt-1 mt-xxl-3">
+                            {{product.name}}
+                        </div>
+                    </h1>
+
+                    <div class="col-12 col-md-7 col-xxl-6 mb-4 mb-xxl-0">
+                        <div id="carouselProducer" class="carousel carousel--product b-carousel carousel-fade row" data-bs-ride="carousel" data-bs-interval="false">
+                            <div class="carousel-inner pe-0 p-md-2 col-9 ">
+                                
+                                <div class="carousel-item active thumb" data-bs-toggle="modal" data-bs-target="#openFullImg">
+                                    <img src="{% if product.thumbnail %}{{product.thumbnail.url}}{% endif %}" class="d-block w-100" alt="product-logo">
+                                </div>
+                                {% for image in product_images %}
+                                    <div class="carousel-item">
+                                        <img src="{{image.image.url}}" class="d-block w-100" alt="{{forloop.counter}}">
+                                    </div>
+                                {% endfor %}
+                                
+                            </div>
+                            <!--splide для вертикальной прокрутки-->
+                            <div class="splide splide--vertical pe-0 pe-md-2 col-3">
+                                <div class="splide__track">
+                                    <div class="carousel-indicators splide__list align-items-center">
+                                        {% for image in product_images %}
+                                            <button type="button" data-bs-target="#carouselProducer" data-bs-slide-to="{{forloop.counter}}" aria-label="Slide {{forloop.counter}}" class="active splide__slide"><img src="{{image.image.url}}" class="d-block w-100" alt="{{forloop.counter}}"></button>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-5 col-xxl-4 d-flex flex-column">
+                        <div class="row d-flex align-items-center mb-3 mb-md-4 order-2 order-xxl-1">
+                            <div class="col-3">
+                                <a href=""><img src="../img/france-flag-lage.svg" class="product-header__flag" alt=""></a>
+                            </div>
+                            <div class="col-9">
+                                {% if product.series.logo %}
+                                    <a href="{% url 'products:series_detail' product.series.slug %}">
+                                        <img src="{{product.series.logo.url}}" class="product-header__logo" alt="">
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row order-3 order-xxl-2r mb-3 mb-md-4">
+                            <div class="col-12">
+                                <button class="favorite favorite--product-full">Добавить в избранное</button> 
+                            </div>
+                        </div>
+                        <div class="row mb-2  mb-md-4 order-1 order-xxl-3">
+                            <div class="col-6 col-xxl-12 product-header__title mb-2">Рейтинг</div>
+                            <div class="col-6 col-xxl-12 product-header__rating rating rating--lage mb-2">
+                                <div class="me-2">
+                                    {% if product.rating %}{{product.rating}}{% else %}0/5{% endif %}</div>
+                                <div class="rating__value rating__body">
+                                    <div class="rating__active" style="width: {{product.product_rating_int}}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row order-4 mb-2 mb-xxl-3 order-xxl-4">
+                            <div class="col-12">
+                                <div class="product-header__title mb-2 mb-xxl-3">Серия</div>
+                                <div class="row">
+                                    <div class="col-12 mb-2 tag-links">
+                                        {% if product.series %}
+                                            {% for tag in product.series.tag.all %}
+                                                <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?tag={{tag.slug}}{% endif %}" class="tag">{{tag.name}}</a>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for tag in product.brand.tag.all %}
+                                                <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?tag={{tag.slug}}{% endif %}" class="tag">{{tag.name}}</a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row order-5 order-xxl-5">
+                            <div class="col-12">
+                                <div class="product-header__title mb-2 mb-xxl-3">Ценовая категория</div>
+                                <div class="row">
+                                    <div class="col-12 tag-links">
+                                        <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?price_category={{product.price_category.slug}}{% endif %}" class="tag">{{product.price_category.name}}</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-2 mb-md-3">
+                    <div class="col-12 col-xxl-10 information">
+                        {% for tag in product.tag.all %}
+                            <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?tag={{tag.slug}}{% endif %}" class="btn btn--base me-3 mb-2 mb-md-3">{{tag.name}}</a>
+                        {% endfor%}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="about-product">
+            <div class="container container--bc"> 
+            <div class="row justify-content-center mb-2 mb-xxl-4">
+                <div class="col-12 col-xxl-10">
+                    <div class="accordion about-product__accordion mb-2 mb-xxl-3">
+                        <div class="accordion-item about-product__item">
+                            <h2 class="accordion-header" id="panelsStayOpen-discription">
+                                <button class="accordion-button collapsed about-product__title" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                Описание
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-discription">
+                                <div class="accordion-body about-product__information information ">
+                                    {{product.description|bleach}}
+                                </div>
+                            </div>
+                        </div>         
+                    </div>
+                    
+                    {% if product.prescription %}
+                        <div class="about-product__title mb-1 mb-xxl-3">Назначение средства</div>
+                        <div class="row">
+                            <div class="col-12 mb-2 tag-links">
+                                {% for tag in product.prescription.all %}
+                                    <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?prescription={{tag.slug}}{% endif %}" class="tag">{{tag.name}}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="accordion about-product__accordion mb-2 mb-xxl-3">
+                        <div class="accordion-item about-product__item">
+                            <h2 class="accordion-header" id="panelsStayOpen-application">
+                                <button class="accordion-button collapsed about-product__title" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseApplication" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                Применение
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseApplication" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-application">
+                                <div class="accordion-body about-product__information information ">
+                                    {{product.use_description|bleach}}
+                                </div>
+                            </div>
+                        </div>         
+                    </div>
+                    
+                    {% if product.key_action %}
+                        <div class="about-product__title mb-1 mb-xxl-3">Ключевое действие</div>
+                        <div class="row">
+                            <div class="col-12 mb-2 tag-links">
+                                {% for tag in product.key_action.all %}
+                                    <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?key_action={{tag.slug}}{% endif %}" class="tag">{{tag.name}}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if product.sex %}
+                    <div class="about-product__title mb-1 mb-xxl-3">Пол</div>
+                    <div class="row">
+                        <div class="col-12 mb-2 tag-links">
+                            {% for tag in product.sex.all %}
+                                <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?sex={{tag.slug}}{% endif %}" class="tag">{{tag.name}}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if product.age_recommendation %}
+                        <div class="about-product__title mb-1 mb-xxl-3">Рекомендации по возрасту</div>
+                        <div class="row">
+                            <div class="col-12 mb-2 tag-links">
+                                <a href="{% if first_category %}{% url 'catalog:category' first_category.slug %}?age_recommendation={{product.age_recommendation.slug}}{% endif %}" class="tag">
+                                    {{product.age_recommendation.name}}
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                </div>
+            </div>
+        </section>
+        <section class="slider">
+            <div class="container container--bc">                
+                <div class="row justify-content-center">
+                    <div class="col-12 col-xxl-10">
+                        <div id="carouselProduct" class="carousel carousel--base slide b-carousel carousel-fade" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                {% for _ in selection_banners %}
+                                    <button type="button" data-bs-target="#carouselSelection"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            aria-label="Slide {{ forloop.counter }}"></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for banner in selection_banners %}
+                                    <div class="carousel-item">
+                                        <a href="{% url 'landing:landing_page' 'o-proekte' %}">
+                                            <img src="{{ banner.banner.url }}" class="d-block w-100" alt="...">
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% if product_reviews_images %}
+            <section class="gallary">
+                <div class="container container--bc">
+                    <div class="row justify-content-center mb-3 gallary__header">
+                        <div class="col-6 col-xxl-5">
+                            Фото ({{product_reviews_images|length}})
+                        </div>
+                        <div class="col-6 col-xxl-5 text-end">
+                            <a href="{% url 'products:product_photos' product.slug %}">Все фото</a>
+                        </div>
+                    </div>
+                        <div class="splide splide--gallery row mb-3 mb-xxl-4" aria-labelledby="carousel-heading">                    
+                            <div class="splide__track col-12 col-xxl-10">
+                                <ul class="splide__list">
+                                    {% for image in product_reviews_images %}
+                                        <li class="splide__slide">
+                                            <img src="{{image.image.url}}" data-bs-toggle="modal" data-bs-target="#openFullImg" class="thumb" alt="">
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </section>
+        {% endif %}
+            <section class="users-feedback">
+                <div class="container container--bc mb-3 mb-xxl-4">
+                    <div class="row justify-content-center mb-2 mb-xxl-3 users-feedback__header">
+                        <div class="col-6 col-xxl-5">
+                            Отзывы ({{product_reviews|length}})
+                        </div>
+                        <div class="col-6 col-xxl-5 text-end">
+                            <a href="{% url 'products:product_reviews' product.slug %}">Все отзывы</a>
+                        </div>
+                    </div>    
+                    {% if product_reviews %}            
+                    <div class="splide splide--users-feedback row justify-content-center mb-0 mb-xxl-3" aria-labelledby="carousel-heading">                    
+                        <div class="splide__track col-12 col-xxl-10">
+                            <div class="splide__list">
+                                {% for review in product_reviews %}
+                                    <a href="" class="splide__slide user-feedback">
+                                        <div class="user-feedback__header row">
+                                            <div class="col-8 mb-2">
+                                                <div class="user-feedback__name">{{review.profile.first_name}} {{review.profile.last_name_slice}}.</div>
+                                                <div class="user-feedback__date">{{review.created_at|date:"d.m.Y"}}</div>
+                                                <div class="rating rating-sm">
+                                                    <div class="rating__body">
+                                                        <div class="rating__active" style="width: {{review.review_rating_int}}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 text-end">
+                                                <div class="user-feedback__avatar">
+                                                    {% if review.profile.avatar %}
+                                                    <img src="{{review.profile.avatar.url}}" alt="">
+                                                    {% endif %}
+                                                </div> 
+                                            </div>
+                                            <div class="col-12 ">
+                                                <p>{{review.text|bleach}}</p>
+                                            </div>
+                                            
+                                                <ul class="col-12 user-feedback__photos mb-1">
+                                                    {% if review.images.all|length %}
+                                                        {% for image in review.images.all %}
+                                                            {% if not forloop.counter > 3 %}
+                                                                <li class="user-feedback__photo">
+                                                                    <img src="{{image.image.url}}" style="height: 180px; width: 180px;" alt="{{image.pk}}">
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </ul>
+                                            
+                                            {% if review.answer_text %}
+                                                <div class="col-8 mb-2">
+                                                    <div class="user-feedback__name text-uppercase">{{review.answer_manufacturer_name}}</div>
+                                                    <div class="user-feedback__date">{{review.answer_date|date:"d.m.Y"}}</div>
+                                                    <div class="rating rating-sm">
+                                                        <div class="rating__body">
+                                                            <div class="rating__active" style="width: {{review.product_rating_int}}%;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-end">
+                                                    <div class="user-feedback__avatar"><img src="../img/icon-skin-short.png" alt=""></div> 
+                                                </div>
+                                                <div class="col-12 ">
+                                                    <p>{{review.answer_text|bleach}}</p>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="user-feedback__footer row justify-content-center">
+                        <div class="col-12 col-xxl-10">
+                            <button type="button" class="btn-string" data-bs-toggle="modal" data-bs-target="#openReview" data-bs-whatever="Icon Skin Stop Acne Сыворотка Multi-Acid Serum"><img src="../img/pen-notice.svg" class="me-1" alt="">Отправить отзыв</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="users-feedback">
+                <div class="container container--bc mb-3 mb-xxl-4">
+                    <div class="row justify-content-center mb-2 mb-xxl-3 users-feedback__header">
+                        <div class="col-6 col-xxl-5">
+                            Вопросы ({{product_questions|length}})
+                        </div>
+                        <div class="col-6 col-xxl-5 text-end">
+                            <a href="{% url 'products:product_questions' product.slug %}">Все вопросы</a>
+                        </div>
+                    </div>
+                    {% if product_questions %}
+                    <div class="splide splide--users-feedback row justify-content-center mb-0 mb-xxl-3" aria-labelledby="carousel-heading">                    
+                        <div class="splide__track col-12 col-xxl-10">
+                            <div class="splide__list">
+                                
+                                {% for question in product_questions %}
+                                    <a href="" class="splide__slide user-feedback user-feedback--questions">
+                                        <div class="user-feedback__header row">
+                                            <div class="col-8 mb-2">
+                                                <div class="user-feedback__name">{{question.profile.first_name}} {{ question.profile.last_name_slice }}.</div>
+                                                <div class="user-feedback__date">{{question.date|date:"d.m.Y"}}</div>
+                                                <div class="rating rating-sm">
+                                                    <div class="rating__body">
+                                                        <div class="rating__active" style="width: 25%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 text-end">
+                                                <div class="user-feedback__avatar"><img src="../img/test-gallery-slide-4.jpg" alt=""></div> 
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <p>{{question.text}}</p>
+                                            </div>
+
+                                            {% if question.answer_text %}
+                                                <div class="col-8 mb-2">
+                                                    <div class="user-feedback__name text-uppercase">{{question.answer_manufacturer_name}}</div>
+                                                    <div class="user-feedback__date">{{question.answer_date|date:"d.m.Y"}}</div>
+                                                    <div class="rating rating-sm">
+                                                        <div class="rating__body">
+                                                            <div class="rating__active" style="width: {{question.product_rating_int}}%;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-end">
+                                                    <div class="user-feedback__avatar"><img src="../img/icon-skin-short.png" alt=""></div> 
+                                                </div>
+                                                <div class="col-12 ">
+                                                    <p>{{question.answer_text}}</p>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="user-feedback__footer row justify-content-center">
+                        <div class="col-12 col-xxl-10">
+                            <button type="button" class="btn-string" data-bs-toggle="modal" data-bs-target="#openQuestion" data-bs-whatever="Icon Skin Stop Acne Сыворотка Multi-Acid Serum"><img src="../img/message-question.svg" class="me-1" alt="">Задать вопрос</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </main>
+    
+    <!--Оставить отзыв-->
+    <div class="modal fade" id="openReview" tabindex="-1" role="dialog" aria-labelledby="openReviewLabel">
+        <div class="modal-dialog modal-lg" role="document" style="transform: translate(0) !important">
+        <div class="modal-content leave-feed__modal-content p-0 p-xxl-4">
+            <div class="row modal-header">
+                <h5 class="col-12 leave-feed__title text-center text-xxl-start">Отзыв о средстве</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'products:create_review' product.pk %}" enctype="multipart/form-data" method="post" class="needs-validation">
+                    {% csrf_token %}
+                    <div class="row mb-4">
+                        <div class="text--15-30 text-start col-6">Оцените средство</div>
+                        <div class="col-6 ">                                        
+                            <div class="rating rating--xl rating--set float-end">
+                                <div class="rating__body">
+                                    <div class="rating__active"></div>
+                                    <div class="rating__items">
+                                        <input type="radio" class="rating__item" value="1" name="rating">
+                                        <input type="radio" class="rating__item" value="2" name="rating">
+                                        <input type="radio" class="rating__item" value="3" name="rating">
+                                        <input type="radio" class="rating__item" value="4" name="rating">
+                                        <input type="radio" class="rating__item" value="5" name="rating">
+                                    </div>
+                                </div>
+                                <div class="rating__value" style="display: none;">0</div><!--Пока значение хранится здесь-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="text--15-30 text-start col-12 mb-3">Расскажите о средстве</div>
+                        <div class="col-12 position-relative leave-feed__textarea  input--dark">      
+                            <textarea class="form-control" id="feedFormControlTextarea" name="text" maxlength="1400"></textarea>
+                            <div class="leave-feed__count">
+                                <span class="leave-feed__num">0</span>
+                                <span class="leave-feed__maximum">/ 1400</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="text--15-30 text-start col-12 mb-3">
+                            Загрузите до 5 фотографий
+                        </div>
+                        <div class="col-3 col-xxl-4"> 
+                            <div class="input input--modal input--image profile__input profile__image" type="button">
+                                <img src="{% static '/img/gallery-add.svg' %}" alt="add photos" class="position-absolute top-50 start-50 translate-middle"/>
+                                <input
+                                    multiple
+                                    type="file"
+                                    id="img-multiple"
+                                    name="images"
+                                    accept="image/png, image/jpg"
+                                    class="file-input profile__file-input"
+                                />
+                            </div>
+                            <div class="leave-feed__img-list"></div>
+                        </div>
+                        <div class="col-9 col-xxl-8 d-flex justify-content-center flex-column">
+                            <p class="mb-1 leave-feed__comment">Нажмите на область с иконкой</p>
+                            <p class="leave-feed__comment leave-feed__comment--light mb-1">Фото до 10 МБ. Формат JPG, JPEG, BMP, GIF</p>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 d-flex justify-content-start justify-content-md-around flex-column flex-md-row flex-column-reverse">
+                            <button type="button" class="btn-string pre-color" data-bs-dismiss="modal">
+                                <img src="../img/cansel-icon.svg" class="me-1" alt="">
+                                Отменить
+                            </button>
+                            <button type="submit" class="btn-string mb-3 mb-md-0" >
+                                <img src="../img/pen-notice.svg" class="me-1" alt="">
+                                Отправить отзыв
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!--Задать вопрос-->
+    <div class="modal fade" id="openQuestion" tabindex="-1" role="dialog" aria-labelledby="openQuestionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="row modal-header">
+                <h5 class="col-12 leave-feed__title text-center text-xxl-center">Задать вопрос о средстве</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'profile:create_question' product.pk %}" method="post" id="question-form">
+                    {% csrf_token %}
+                    <div class="row mb-4">
+                        <div class="col-12 position-relative leave-feed__textarea  input--dark">      
+                            <textarea class="form-control" name="text" id="question-input" maxlength="500"></textarea>
+                            <div class="leave-feed__count">
+                                <span class="leave-feed__num">0</span>
+                                <span class="leave-feed__maximum">/ 500</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 d-flex justify-content-start justify-content-md-around flex-column flex-md-row flex-column-reverse">
+                            <button type="button" class="btn-string pre-color" data-bs-dismiss="modal">
+                                <img src="../img/cansel-icon.svg" class="me-1" alt="">
+                                Отменить
+                            </button>
+                            <button type="submit" class="btn-string mb-3 mb-md-0" href="#questionApply" data-bs-toggle="modal">
+                                <img src="../img/pen-notice.svg" class="me-1" alt="">
+                                Отправить вопрос
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!--Увеличение изображения-->
+    <div class="modal fade" id="openFullImg" tabindex="-1" role="dialog" aria-labelledby="openFullImgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog--img" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-img" data-bs-dismiss="modal" aria-label="Close"><img src="" alt=""></div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="questionApply" aria-hidden="true" aria-labelledby="questionApplyLabel" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="container">
+                <div class="modal-content auth__content">
+                    <div class="modal-header py-2 px-0">
+                        <h5 class="modal-title text-center auth__title" id="questionToggleLabel">
+                            Ваш вопрос принят в обработку, уведомление об ответе появится в
+                            Личном кабинете
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row d-flex justify-content-around">
+                            <form class="w-100">
+                                <button type="submit" class="btn btn--base w-100">ok</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/splide.min.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#question-form").submit(function (event) {
+                event.preventDefault();
+                const question = $("#question-input").val();
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr("action"),
+                    data: {"text": question, "csrfmiddlewaretoken": "{{ csrf_token }}"},
+                    error: function (xhr, status, error) {
+                        alert("Произошла ошибка: " + error);
+                    },
+                })
+            });
+        });
+    </script>
+{% endblock %}

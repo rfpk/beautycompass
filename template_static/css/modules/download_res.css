@@ -1,0 +1,144 @@
+.download_rezult {
+  margin-bottom: 30px;
+}
+.download_rezult form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+@media screen and (max-width: 768px) {
+  .download_rezult form {
+    width: 100%;
+  }
+}
+.download_rezult form label {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #D9D9D9;
+  width: 100%;
+}
+@media screen and (max-width: 768px) {
+  .download_rezult form label {
+    width: 100%;
+    font-size: 10px;
+    line-height: 12px;
+  }
+}
+.download_rezult form label input {
+  border-radius: 15px;
+  background: #FFFFFF;
+  border: 0 solid #1560BD;
+  width: 100%;
+  padding: 10px;
+  box-shadow: 0px 10px 20px rgba(14, 14, 14, 0.1);
+}
+@media screen and (max-width: 768px) {
+  .download_rezult form label input {
+    width: 100%;
+  }
+}
+.download_rezult form label input:focus {
+  box-shadow: none;
+}
+.download_rezult form label input:focus-visible {
+  box-shadow: none;
+}
+.download_rezult form button {
+  background: rgba(0, 0, 0, 0);
+  border: 0;
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  color: #1560BD;
+  transition: opacity 0.3s;
+}
+@media screen and (max-width: 768px) {
+  .download_rezult form button {
+    width: 100%;
+    margin-top: 25px;
+  }
+}
+.download_rezult form button:before {
+  flex-shrink: 0;
+  content: "";
+  display: inline-block;
+  width: 34px;
+  aspect-ratio: 1;
+  border: 3px solid #1560BD;
+  border-radius: 50%;
+  margin-right: 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 68%;
+  background-image: url("../img/checkBlue.svg");
+}
+@media screen and (max-width: 1400px) {
+  .download_rezult form button:before {
+    width: 20px !important;
+    border: 1px solid #1560BD;
+  }
+}
+.download_rezult form button:hover {
+  opacity: 0.7;
+}
+.download_rezult form button p {
+  margin: 0;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 37px;
+}
+@media screen and (max-width: 1400px) {
+  .download_rezult form button p {
+    font-size: 24px;
+    line-height: 18px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .download_rezult form button p {
+    font-size: 15px;
+    line-height: 18px;
+  }
+}
+.download_rezult form #paySelect:before {
+  border: 1px rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background-size: 100%;
+  background-image: url("../img/receipt-item.svg");
+}
+.download_rezult form #selectProgram:before {
+  border: 1px rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background-size: 100%;
+  background-image: url("../img/wallet-money.svg");
+}
+.download_rezult form #butChoice {
+  display: flex;
+}
+.download_rezult form #butChoice:before {
+  flex-shrink: 0;
+  content: "";
+  display: inline-block;
+  width: 34px;
+  aspect-ratio: 1;
+  border: 0px;
+  border-radius: 50%;
+  margin-right: 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100%;
+  background-image: url("../img/settingDidg.svg");
+}
+.download_rezult-saveing {
+  margin-top: 20px;
+}
+.download_rezult-saveing form label {
+  width: 60%;
+}
+@media screen and (max-width: 1400px) {
+  .download_rezult-saveing form label {
+    width: 100%;
+  }
+}/*# sourceMappingURL=download_res.css.map */

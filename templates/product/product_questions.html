@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ block.super }} - Вопросы{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="questions">
+            <div class="container container--bc questions__sticker">
+                <div class="row justify-content-center mb-4">
+                    <a href="{% url 'products:series_detail' product.series.slug %}"
+                       class="col-12 col-xxl-10 mb-2 mb-md-4 text-center title--h1 questions__heading-link--h1-link">
+                        {{ product.series.name }}
+                    </a>
+                    <div class="col-12">
+                        <a href="{% url 'products:product_detail' product.slug %}"
+                           class="questions__heading-link title__under d-flex justify-content-center align-items-center text-center">
+                            {{ product.name }}
+                        </a>
+                    </div>
+                </div>
+                <div class="questions__body offset-xxl-1 col-xxl-10">
+                    <button type="button" class="btn-string mb-4" id="question-form-btn">
+                        <img src="{% static '/img/pen-notice.svg' %}" class="me-1" alt=""/>Задать вопрос
+                    </button>
+
+                    <form action="{% url 'profile:create_question' product.pk %}" method="post" id="question-form"
+                          class="questions__form mb-4" hidden>
+                        {% csrf_token %}
+                        <div class="textarea--wrapper position-relative col-12 mb-2">
+                            <textarea id="question-input" name="text" class="textarea--regular w-100 h-100 border-0"
+                                      placeholder="Задайте вопрос" maxlength="500" rows="5" required></textarea>
+                            <div id="char-count" class="textarea--char-count">0/500</div>
+                        </div>
+                        <button type="submit" data-bs-toggle="modal" href="#questionApply" class="btn btn--base">
+                            Задать вопрос
+                        </button>
+                    </form>
+                    <h3 class="title--h4 mb-4">Вопросы пользователей ({{ page_obj.paginator.count }})</h3>
+                    {% for question in questions %}
+                        <div class="feed d-flex flex-column mb-5">
+                            <div class="feed__row">
+                                <div class="feed__user">
+                                    <a href="{% url 'profile:author-profile' question.author_id %}"
+                                       class="feed__avatar">
+                                        {% if question.profile.avatar %}
+                                            <img src="{{ question.profile.avatar.url }}" alt="avatar"/>
+                                        {% endif %}
+                                    </a>
+                                    <div class="feed__info">
+                                        <a href="{% url 'profile:author-profile' question.author_id %}"
+                                           class="feed__name">{{ question.profile.first_name }} {{ question.profile.last_name_slice }}.</a>
+                                        <div class="feed__date">{{ question.date|date:"d.m.Y" }}</div>
+                                    </div>
+                                </div>
+                                <p class="feed__text mb-4">
+                                    {{ question.text }}
+                                </p>
+                                {% if question.question_answers.all %}
+                                    {% for question in question.question_answers.all %}
+                                        <div class="feed__user">
+                                            <a href="{% url 'manufacturer:profile_manufacturer' question.manufacturer.pk %}"
+                                               class="feed__avatar">
+                                                {% if question.manufacturer.logo %}
+                                                    <img src="{{ question.manufacturer.logo.url }}" alt="avatar"/>
+                                                {% endif %}
+                                            </a>
+                                            <div class="feed__info">
+                                                <a href="{% url 'manufacturer:profile_manufacturer' question.manufacturer.pk %}"
+                                                   class="feed__name">{{ question.manufacturer.name }}</a>
+                                                <div class="feed__date">{{ question.date|date:"d.m.Y" }}</div>
+                                            </div>
+                                        </div>
+                                        <p class="feed__text">
+                                            {{ question.text }}
+                                        </p>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% if page_obj.has_other_pages %}
+                        <div class="d-flex justify-content-center mt-4 mt-md-5">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    {% if page_obj.has_previous %}
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">〈</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if num == page_obj.number %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <li class="page-item">
+                                    {% if page_obj.has_next %}
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">〉</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal fade" id="questionApply" aria-hidden="true" aria-labelledby="questionApplyLabel" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="container">
+                <div class="modal-content auth__content">
+                    <div class="modal-header py-2 px-0">
+                        <h5 class="modal-title text-center auth__title" id="questionToggleLabel">
+                            Ваш вопрос принят в обработку, уведомление об ответе появится в
+                            Личном кабинете
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row d-flex justify-content-around">
+                            <form class="w-100">
+                                <button type="submit" class="btn btn--base w-100">ok</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/questions.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#question-form").submit(function (event) {
+                event.preventDefault();
+                const question = $("#question-input").val();
+                console.log(question)
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr("action"),
+                    data: {"text": question, "csrfmiddlewaretoken": "{{ csrf_token }}"},
+                    error: function (xhr, status, error) {
+                        alert("Произошла ошибка: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

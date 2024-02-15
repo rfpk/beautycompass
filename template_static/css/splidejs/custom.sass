@@ -1,0 +1,112 @@
+@import "../modules/vars.sass"
+    
+.splide--gallery
+    display: flex
+    justify-content: center
+    text-align: center
+    padding-right: calc(var(--bs-gutter-x)/ 2)
+    padding-left: calc(var(--bs-gutter-x)/ 2)
+    .splide
+        &__arrows
+            position: absolute
+            height: 100%
+            width: 100%
+            left: 0
+        &__arrow
+            width: 50px
+            height: 35px
+            position: absolute
+            top: 50%
+            transform: translateY(-50%)
+            background: url(../../img/arrow-active.svg) no-repeat
+            background-position: bottom
+            border: 0   
+
+            &--prev
+                left: 60px
+                transform: translateY(-50%) rotateZ(-90deg)
+            &--next
+                right: 60px
+                transform: translateY(-50%) rotate(90deg)
+            &[disabled]
+                background-image: url(../../img/arrow-disabled.svg)
+        &__slide
+            display: flex
+            text-align: center
+            justify-content: center
+            align-items: center
+            overflow: hidden
+            border-radius: $border-radius
+            @media screen and (max-width: $first-breack-point)
+                border-radius: 10px
+            img
+                object-fit: contain
+                max-width: 220px
+                max-height: 195px
+    .splide__arrows:has(.splide__arrow--prev[disabled] ~ .splide__arrow--next[disabled])
+        display: none
+
+.splide--users-feedback
+    .splide
+        &__arrows
+            position: absolute
+            height: 100%
+            width: 100%
+            left: 0
+        &__arrow
+            width: 50px
+            height: 35px
+            position: absolute
+            top: 50%
+            transform: translateY(-50%)
+            background: url(../../img/arrow-active.svg) no-repeat
+            background-position: bottom
+            border: 0    
+            &--prev
+                left: 60px
+                transform: translateY(-50%) rotateZ(-90deg)
+            &--next
+                right: 60px
+                transform: translateY(-50%) rotate(90deg)
+            &[disabled]
+                background-image: url(../../img/arrow-disabled.svg)
+        &__track
+            padding-top: 10px
+            padding-bottom: 24px
+            @media screen and (max-width: $first-breack-point)
+                padding-bottom: 22px
+    .splide__arrows:has(.splide__arrow--prev[disabled] ~ .splide__arrow--next[disabled])
+        display: none
+
+.splide--vertical
+    display: flex
+    flex-direction: column
+    justify-content: center
+    text-align: center
+    .splide
+        &__arrows
+            position: absolute
+            height: 100%
+            width: 100%
+            left: 0
+            @media screen and (max-width: $first-breack-point)
+                margin-left: 6px
+        &__arrow
+            position: absolute
+            left: 50%
+            background: url(../../img/arrow-active.svg) no-repeat
+            border: 0   
+            @media screen and (max-width: $first-breack-point)
+                 width: 28px
+                 height: 28px
+                 background-size: 100%
+            &--prev
+                top: 0
+                transform: translateX(-50%)
+            &--next
+                bottom: 0
+                transform: translateX(-50%) rotate(180deg)
+            &[disabled]
+                background-image: url(../../img/arrow-disabled.svg)
+    .splide__arrows:has(.splide__arrow--prev[disabled] ~ .splide__arrow--next[disabled])
+        display: none

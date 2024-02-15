@@ -1,0 +1,61 @@
+
+{% for author in data %}
+    <div class="white-box white-box--line">
+        <div class="container container--bc">
+            <div class="col-xxl-10 offset-xxl-1">
+                <div class="user-rating-item">
+                    <div class="user-rating-item__pos title--20-50 lh-125 dark-semi">{{ author.position }}</div>
+                    <div class="user-rating-item__avatar">
+                        {% if type_period == 'total' %}
+                            {% if author.profile.avatar %}
+                                <img src="{{ author.profile.avatar.url }}" alt="">
+                            {% endif %}
+                        {% else %}
+                            {% if author.author.profile.avatar %}
+                                <img src="{{ author.author.profile.avatar.url }}" alt="">
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        {% if type_period == 'total' %}
+                            <div
+                                    style="cursor: pointer;"
+                                    class="user-rating-item__nickname title--20-36 lh-125 dark-semi"
+                                    onclick="location.href='{% url 'profile:author-profile' author.profile.pk %}'"
+                            >
+                                {{ author.profile.nickname }}
+                            </div>
+                        {% else %}
+                            <div
+                                    style="cursor: pointer;"
+                                    class="user-rating-item__nickname title--20-36 lh-125 dark-semi"
+                                    onclick="location.href='{% url 'profile:author-profile' author.author.profile.pk %}'"
+                            >
+                                {{ author.author.profile.nickname }}
+                            </div>
+                        {% endif %}
+                        <div class="d-flex gap-3">
+                            <div class="user-rating-item__rate text--10_18 dark-lighter text-uppercase">
+                                Рейтинг:
+                                <span>{{ author.rating }}</span>
+                            </div>
+
+                            {% if type_period == 'total' %}
+                                {% if author.profile.city %}
+                                    <div class="user-rating-item__city text--10_18 dark-lighter">
+                                        г. {{ author.profile.city }}</div>
+                                {% endif %}
+                            {% else %}
+                                {% if author.author.profile.city %}
+                                    <div class="user-rating-item__city text--10_18 dark-lighter">
+                                        г. {{ author.author.profile.city }}</div>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

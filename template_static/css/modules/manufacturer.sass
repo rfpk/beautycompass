@@ -1,0 +1,443 @@
+@import "vars.sass"
+.manufacturer
+  a
+    text-decoration: none
+    margin-bottom: 0
+  p
+    margin-bottom: 0
+  textarea
+    resize: none
+  .question
+    width: 1rem
+    @media screen and (min-width: $first-breack-point)
+      width: 1.5rem
+  #profile__file-input, #shop__file-input
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    opacity: 0
+    cursor: pointer
+  .border--right
+    border-right: 1px solid $dark-color
+  .inherit
+    &:hover
+      color: inherit
+      opacity: inherit
+
+
+  .profile
+    &__badge
+      svg
+        width: 2rem
+        @media screen and (min-width: $first-breack-point)
+          width: 3rem
+      &:hover
+        color: $pre-color
+        opacity: .8
+        svg
+          path
+            fill: $pre-color
+
+    &__body
+      grid-template-columns: 1fr 2fr 1fr
+      grid-template-rows: 26px auto auto auto repeat(3, auto)
+      grid-row-gap: 23px
+      grid-column-gap: 1rem
+      grid-template-areas: 'name name name' 'photo country country' 'photo town town' 'photo . .' 'tel tel tel' 'email email email' 'description description description' 'history history history' 'principles principles principles'
+      @media screen and (min-width: $second-breack-point)
+        grid-template-rows: repeat(3, 42px) repeat(3, auto)
+        grid-row-gap: 1.5rem
+        grid-column-gap: 1.5rem
+        grid-template-areas: 'photo name country' 'photo email town' 'photo tel .' 'description description description' 'history history history' 'principles principles principles'
+
+      @media screen and (min-width: $first-breack-point)
+        grid-template-columns: 187px auto 258px
+        grid-column-gap: 37px
+        grid-row-gap: 30px
+
+      .name
+        grid-area: name
+      .photo
+        grid-area: photo
+      .country
+        grid-area: country
+      .town
+        grid-area: town
+      .tel
+        grid-area: tel
+        @media screen and (min-width: $first-breack-point)
+          max-width: 410px
+      .email
+        grid-area: email
+        @media screen and (min-width: $first-breack-point)
+          max-width: 410px
+      .description
+        grid-area: description
+      .history
+        grid-area: history
+      .principles
+        grid-area: principles
+
+      .tel, .email
+        img
+          width: 26px
+          height: 26px
+          @media screen and (min-width: $first-breack-point)
+            width: 42px
+            height: 42px
+    &__label
+      top: -12px
+      left: 0
+      margin-bottom: -10px
+      @media screen and (min-width: $first-breack-point)
+        top: -18px
+    &__photo
+      width: 114px
+      height: 114px
+      border-radius: 15px
+      background: $white-color
+      box-shadow: $box-shadow-regular
+      @media screen and (min-width: $second-breack-point)
+        width: 175px
+        height: 175px
+      @media screen and (min-width: $first-breack-point)
+        width: 187px
+        height: 187px
+      img
+        width: 54px
+        height: auto
+    &__card
+      &--btn
+        justify-self: center
+        .confirm
+          margin-left: 10px
+      .small-brake
+        @media (max-width: $xs-breack-point)
+          width: 60%
+
+
+  .add-info
+    &__button
+      &:hover
+        color: $pre-color
+        opacity: .8
+        svg
+          path
+            fill: $pre-color
+    &__wrapper
+      border-radius: 10px
+      background: $white-color
+      box-shadow: $box-shadow-regular
+    &__content
+      max-height: 0
+    &__title
+      font-weight: 700
+    &__schemes
+
+      .left
+
+        &-inner
+          &__item
+            margin-top: -8px
+      .right
+        &__title
+          display: flex
+          flex-wrap: nowrap
+          align-items: center
+    &__buttons
+      @media screen and (min-width: $first-breack-point)
+        row-gap: 1.5rem
+      img
+        @media screen and (min-width: $first-breack-point)
+          width: 37px
+          height: 37px
+
+  .shops
+    &__item
+      padding: 9px 17px 25px 15px
+      border-radius: 15px
+      background: $main-color
+      box-shadow: $box-shadow-regular
+      .title
+        margin-bottom: 4px
+        color: $gray-light
+        font-size: 12px
+        font-style: normal
+        font-weight: 600
+        line-height: normal
+      .input
+        padding: 10px 17px
+        border-radius: 15px
+        color: #210E22
+        font-size: 12px
+        font-style: normal
+        font-weight: 600
+        line-height: normal
+    .plus-image
+      padding: 0
+      width: 50px
+      height: 50px
+      @media screen and (min-width: $second-breack-point)
+        width: 42px
+        height: 42px
+      img
+        width: 100%
+    &__photo
+      width: 114px
+      height: 114px
+      border-radius: 10px
+      background: #FFF
+      box-shadow: 0 4px 20px 0 rgba(14, 14, 14, 0.07)
+      @media screen and (min-width: $second-breack-point)
+        //width: 335px
+        width: 100%
+        height: 200px
+      @media screen and (min-width: $first-breack-point)
+        height: 277px
+      img
+        width: 54px
+        height: 54px
+      label
+        margin-top: -14px
+  .banners
+    &__add
+      &-btn
+        padding: 0
+        width: 50px
+        height: 50px
+        @media screen and (min-width: $second-breack-point)
+          width: 42px
+          height: 42px
+      &-image
+        width: 100%
+
+  .page-buttons
+    &__add, &__remove
+      padding: 10px 20px
+      border-radius: 50px
+      color: $white-color
+      text-align: center
+      font-size: 10px
+      font-style: normal
+      font-weight: 700
+      line-height: normal
+      text-transform: uppercase
+      border: none
+    &__add
+      background: $main-color
+    &__remove
+      background: $pre-color
+
+.modal
+  &__prices
+    &-content
+      border-radius: 20px
+      max-width: 1200px
+      margin: auto
+      @media screen and (max-width: $first-breack-point)
+        max-width: 774px
+    &-header
+      padding-bottom: 0
+    &-close
+      top: -10px
+      right: -10px
+      width: 20px
+      height: 20px
+      @media screen and (min-width: $second-breack-point)
+        width: 44px
+        height: 44px
+        top: -22px
+        right: -22px
+    &-body
+      @media screen and (min-width: $first-breack-point)
+        padding: 74px 40px 54px 54px
+      tbody, td, tfoot, th, thead, tr
+        border-color: inherit
+        border-style: none
+        border-width: 0
+      th, td
+        text-align: center
+        vertical-align: middle
+        white-space: nowrap
+        padding: 7px 12px
+        @media screen and (min-width: $first-breack-point)
+          padding: 12px 26px
+        &:not(:last-child)
+          border-right: 1px solid $dark-color
+      tr
+        &:not(:last-child)
+          border-bottom: 1px solid $dark-color
+      td
+        cursor: pointer
+        &:hover
+          color: $pre-color
+  &__confirm
+    border-radius: 20px
+    &-content
+      max-width: 768px
+      margin: auto
+      border-radius: 20px
+    &-footer
+      border-top: none
+    &-close, &-apply
+      font-size: 15px
+      font-style: normal
+      font-weight: 600
+      line-height: normal
+      text-transform: uppercase
+      text-decoration: none
+      @media screen and (min-width: $first-breack-point)
+        font-size: 30px
+      img
+        width: 24px
+        height: 24px
+        @media screen and (min-width: $first-breack-point)
+          width: 48px
+          height: 48px
+    &-close
+      color: $pre-color
+    &-apply
+      color: $main-color
+
+.icon
+  &-statistic
+    width: fit-content
+    position: absolute
+    transform: translate(297%, 142%)
+    @media screen and (max-width: $first-breack-point)
+      transform: translate(0%, 130%)
+
+.title-custom
+  @media screen and (max-width: $first-breack-point)
+    margin-bottom: 75px
+
+.item
+  margin-top: 30px
+  &__chart
+    background: none
+    color: $dark-color
+    transition: .5s
+    &-open
+      background: linear-gradient(144.75deg, $main-color 31.52%, #194071 72.37%) 
+      color: $sub-color
+
+  &__inside
+    display: grid
+    grid-template: repeat(6, 60px) / ( 250px 1fr 500px)
+  &__image-view
+    grid-column: 1 / 2
+    grid-row: 1 / 5
+    img
+      height: 100%
+    
+  &__title
+    grid-column: 2 / 3
+    grid-row: 1/3
+    p
+      height: 50%
+      text-overflow: ellipsis
+      overflow: hidden
+      text-align: start
+      white-space: nowrap
+      width: 50%
+  &__rating-value
+    grid-column: 2 / 3
+    grid-row: 3
+    &::before
+      width: 200px
+      height: auto
+      aspect-ratio: 1/1
+    .rating__active
+      width: 100%
+      &::before
+        width: 200px
+        height: auto
+        aspect-ratio: 1/1
+  &__statistic-number
+    grid-column: 2 / 3
+    grid-row: 4
+    &__element
+      margin-right: 20px  
+      img
+        height: 37px
+        aspect-ratio: 1/1
+      span
+        &:last-child
+          color: $dark-semi-light
+  &__btn
+
+    margin-top: 18px
+    width: 60%
+    grid-column: 1 / 3
+    grid-row: 5
+    display: flex
+    overflow-x: scroll
+    overflow-y: hidden
+    height: fit-content
+    padding-bottom: 15px
+    scrollbar-width: thin
+    scrollbar-color: $main-color transparent
+
+    &::-webkit-scrollbar 
+      width: 5px
+      background-color: $white-color
+      margin-top: 5px
+    
+    &::-webkit-scrollbar-thumb 
+      border-radius: 10px
+      -webkit-box-shadow: $box-shadow-sm
+      background-color: $main-color
+      
+    &::-webkit-scrollbar-track 
+      color: $main-color
+      -webkit-box-shadow: $box-shadow-sm
+      border-radius: $border-radius
+      background-color: $white-color
+
+    transition: color 0.3s
+    a
+      flex-shrink: 0
+      background: $main-color
+      margin-right: 30px
+      color: $sub-color
+      &:last-child
+        margin: 0
+      &:hover
+        color: $sub-color !important
+        background: $pre-color !important
+      &:visited
+        color: $sub-color
+        background: $main-color
+
+.open_chart
+  p
+    margin: auto
+    width: fit-content
+    &::before
+      width: 20px
+      height: 20px
+      background: url('../img/dropdown-arr.svg')
+.chart
+  transition: .5s
+  overflow: hidden
+  height: 0
+  margin-bottom: 30px
+  canvas
+    width: 100% !important
+    height: fit-content !important
+    box-shadow: $box-shadow-sm
+
+  &-open
+    height: fit-content !important
+
+.output__statistic-items
+  margin-bottom: 30px
+  ul
+    list-style: none
+
+.products
+  &__statistic
+    #rating,#view,#visit,#favarite,#new,#default
+      cursor: pointer

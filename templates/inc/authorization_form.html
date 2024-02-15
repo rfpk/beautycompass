@@ -1,0 +1,200 @@
+<div class="modal fade" id="headerAutorisation" aria-hidden="true" aria-labelledby="headerAutorisationLabel"
+     tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="container">
+            <!--authorized-->
+            {% if user.is_authenticated %}
+                <div class="modal-content auth__content auth__content--authorized">
+                    <div class="modal-body">
+                        <div class="row d-flex justify-content-center align-items-center">
+                            <div class="auth__avatar">
+                                {% if user.user_profile.avatar %}
+                                    <img src="{{ user.user_profile.avatar.url }}" alt=""/>
+                                {% endif %}
+                            </div>
+                            <div class="auth__user">
+                                <div class="auth__name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</div>
+                                <input type="submit" value="В кабинет"
+                                       class="btn auth__btn col-12 col-xxl-5 mb-2 mb-xxl-0"
+                                       onclick="location.href='{% url 'profile:profile_detail' %}'"/>
+                                <a href="{% url 'main:logout' %}" class="btn btn-primary auth__btn auth__btn--primary">Выйти</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="modal-content auth__content">
+                    <div class="modal-header py-2 px-0">
+                        <h5 class="modal-title auth__title" id="authToggleLabel">
+                            Авторизация
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'main:login_user' %}" method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            <div class="row mb-2 d-flex auth__group">
+                                <label for="headerAuthEmail" class="col-3 my-0 p-0 auth__label">E-mail</label>
+                                <input type="email" name="email" class="form-control order-2" id="headerAuthEmail"
+                                       required/>
+                                <div id="headerAuthEmailFeedback"
+                                     class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                    Неверный E-mail
+                                </div>
+                            </div>
+                            <div class="row mb-3 mb-md-5 d-flex auth__group">
+                                <label for="authInputPassword" class="col-3 my-0 p-0 auth__label">Пароль</label>
+                                <input type="password" name="password" class="form-control order-2" id="headerAuthEmail"
+                                       required/>
+                                <div id="headerAuthPassFeedback"
+                                     class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                    Неверный пароль
+                                </div>
+                            </div>
+                            <div class="auth__sub-title">Забыли пароль?</div>
+                            <div class="row d-flex justify-content-around">
+                                <input type="submit" value="Регистрация" class="btn auth__btn col-7 col-xxl-4"
+                                       data-bs-target="#headerRegistration" data-bs-toggle="modal"
+                                       data-bs-dismiss="modal"/>
+                                <input type="submit" value="Войти"
+                                       class="btn btn-primary col-7 col-xxl-4 auth__btn auth__btn--primary"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="headerRegistration" aria-hidden="true" aria-labelledby="headerRegistrationLabel"
+     tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="container">
+            <div class="modal-content auth__content">
+                <div class="modal-header py-2 px-0">
+                    <h5 class="modal-title auth__title" id="authToggleLabel">Регистрация</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'main:register' %}" method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row mb-2 d-flex auth__group">
+                            <label for="headerReisterFirstName" class="col-3 my-0 p-0 auth__label">Имя</label>
+                            <input type="text" name="first_name" class="form-control order-2"
+                                   id="headerReisterFirstName" required/>
+                            <div id="headerRegisterFirstNameFeedback"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Неверное имя
+                            </div>
+                        </div>
+                        <div class="row mb-2 d-flex auth__group">
+                            <label for="headerReisterLastName" class="col-3 my-0 p-0 auth__label">Фамилия</label>
+                            <input type="text" name="last_name" class="form-control order-2" id="headerReisterLastName"
+                                   required/>
+                            <div id="headerRegisterLastNameFeedback"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Неверная фамилия
+                            </div>
+                        </div>
+                        <div class="row mb-2 d-flex auth__group">
+                            <label for="headerReisterNickName" class="col-3 my-0 p-0 auth__label">Ник</label>
+                            <input type="text" name="nickname" class="form-control order-2" id="headerReisterNickName"
+                                   required/>
+                            <div id="headerRegisterNickNameFeedback"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Неверный ник
+                            </div>
+                        </div>
+                        <div class="row mb-2 d-flex auth__group">
+                            <label for="headerReisterPhone" class="col-3 my-0 p-0 auth__label">Телефон</label>
+                            <input type="tel" name="phone" class="form-control order-2" id="headerReisterPhone"
+                                   required/>
+                            <div id="headerRegisterPhoneFeedback"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Неверный телефон
+                            </div>
+                        </div>
+                        <div class="row mb-2 d-flex auth__group">
+                            <label for="userSignupEmail" class="col-3 my-0 p-0 auth__label">E-mail</label>
+                            <input type="email" name="username" class="form-control order-2" id="userSignupEmail"
+                                   required/>
+                            <div id="headerRegisterEmailFeedback"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Неверный E-mail
+                            </div>
+                        </div>
+                        <div class="row mb-2 d-flex auth__group">
+                            <label for="registerInputPassword1" class="col-3 my-0 p-0 auth__label">Пароль</label>
+                            <input type="password" name="password1" class="form-control order-2"
+                                   id="registerInputPassword1" required/>
+                            <div id="headerRegisterPassFeedback1"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Введите пароль
+                            </div>
+                            <div id="headerRegisterPassCheck1" class="auth__invalid">
+                                Пароли не совпадают
+                            </div>
+                        </div>
+                        <div class="row mb-3 d-flex auth__group">
+                            <label for="registerInputPassword2" class="col-3 my-0 p-0 auth__label">Подтвердите
+                                пароль</label>
+                            <input type="password" name="password2" class="form-control order-2"
+                                   id="registerInputPassword2"
+                                   onkeyup="valid(event)" required/>
+                            <div id="headerRegisterPassFeedback2"
+                                 class="invalid-feedback col-9 order-1 my-0 auth__invalid">
+                                Введите пароль
+                            </div>
+                            <div id="headerRegisterPassCheck2" class="auth__invalid">
+                                Пароли не совпадают
+                            </div>
+                        </div>
+                        <div class="form-check mb-5 ps-2">
+                            <input class="form-check-input" type="checkbox" value="" id="registerCheck" required/>
+                            <label class="form-check-label" for="registerCheck">
+                                Я ознакомлен(а) с
+                                <a href="{% url 'landing:landing_page' "politika-konfidencialnosti" %}"
+                                   class="auth__conf" target="_blank">политикой конфиденциальности</a>
+                            </label>
+                            <div class="invalid-feedback auth__invalid">
+                                Необходимо подтверждение
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-around">
+                            <input type="submit" value="Регистрация"
+                                   class="btn btn-primary col-7 col-xxl-4 auth__btn auth__btn--primary"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="headerFavorites" aria-hidden="true" aria-labelledby="headerFavoritesLabel" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="container">
+            <div class="modal-content auth__content">
+                <div class="modal-header py-2 px-0">
+                    <h5 class="modal-title text-center auth__title" id="authToggleLabel">
+                        Функция доступна зарегистрированным пользователям
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row d-flex justify-content-around">
+                        <input type="submit" value="Регистрация" class="btn auth__btn col-7 col-xxl-4"
+                               data-bs-target="#headerRegistration" data-bs-toggle="modal" data-bs-dismiss="modal"/>
+                    </div>
+                </div>
+            </div>
+
+            <!--authorized-->
+            <div class="modal-content auth__content auth__content--authorized">
+                <div class="modal-body">
+                    <div class="row">
+                        <a href="#" class="auth__link">Сатьи</a>
+                        <a href="#" class="auth__link">Бренды</a>
+                        <a href="#" class="auth__link">Средства</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

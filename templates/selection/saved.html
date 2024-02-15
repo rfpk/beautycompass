@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Сохраненные Программы{% endblock %}
+
+
+{% block content %}
+    <main class="custom-main-program">
+      <section class="brand__title">
+        <div class="container container--bc">
+            <div class="page-title d-flex flex-wrap align-items-center col-xxl-10 offset-xxl-1">
+                <div class="col-1 col-xxl-12 order-xxl-1">
+                    <a href="{% url 'profile:profile_detail' %}" class="btn__svg-confirm text--15-30 fw-600 main-color hover-red d-flex align-items-center justify-content-start justify-content-xxl-center m-auto text-decoration-none">
+                        <img src="{% static 'img/arrow-left.svg' %}" alt="Стрелка налево">
+                        <span class=" text-uppercase ms-2">Вернуться в кабинет</span>
+                    </a>
+                </div>
+                <div class="col text-center col-xxl-12">
+                    <h1 class="title--20-36 text-uppercase" >Сохраненные программы</h1>
+                </div>
+            </div>
+        </div>
+      </section>
+    {% if programs %}
+        <section class="view  container container--bc">
+            <p class="text-uppercase">
+              программы
+            </p>
+            <div class="pagin__output-info">
+                <p>
+                    <ul>
+                        {% for program in programs %}
+                            <li class="">
+                                <a href="" class="d-flex justify-content-between align-items-center">
+                                    <div class="infProg">
+                                        <p class="title">{{ program.name }}</p>
+                                        <small>{{ program.created_at|date:'d.m.Y' }}</small>
+                                        <p class="descr">{{ program.description }}</p>
+                                    </div>
+                                    <div class="image"></div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </p>
+                <div class="pagin__output-info" id="viewProg">
+                     <div class="paginationjs">
+                    <div class="paginationjs-pages">
+                        <ul>
+                            <li class="paginationjs-prev J-paginationjs-previous " data-num="2" title="Previous page">
+                                {% if programs.has_previous %}
+                                    <a href="?page_program={{ programs.previous_page_number }}">‹</a>
+                                {% endif %}
+                            </li>
+                            {% for num in programs.paginator.page_range %}
+                                {% if num == programs.number %}
+                                    <li class="paginationjs-page J-paginationjs-page  active" data-num="{{forloop.counter}}">
+                                        <a href="?page_program={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num > programs.number|add:'-3' and num < programs.number|add:'3' %}
+                                    <li class="paginationjs-page J-paginationjs-page " data-num="{{forloop.counter}}">
+                                        <a href="?page_program={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="paginationjs-next disabled ">
+                                {% if programs.has_next %}
+                                    <a href="?page_program={{ programs.next_page_number }}">›</a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div></div>
+                </div>
+                </div>
+              </div>
+        </section>
+    {% endif %}
+    {% if result_tests %}
+        <section class=" view view-rez container container--bc">
+            <p class="text-uppercase">
+              Результаты тестов
+            </p>
+            <div class="pagin__output-info">
+                <p>
+                    <ul>
+                        {% for test in result_tests %}
+                            <li class="">
+                                <a href="" class="d-flex justify-content-between align-items-center">
+                                    <div class="infProg">
+                                        <p class="title">{{test.name}}</p>
+                                        <small>{{test.created_at|date:'d.m.Y'}}</small>
+                                    </div>
+                                    <div class="image"></div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </p>
+                <!-- {% if result_tests.has_other_pages %}
+                    <div class="d-flex justify-content-center mt-4 mt-md-5">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                {% if result_tests.has_previous %}
+                                    <a class="page-link" href="?page_test={{ result_tests.previous_page_number }}"
+                                    aria-label="Previous">
+                                        <span aria-hidden="true">〈</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+                            {% for num in result_tests.paginator.page_range %}
+                                {% if num == result_tests.number %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="?page_test={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num > result_tests.number|add:'-3' and num < result_tests.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page_test={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="page-item">
+                                {% if result_tests.has_next %}
+                                    <a class="page-link" href="?page_test={{ result_tests.next_page_number }}"
+                                    aria-label="Previous">
+                                        <span aria-hidden="true">〉</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %} -->
+
+                <div class="paginationjs">
+                    <div class="paginationjs-pages">
+                        <ul>
+                            <li class="paginationjs-prev J-paginationjs-previous " data-num="2" title="Previous page">
+                                {% if result_tests.has_previous %}
+                                    <a href="?page_test={{ result_tests.previous_page_number }}">‹</a>
+                                {% endif %}
+                            </li>
+                            {% for num in result_tests.paginator.page_range %}
+                                {% if num == result_tests.number %}
+                                    <li class="paginationjs-page J-paginationjs-page  active" data-num="{{forloop.counter}}">
+                                        <a href="?page_test={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num > result_tests.number|add:'-3' and num < result_tests.number|add:'3' %}
+                                    <li class="paginationjs-page J-paginationjs-page " data-num="{{forloop.counter}}">
+                                        <a href="?page_test={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="paginationjs-next disabled ">
+                                {% if result_tests.has_next %}
+                                    <a href="?page_test={{ result_tests.next_page_number }}">›</a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div></div>
+                </div>
+        </section>
+    {% endif %}
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/jq.js" %}"></script>
+    <!-- <script src="{% static "js/pogination.js" %}"></script> -->
+    <script src="{% static "js/save-prog.js" %}"></script>
+{% endblock %}
